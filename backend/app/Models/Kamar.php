@@ -14,5 +14,8 @@ class Kamar extends Model
         'image',
         'fasilitas',
         'status',
+        'latitude',
+        'longitude',
+        'luas',
     ];
 }
