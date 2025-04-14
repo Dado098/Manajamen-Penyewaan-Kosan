@@ -1,0 +1,160 @@
+.login {
+    background-color: #989d8c;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .login .div {
+    background-color: #989d8c;
+    width: 1440px;
+    height: 783px;
+    position: relative;
+  }
+  
+  .login .overlap {
+    position: absolute;
+    width: 645px;
+    height: 783px;
+    top: 0;
+    left: -29px; /* atau coba -20px untuk lebih ke kiri */
+    background-image: url("../images/rt1.png");
+    background-size: 100% 100%;
+  }
+  
+  
+  .login .overlap-group {
+    position: absolute;
+    width: 379px;
+    height: 149px;
+    top: 163px;
+    left: 144px;
+  }
+  
+  .login .daftar-gabung {
+    position: absolute;
+    width: 322px;
+    top: 85px;
+    left: 28px;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    color: #000;
+    font-size: 20px;
+    text-align: center;
+  }
+  
+  .login .text-wrapper {
+    position: absolute;
+    width: 379px;
+    top: 0;
+    left: 0;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: #000;
+    text-align: center;
+  }
+  
+  .login .button-primary-large {
+    all: unset;
+    box-sizing: border-box;
+    display: flex;
+    width: 134px;
+    height: 49px;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    position: absolute;
+    top: 342px;
+    left: 265px;
+    background-color: #6b5c48;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .login .button-primary {
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  .login .popup-login {
+    position: absolute;
+    width: 423px;
+    height: 445px;
+    top: 179px;
+    left: 859px;
+    background-color: #fff;
+    border-radius: 18px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .login .login-sekarang-juga {
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .login .group, .login .overlap-wrapper {
+    margin-bottom: 20px;
+  }
+  
+  .login .rectangle, .login .text-wrapper-3 {
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    box-sizing: border-box;
+  }
+  
+  .login .overlap-2 {
+    background-color: #2b1b12;
+    border-radius: 18px;
+    text-align: center;
+    cursor: pointer;
+    padding: 15px;
+  }
+  
+  .login .text-wrapper-4 {
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    color: #fff;
+    font-size: 20px;
+  }
+  
+  .login .text-wrapper-5 {
+    position: absolute;
+    width: 588px;
+    top: 89px;
+    left: 776px;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    text-align: center;
+    color: #1e1e1e;
+  }
+  .logo-wrapper img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  .logo-wrapper {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    width: 140px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+  }
+  
+  

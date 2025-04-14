@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register Senangkos</title>
+  <link rel="stylesheet" href="../css/register.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <div class="sign-up">
+    <div class="div">
+
+
+      <!-- Bagian Kanan (Sudah Punya Akun) -->
+      <div class="overlap">
+
+        <!-- Logo -->
+        <div class="logo-wrapper">
+          <img src="../images/logo.png" alt="Logo Senangkos" />
+        </div>
+
+        <!-- Teks dan tombol login -->
+        <div class="text-wrapper">Sudah Punya Akun ?</div>
+        <button class="button-primary-large" onclick="window.location.href='login.html'">Login</button>
+      </div>
+
+      <!-- Judul Atas -->
+      <div class="text-wrapper-2">Selamat Datang di <br><strong>Senangkos</strong></div>
+
+      <!-- Form Register -->
+      <div class="overlap-group">
+        <div class="popup-login">
+          <h2 class="register-title">Register</h2>
+
+          <input type="email" id="email" placeholder="Email" class="input" />
+          <input type="text" id="nama" placeholder="Nama Lengkap" class="input" />
+          <input type="text" id="hp" placeholder="Nomor Handphone" class="input" />
+          <input type="password" id="password" placeholder="Password" class="input" />
+
+          <button id="btnRegister" class="rectangle">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/register.js"></script>
+</body>
+</html>

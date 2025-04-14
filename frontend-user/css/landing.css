@@ -1,0 +1,190 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #e2e5dc;
+    color: #111;
+  }
+  
+  /* Header */
+  .overlay-rrt {
+    position: absolute;     /* atau fixed kalau mau nempel terus */
+    top: 0;
+    left: 0;
+    width: 150vw;           /* full lebar layar */
+    height: 100vh;          /* full tinggi layar */
+    object-fit: cover;      /* biar nutup tanpa deformasi aneh */
+    z-index: -1;            /* taruh di belakang konten lain */
+  }
+  
+  .header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 10;
+  }
+  .logo {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  .auth-buttons {
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    display: flex;
+    gap: 20px; /* jarak antar tombol */
+  }
+  
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap');
+
+  .auth-buttons button {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600; /* Semibold */
+    padding: 5px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  
+  #loginBtn {
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid #fff; /* garis pinggir hitam */
+    border-radius: 8px;
+  }
+  
+  
+  /* Style untuk tombol Sign Up */
+  #signupBtn {
+    background-color: #328300;
+    color: #fff;
+    border: 2px solid #328300;
+    border-radius: 8px;
+  }
+  
+  
+  /* Hero Section */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: url('../images/hero-bg.png') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: white;
+    overflow: hidden;
+  }
+  
+  /* Overlay PNG dengan opasitas diatur */
+  .overlay-rrt {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.7; /* Ubah sesuai kebutuhan, misal 0.7 untuk transparansi */
+  }
+  
+  /* Konten di atas overlay */
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 60px;
+    max-width: 700px;
+  }
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .hero-buttons a {
+    margin-right: 20px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .hero-buttons .lihat-kamar {
+    background-color: #dbe8cb;
+    color: #000;
+  }
+  .hero-buttons a:last-child {
+    color: white;
+  }
+  
+  /* Sections, Cards, Lokasi, Footer */
+  /* ... kode lain tetap sama ... */
+  
+  /* Sections */
+  .section {
+    padding: 60px 40px;
+    text-align: center;
+  }
+  
+  /* Card Style (Kamar & Fasilitas) */
+  .kamar-list, .fasilitas-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .card {
+    background: #ecd5ca;
+    padding: 20px;
+    width: 200px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  .card img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  .card button {
+    margin-top: 10px;
+    padding: 5px 15px;
+    background: #2d1f1d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  /* Lokasi */
+  .lokasi iframe {
+    border-radius: 10px;
+  }
+  
+  /* Footer */
+  footer {
+    background: #5d4e3d;
+    color: white;
+    padding: 40px;
+  }
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .column {
+    min-width: 150px;
+  }
+  .column a {
+    display: block;
+    color: white;
+    margin: 5px 0;
+    text-decoration: none;
+  }
+  .footer-note {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9em;
+  }
+  

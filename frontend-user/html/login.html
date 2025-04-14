@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="../css/login.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+  <div class="login">
+    <div class="div">
+      <div class="logo-wrapper">
+        <img src="../images/logo.png" alt="Logo Senangkos" />
+      </div>
+      <!-- Kiri - Dekorasi dan Daftar -->
+      <div class="overlap">
+        <div class="overlap-group">
+          <p class="daftar-gabung">Daftar &amp; Gabung Menjadi Penghuni</p>
+          <div class="text-wrapper">Belum Punya Akun?</div>
+        </div>
+
+        <button class="button-primary-large" onclick="window.location.href='register.html'">
+          <div class="button-primary">Sign Up</div>
+        </button>
+      </div>
+
+      <!-- Kanan - Form Login -->
+      <div class="popup-login">
+        <div class="login-sekarang-juga">Login <br />Sekarang Juga!</div>
+
+        <div class="group">
+          <div class="overlap-group-2">
+            <input type="email" id="email" class="rectangle" placeholder="Email" />
+          </div>
+        </div>
+
+        <div class="overlap-wrapper">
+          <div class="div-wrapper">
+            <input type="password" id="password" class="text-wrapper-3" placeholder="Password" />
+          </div>
+        </div>
+
+        <div class="overlap-2" id="login-btn">
+          <div class="text-wrapper-4">Login</div>
+        </div>
+
+        <p id="error-message" class="hidden" style="text-align:center; color:red; margin-top:10px;"></p>
+      </div>
+
+      <!-- Judul utama -->
+      <div class="text-wrapper-5">Selamat Datang di Senangkos</div>
+
+    </div>
+  </div>
+
+  <script src="../js/login.js"></script>
+</body>
+</html>
