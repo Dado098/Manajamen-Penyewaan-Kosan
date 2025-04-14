@@ -19,9 +19,13 @@ Route::apiResource('kamars', KamarController::class);
 // Untuk Export Data Kamar ke GeoJSON
 Route::get('kamars/export', [KosanExportController::class, 'export']);
 
+// Route Untuk CRUD Pemesanan
 Route::apiResource('pemesanans', PemesananController::class);
+
+// Route untuk Pembayaran
 Route::apiResource('pembayarans', PembayaranController::class);
-// Endpoint untuk generate QR Code
+
+// Route untuk Pembayaran berdasarkan ID Pemesanan (QRCode)
 Route::get('pembayarans/{id}/qrcode', [PembayaranController::class, 'generateQRCode'])->name('pembayarans.qrcode');
 
 
