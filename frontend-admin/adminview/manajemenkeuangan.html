@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manajemen Keuangan | SenangKos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/adminstyle.css" />
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo-container">
+      <img src="../images/logosenangkos.svg" alt="Logo" class="logo">
+    </div>
+    <ul class="sidebar-menu">
+      <li>
+        <img src="../images/icon-home.svg" class="icon">
+        <span class="sidebar-text">Dashboard</span>
+      </li>
+      <li>
+        <img src="../images/icon-mkamar.svg" class="icon">
+        <span class="sidebar-text">Manajemen Kamar</span>
+      </li>
+      <li>
+        <img src="../images/icon-mkeuangan.svg" class="icon">
+        <span class="sidebar-text">Manajemen Keuangan</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="content-wrapper">
+    <header>
+      <div class="header-buttons-row">
+        <div class="header-buttons">
+          <button class="btn-green">Lihat Website</button>
+          <button class="btn-red">Logout</button>
+        </div>
+      </div>
+      <div class="greeting">
+        <h2>Manajemen Keuangan</h2>
+        <p>Lihat dan kelola transaksi keuangan kos Anda</p>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <section class="summary">
+        <div class="summary-header">
+          <h3>Daftar Transaksi</h3>
+          <div class="table-actions-left">
+            <button class="btn-blue">Tambah</button>
+            <button class="btn-green">Ekspor</button>
+          </div>
+        </div>
+        <div class="room-table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Nama Penghuni</th>
+                <th>No. Kamar</th>
+                <th>Jumlah Bayar</th>
+                <th>Tanggal Bayar</th>
+                <th>Status</th>
+                <th>Metode Bayar</th>
+                <th>Bukti Bayar</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Nama Penghuni">Dimas</td>
+                <td data-label="No. Kamar">A001</td>
+                <td data-label="Jumlah Bayar">Rp1.500.000</td>
+                <td data-label="Tanggal Bayar">01 April 2025</td>
+                <td data-label="Status"><span class="badge badge-full">Lunas</span></td>
+                <td data-label="Metode Bayar">Transfer</td>
+                <td data-label="Bukti Bayar"><a href="#">Lihat</a></td>
+                <td data-label="Aksi">
+                  <button class="btn-action edit">Edit</button>
+                  <button class="btn-action delete">Hapus</button>
+                </td>
+              </tr>
+              <tr>
+                <td data-label="Nama Penghuni">Tungtungtung</td>
+                <td data-label="No. Kamar">A002</td>
+                <td data-label="Jumlah Bayar">Rp1.400.000</td>
+                <td data-label="Tanggal Bayar">01 April 2025</td>
+                <td data-label="Status"><span class="badge badge-empty">Belum Lunas</span></td>
+                <td data-label="Metode Bayar">Cash</td>
+                <td data-label="Bukti Bayar">-</td>
+                <td data-label="Aksi">
+                  <button class="btn-action edit">Edit</button>
+                  <button class="btn-action delete">Hapus</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="activity">
+        <h3>Aktivitas Terbaru</h3>
+        <div class="table-actions-left">
+          <button class="btn-green">Ekspor</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Aktivitas</th>
+              <th>Deskripsi</th>
+              <th>Waktu</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                <td data-label="No.">1</td>
+                <td data-label="Aktivitas">Pembayaran Masuk</td>
+                <td data-label="Deskripsi">User A membayar Rp700.000</td>
+                <td data-label="Waktu">2025-04-03 10:30</td>
+              </tr>
+              <tr>
+                <td data-label="No.">2</td>
+                <td data-label="Aktivitas">Konfirmasi Pembayaran</td>
+                <td data-label="Deskripsi">Pembayaran User B dikonfirmasi</td>
+                <td data-label="Waktu">2025-04-03 09:45</td>
+              </tr>
+            </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

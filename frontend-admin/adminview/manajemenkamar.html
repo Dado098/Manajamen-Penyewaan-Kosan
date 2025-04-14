@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manajemen Kamar | SenangKos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-xh6JNQcHqund0MZXYXW2gV7KnL6XLZ7OeT+KhpafSkpeb7lcyL2V+F7fG1Evk9WDEvNLf2Hx7oM5t3RxwZ5qYQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/adminstyle.css" />
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo-container">
+      <img src="../images/logosenangkos.svg" alt="Logo" class="logo">
+    </div>
+    <ul class="sidebar-menu">
+      <li>
+        <img src="../images/icon-home.svg" class="icon">
+        <span class="sidebar-text">Dashboard</span>
+      </li>
+      <li>
+        <img src="../images/icon-mkamar.svg" class="icon">
+        <span class="sidebar-text">Manajemen Kamar</span>
+      </li>
+      <li>
+        <img src="../images/icon-mkeuangan.svg" class="icon">
+        <span class="sidebar-text">Manajemen Keuangan</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="content-wrapper">
+    <header>
+      <div class="header-buttons-row">
+        <div class="header-buttons">
+          <button class="btn-green">Tambah Kamar</button>
+          <button class="btn-red">Logout</button>
+        </div>
+      </div>
+      <div class="greeting">
+        <h2>Manajemen Kamar</h2>
+        <p>Kelola kamar kos Anda dengan mudah</p>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <section class="summary">
+        <div class="summary-header">
+          <h3>Daftar Kamar</h3>
+          <div class="table-actions-left">
+            <button class="btn-blue">Tambah</button>
+            <button class="btn-green">Ekspor</button>
+          </div>
+        </div>
+        <div class="room-table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>No. Kamar</th>
+                <th>Nama Penghuni</th>
+                <th>Status</th>
+                <th>Harga</th>
+                <th>Deskripsi</th>
+                <th>Foto</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="No. Kamar">A001</td>
+                <td data-label="Nama Penghuni">Dimas</td>
+                <td data-label="Status"><span class="badge badge-full">Terisi</span></td>
+                <td data-label="Harga">Rp1.500.000</td>
+                <td data-label="Deskripsi">Kamar dengan AC dan kamar mandi dalam.</td>
+                <td data-label="Foto"><img src="kamar1.jpg" class="room-photo" alt="Foto Kamar A001"></td>
+                <td data-label="Aksi">
+                  <button class="btn-action edit">Edit</button>
+                  <button class="btn-action delete">Hapus</button>
+                </td>
+              </tr>
+              <tr>
+                <td data-label="No. Kamar">A002</td>
+                <td data-label="Nama Penghuni">-</td>
+                <td data-label="Status"><span class="badge badge-empty">Kosong</span></td>
+                <td data-label="Harga">Rp1.400.000</td>
+                <td data-label="Deskripsi">Kamar luas tanpa AC.</td>
+                <td data-label="Foto"><img src="kamar2.jpg" class="room-photo" alt="Foto Kamar A002"></td>
+                <td data-label="Aksi">
+                  <button class="btn-action edit">Edit</button>
+                  <button class="btn-action delete">Hapus</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="activity">
+        <h3>Aktivitas Terbaru</h3>
+        <div class="table-actions-left">
+          <button class="btn-green">Ekspor</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Aktivitas</th>
+              <th>Deskripsi</th>
+              <th>Waktu</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                <td data-label="No.">1</td>
+                <td data-label="Aktivitas">Pemesanan</td>
+                <td data-label="Deskripsi">User A menyewa kamar A001</td>
+                <td data-label="Waktu">2025-04-03 10:30</td>
+              </tr>
+              <tr>
+                <td data-label="No.">2</td>
+                <td data-label="Aktivitas">Status Kamar</td>
+                <td data-label="Deskripsi">Kamar A002 sekarang menjadi ‘Kosong’</td>
+                <td data-label="Waktu">2025-04-03 09:45</td>
+              </tr>
+            </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
+
+<script src="js/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+<script src="js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    // Validasi token dan role
+//    if (!user || user.role !== 'admin') {
+//      alert("Anda tidak memiliki akses.");
+//      window.location.href = "../loginuser.html";
+//      return;
+//    }
+
+    // Ambil data kamar dari API
+    $.ajax({
+      url: 'http://localhost:8000/api/kamar',
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${user.token}`
+      },
+      success: function (response) {
+        const tbody = $('table tbody').first(); // table kamar
+        tbody.empty(); // Kosongkan tabel
+
+        response.forEach(kamar => {
+          const statusBadge = kamar.status === 'Terisi'
+            ? '<span class="badge badge-full">Terisi</span>'
+            : '<span class="badge badge-empty">Kosong</span>';
+
+          const fotoUrl = `http://localhost:8000/storage/${kamar.foto}`;
+
+          const row = `
+            <tr>
+              <td data-label="No. Kamar">${kamar.nomor_kamar}</td>
+              <td data-label="Nama Penghuni">${kamar.penghuni || '-'}</td>
+              <td data-label="Status">${statusBadge}</td>
+              <td data-label="Harga">Rp${parseInt(kamar.harga).toLocaleString('id-ID')}</td>
+              <td data-label="Deskripsi">${kamar.deskripsi}</td>
+              <td data-label="Foto"><img src="${fotoUrl}" class="room-photo" alt="Foto ${kamar.nomor_kamar}"></td>
+              <td data-label="Aksi">
+                <button class="btn-action edit" data-id="${kamar.id}">Edit</button>
+                <button class="btn-action delete" data-id="${kamar.id}">Hapus</button>
+              </td>
+            </tr>`;
+          tbody.append(row);
+        });
+      },
+      error: function (err) {
+        console.error("Gagal mengambil data kamar:", err);
+      }
+    });
+
+    // Ambil aktivitas terbaru dari API
+    $.ajax({
+      url: 'http://localhost:8000/api/aktivitas',
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${user.token}`
+      },
+      success: function (res) {
+        const tbody = $('.activity tbody');
+        tbody.empty();
+
+        res.forEach((item, index) => {
+          const row = `
+            <tr>
+              <td data-label="No.">${index + 1}</td>
+              <td data-label="Aktivitas">${item.jenis}</td>
+              <td data-label="Deskripsi">${item.deskripsi}</td>
+              <td data-label="Waktu">${item.waktu}</td>
+            </tr>`;
+          tbody.append(row);
+        });
+      },
+      error: function (err) {
+        console.error("Gagal memuat aktivitas:", err);
+      }
+    });
+
+    // Tambahkan event listener untuk tombol logout
+    $('.btn-red').on('click', function () {
+      localStorage.removeItem('user');
+      window.location.href = '../loginuser.html';
+    });
+  });
+</script>

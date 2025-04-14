@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
   <link rel="stylesheet" href="../css/login.css" />
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -32,7 +31,7 @@
 
         <div class="group">
           <div class="overlap-group-2">
-            <input type="email" id="email" class="rectangle" placeholder="Email" />
+            <input type="username" id="username" class="rectangle" placeholder="Username" />
           </div>
         </div>
 
@@ -56,5 +55,79 @@
   </div>
 
   <script src="../js/login.js"></script>
+
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+  $("#login-btn").click(function (e) {
+    e.preventDefault();
+
+    const username = $("#username").val();
+    const password = $("#password").val();
+
+    // Clear error message dulu
+    $("#error-message").addClass('hidden').text('');
+
+    // Validasi simple
+    if (!username || !password) {
+      $("#error-message").removeClass('hidden').text('Username dan Password wajib diisi.');
+      return;
+    }
+
+    $.ajax({
+      url: "http://localhost:8000/api/login", // Ganti dengan URL API kamu
+      method: "POST",
+      data: {
+        username: username,
+        password: password
+      },
+      success: function (response) {
+        console.log(response);
+
+        // Simpan token ke localStorage
+        localStorage.setItem('token', response.token);
+
+        // Ambil data user (opsional)
+        // Kalau mau, bisa fetch user detail disini
+
+        // Redirect sesuai role
+        $.ajax({
+          url: "http://localhost:8000/api/user", // API yang ngasih data user yang login
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + response.token
+          },
+          success: function (userData) {
+            if (userData.role === 'pemilik') {
+              window.location.href = "frontend-admin/adminview/indexadmin.html";
+            } else if (userData.role === 'penyewa') {
+              window.location.href = "penyewa.html";
+            } else {
+              $("#error-message").removeClass('hidden').text('Role tidak dikenali.');
+            }
+          },
+          error: function () {
+            $("#error-message").removeClass('hidden').text('Gagal mengambil data user.');
+          }
+        });
+      },
+      error: function (xhr) {
+        console.log(xhr);
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          $("#error-message").removeClass('hidden').text(xhr.responseJSON.message);
+        } else {
+          $("#error-message").removeClass('hidden').text('Login gagal. Coba lagi.');
+        }
+      }
+    });
+  });
+});
+
+  </script>
+
 </body>
 </html>

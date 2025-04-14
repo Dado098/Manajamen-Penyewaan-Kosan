@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard | SenangKos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-xh6JNQcHqund0MZXYXW2gV7KnL6XLZ7OeT+KhpafSkpeb7lcyL2V+F7fG1Evk9WDEvNLf2Hx7oM5t3RxwZ5qYQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/adminstyle.css" />
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+          <img src="../images/logosenangkos.svg" alt="Logo" class="logo">
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+              <img src="../images/icon-home.svg" class="icon">
+              <span class="sidebar-text">Dashboard</span>
+            </li>
+            <li>
+              <img src="../images/icon-mkamar.svg" class="icon">
+              <span class="sidebar-text">Manajemen Kamar</span>
+            </li>
+            <li>
+              <img src="../images/icon-mkeuangan.svg" class="icon">
+              <span class="sidebar-text">Manajemen Keuangan</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="content-wrapper">
+          <header>
+            <div class="header-buttons-row">
+              <div class="header-buttons">
+                <button class="btn-green">Lihat Web</button>
+                <button class="btn-red">Logout</button>
+              </div>
+            </div>
+            <div class="greeting">
+              <h2>Halo Ibu Senang!</h2>
+              <p>Apa yang bisa kami bantu pada hari ini?</p>
+            </div>
+          </header>
+      
+
+  <div class="main-content">
+    <section class="summary">
+      <h3>Ringkasan Data Penyewaan</h3>
+      <div class="summary-cards">
+        <div class="card">
+          <p>Total Kamar</p>
+          <h2>15</h2>
+        </div>
+        <div class="card">
+          <p>Kamar Kosong</p>
+          <h2>0</h2>
+        </div>
+        <div class="card">
+          <p>Pendapatan Bulan Ini</p>
+          <h2>Rp9100k</h2>
+        </div>
+        <div class="card">
+          <p>Pembayaran Tertunda</p>
+          <h2>Rp1400k</h2>
+        </div>
+      </div>
+    </section>
+
+    <section class="activity">
+      <h3>Aktivitas Terbaru</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Nama Penghuni</th>
+            <th>Kamar</th>
+            <th>Jenis Aktivitas</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td data-label="Tanggal">16 Maret 2025</td>
+              <td data-label="Nama Penghuni">Wawan Putih</td>
+              <td data-label="Kamar">A001</td>
+              <td data-label="Jenis Aktivitas">Pembayaran Bulanan</td>
+            </tr>
+            <tr>
+              <td data-label="Tanggal">12 Maret 2025</td>
+              <td data-label="Nama Penghuni">Tungtungtung</td>
+              <td data-label="Kamar">A002</td>
+              <td data-label="Jenis Aktivitas">Pindahan Masuk</td>
+            </tr>
+          </tbody>
+      </table>
+    </section>
+  </div>
+</div>
+
+</body>
+</html>
