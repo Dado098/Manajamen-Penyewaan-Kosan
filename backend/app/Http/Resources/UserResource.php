@@ -8,10 +8,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array<string, mixed>
+     * @property int $id
+     * @property string $name
+     * @property string $username
+     * @property string|null $no_telp
+     * @property string $role
      */
     public function toArray($request)
     {
