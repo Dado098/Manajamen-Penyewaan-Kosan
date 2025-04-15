@@ -33,8 +33,8 @@
         <div class="popup-login">
           <h2 class="register-title">Register</h2>
 
-          <input type="email" id="email" placeholder="Email" class="input" />
           <input type="text" id="nama" placeholder="Nama Lengkap" class="input" />
+          <input type="username" id="username" placeholder="Username" class="input" />
           <input type="text" id="hp" placeholder="Nomor Handphone" class="input" />
           <input type="password" id="password" placeholder="Password" class="input" />
 
@@ -45,5 +45,61 @@
   </div>
 
   <script src="../js/register.js"></script>
+
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+  $('#btnRegister').on('click', function (e) {
+    e.preventDefault();
+
+    let name = $('#nama').val();
+    let username = $('#username').val();
+    let no_telp = $('#hp').val();
+    let password = $('#password').val();
+    let role = 'penyewa'; // default role saat register (bisa disesuaikan)
+
+    $.ajax({
+      url: 'http://localhost:8000/api/register',
+      method: 'POST',
+      data: {
+        name: name,
+        username: username,
+        no_telp: no_telp,
+        password: password,
+        role: role,
+      },
+      success: function (response) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil Daftar!',
+          text: 'Silakan login untuk melanjutkan.',
+        }).then(() => {
+          window.location.href = 'login.html';
+        });
+      },
+      error: function (xhr) {
+        let errors = xhr.responseJSON.errors;
+        let message = xhr.responseJSON.message || 'Terjadi kesalahan';
+
+        let detail = '';
+        for (let key in errors) {
+          detail += `${errors[key][0]}<br>`;
+        }
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Daftar',
+          html: detail || message,
+        });
+      }
+    });
+  });
+});
+
+  </script>
 </body>
 </html>
