@@ -4,50 +4,77 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Senangkos - Landing Page</title>
-  <link rel="stylesheet" href="../css/landing.css" />
+  <link rel="stylesheet" href="../css/homepage.css" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
   <!-- Header -->
   <header class="header">
-    <div class="auth-buttons">
-      <button id="loginBtn">Login</button>
-      <button id="signupBtn">Sign Up</button>
+    <div class="logo">
+      <img src="../images/logo.png" alt="Logo Senangkos" />
+    </div>
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="#" class="home">Home</a></li>
+        <li><a href="#">Explore Kamar</a></li>
+        <li><a href="#">Kamar Anda</a></li>
+      </ul>
+    </nav>
+    <div class="profile-icon">
+      <a href="profile.html">
+        <img src="../images/iconp.png" alt="Profil" />
+      </a>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero" style="background: url('../images/hero-bg.png') no-repeat center center/cover;">
-    <!-- Overlay PNG -->
+<!-- Hero Section -->
+<section class="hero">
     <img src="../images/r.png" alt="Overlay Dekorasi" class="overlay-rrt" />
     <div class="hero-content">
-      <h1>Tinggal Nyaman Serasa di Rumah!</h1>
+      <h1>
+        <span>Tinggal</span>
+        <span>Nyaman</span>
+        <span>Serasa di</span>
+        <span>Rumah!</span>
+      </h1>
       <div class="hero-buttons">
         <a href="#kamar" class="lihat-kamar">Lihat Kamar</a>
         <a href="#footer">Hubungi Kami</a>
       </div>
     </div>
   </section>
+  
 
   <!-- Kamar Section -->
   <section class="section" id="kamar">
     <h2>Cari Kost Nyaman & Terjangkau?<br />Tinggal di Sini Saja, Serasa di Rumah Sendiri!</h2>
     <div class="kamar-list">
       <div class="card">
-        <img src="../images/kamar1.png" alt="Kamar 1" />
-        <p>Kamar No 1</p>
-        <button class="signupRedirect">Sign up</button>
+        <img src="../images/kamar1.png" alt="Kamar No 1" />
+        <div class="card-body">
+          <p>Kamar No 1</p>
+          <p>Rp1.500.000/bulan</p>
+        </div>
+        <a href="detailkamar.html"><button class="cekdtlkamarRedirect">Cek Detail Kamar</button></a>
       </div>
+
       <div class="card">
-        <img src="../images/kamar2.png" alt="Kamar 2" />
-        <p>Kamar No 2</p>
-        <button class="signupRedirect">Sign up</button>
+        <img src="../images/kamar2.png" alt="Kamar No 2" />
+        <div class="card-body">
+          <p>Kamar No 2</p>
+          <p>Rp1.500.000/bulan</p>
+        </div>
+        <a href="detailkamar.html"><button class="cekdtlkamarRedirect">Cek Detail Kamar</button></a>
       </div>
+
       <div class="card">
-        <img src="../images/kamar3.png" alt="Kamar 3" />
-        <p>Kamar No 3</p>
-        <button class="signupRedirect">Sign up</button>
+        <img src="../images/kamar3.png" alt="Kamar No 3" />
+        <div class="card-body">
+          <p>Kamar No 3</p>
+          <p>Rp1.500.000/bulan</p>
+        </div>
+        <a href="detailkamar.html"><button class="cekdtlkamarRedirect">Cek Detail Kamar</button></a>
       </div>
     </div>
   </section>
@@ -74,7 +101,9 @@
   <!-- Lokasi Section -->
   <section class="section lokasi">
     <h2>Lokasi Kost</h2>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.387490227835!2d106.80554937480659!3d-6.598671593395129!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c5daedddf98d%3A0xce0c1712c240c876!2sJl.%20Babakan%20Fakultas%20No.4%2C%20RT.03%2FRW.05%2C%20Tegallega%2C%20Kecamatan%20Bogor%20Tengah%2C%20Kota%20Bogor%2C%20Jawa%20Barat%2016129!5e0!3m2!1sen!2sid!4v1744384832179!5m2!1sen!2sid" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.387490227835!2d106.80554937480659!3d-6.598671593395129!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c5daedddf98d%3A0xce0c1712c240c876!2sJl.%20Babakan%20Fakultas%20No.4%2C%20RT.03%2FRW.05%2C%20Tegallega%2C%20Kecamatan%20Bogor%20Tengah%2C%20Kota%20Bogor%2C%20Jawa%20Barat%2016129!5e0!3m2!1sen!2sid!4v1744384832179!5m2!1sen!2sid"
+      width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
   </section>
 
   <!-- Footer -->
@@ -105,6 +134,7 @@
     </div>
   </footer>
 
+  <!-- Script -->
   <script>
     $(document).ready(function () {
       $('#loginBtn').click(function () {
@@ -117,7 +147,6 @@
     });
   </script>
 
-  <script src="../js/landing.js"></script>
-
+  <script src="../js/homepage.js"></script>
 </body>
 </html>
