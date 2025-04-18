@@ -21,4 +21,9 @@ class Pemesanan extends Model
     {
         return $this->belongsTo(Kamar::class);
     }
+
+    public function pemesanan()
+    {
+        return $this->belongsTo(Pemesanan::class);  // Relasi Pembayaran ke Pemesanan
+    }
 }

@@ -2,15 +2,14 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PembayaranResource extends JsonResource
 {
     /**
-     * Format respons pembayaran.
+     * Transformasikan sumber daya menjadi array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -19,7 +18,12 @@ class PembayaranResource extends JsonResource
             'id' => $this->id,
             'metode_pembayaran' => $this->metode_pembayaran,
             'total_tagihan' => $this->total_tagihan,
-            'penyewa_id' => $this->penyewa_id,
+            'penyewa' => [
+                'id' => $this->penyewa_id, // ID penyewa
+                'name' => $this->penyewa->name ?? 'Nama tidak ditemukan', // Menampilkan nama penyewa
+                'username' => $this->penyewa->username ?? 'Username tidak ditemukan', // Menampilkan username penyewa
+                'no_telp' => $this->penyewa->no_telp ?? 'Nomor telepon tidak ditemukan', // Menampilkan nomor telepon penyewa
+            ],
             'pemesanan_id' => $this->pemesanan_id,
             'qr_code' => $this->qr_code,
             'created_at' => $this->created_at,

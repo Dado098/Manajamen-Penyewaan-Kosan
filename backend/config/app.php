@@ -3,19 +3,6 @@
 return [
 
 
-    'providers' => [
-        /*
-         * Laravel Framework Service Providers...
-         */
-        Illuminate\Auth\AuthServiceProvider::class,
-        Illuminate\Broadcasting\BroadcastServiceProvider::class,
-        Illuminate\Bus\BusServiceProvider::class,
-
-        // Tambahkan MidtransServiceProvider di sini
-        App\Providers\MidtransServiceProvider::class,
-    ],
-
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -136,6 +123,22 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    // 'providers' => [
+    //     /*
+    //      * Laravel Framework Service Providers...
+    //      */
+    //     Illuminate\Auth\AuthServiceProvider::class,
+    //     Illuminate\Broadcasting\BroadcastServiceProvider::class,
+    //     Illuminate\Bus\BusServiceProvider::class,
+    //     Illuminate\Filesystem\FilesystemServiceProvider::class,
+    //     // Tambahkan MidtransServiceProvider di sini
+    //     App\Providers\MidtransServiceProvider::class,
+    // ],
+
+//     'aliases' => [
+//     'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+// ],
 
 
 
