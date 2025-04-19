@@ -1,0 +1,109 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  padding: 40px;
+  color: #333;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+}
+
+.back-button {
+  background: none;
+  border: none;
+  font-size: 30px;
+  color: #000000;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #4d342f;
+}
+
+.room-details {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.room-image {
+  width: 150px;
+  height: 150px;
+  margin-right: 20px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.room-info {
+  flex-grow: 1;
+}
+
+.room-info h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #4d342f;
+}
+
+.room-info p {
+  margin: 5px 0;
+}
+
+.price {
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+.payment-method {
+  margin-bottom: 20px;
+}
+
+.payment-method p {
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #4d342f;
+}
+
+.payment-method select {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.pay-button {
+  width: auto;
+  padding: 12px 24px;
+  background-color: #4d342f;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.pay-button:hover {
+  background-color: #3b2622;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Halaman Pembayaran</title>
+  <link rel="stylesheet" href="../css/halamanpembayaran.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Tombol Kembali -->
+    <button class="back-button" onclick="window.history.back();">&#60;</button>
+
+    <!-- Judul Halaman -->
+    <h2>Halaman Pembayaran</h2>
+
+    <!-- Gambar Kamar dan Detail -->
+    <div class="room-details">
+      <img src="../images/kamar1.png" alt="Gambar Kamar" class="room-image" />
+      <div class="room-info">
+        <h3>Kamar No. 1</h3>
+        <p>Luas Kamar: 25 m²</p>
+        <p>Deskripsi: Kamar nyaman, dilengkapi dengan AC dan tempat tidur besar.</p>
+        <p>Total Pembayaran: <span class="price">Rp 1.500.000</span></p>
+      </div>
+    </div>
+
+    <!-- Pilihan Bank -->
+    <div class="payment-method">
+      <p>Pilih Bank Virtual Account:</p>
+      <select name="bank" required>
+        <option value="bca">BCA</option>
+        <option value="bni">BNI</option>
+        <option value="bri">BRI</option>
+        <option value="mandiri">Mandiri</option>
+      </select>
+    </div>
+
+    <!-- Form Pembayaran -->
+    <form id="formPembayaran">
+      <label>Nama Pemesan:</label>
+      <input type="text" name="nama" required />
+
+
+      <div style="text-align: center;">
+        <button type="submit" class="pay-button">Bayar</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="../js/halamanpembayaran.js"></script>
+</body>
+</html>
