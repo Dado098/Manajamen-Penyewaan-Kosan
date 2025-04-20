@@ -5,7 +5,7 @@ body {
   }
   
   .profil {
-    background-color: #989d8c;
+    background-color: #97D94D;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -83,12 +83,12 @@ body {
     background-color: #3d2d21;
   }
   
-  .btn-delete {
-    background-color: #d9534f;
+  .btn-backacount {
+    background-color: #121010;
   }
   
-  .btn-delete:hover {
-    background-color: #c9302c;
+  .btn-backacount:hover {
+    background-color: #111010;
   }
   
   .btn-logout {
@@ -98,4 +98,21 @@ body {
   .btn-logout:hover {
     background-color: #4e555b;
   }
-  
+  /* RESPONSIVE */
+@media screen and (max-width: 480px) {
+  .form-box {
+    padding: 30px 20px;
+  }
+
+  .form-title {
+    font-size: 18px;
+  }
+
+  .logo-img {
+    width: 110px;
+  }
+
+  .sign-up {
+    padding-top: 80px;
+  }
+}

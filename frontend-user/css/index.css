@@ -113,7 +113,7 @@ body {
     font-weight: 600;
   }
   .hero-buttons .lihat-kamar {
-    background-color: #dbe8cb;
+    background-color: #A1DB60;
     color: #000;
   }
   .hero-buttons a:last-child {
@@ -137,7 +137,7 @@ body {
     flex-wrap: wrap;
   }
   .card {
-    background: #ecd5ca;
+    background: #A1DB60;
     padding: 20px;
     width: 200px;
     border-radius: 12px;
@@ -164,8 +164,8 @@ body {
   
   /* Footer */
   footer {
-    background: #5d4e3d;
-    color: white;
+    background: #97D94D;
+    color: rgb(255, 255, 255);
     padding: 40px;
   }
   .footer-content {

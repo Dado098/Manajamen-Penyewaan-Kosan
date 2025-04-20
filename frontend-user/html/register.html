@@ -8,41 +8,29 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+  <!-- Logo di kiri atas -->
+  <div class="logo-top">
+    <img src="../images/logo.png" alt="Logo Senangkos" class="logo-img" />
+  </div>
+
+  <!-- Container form -->
   <div class="sign-up">
-    <div class="div">
+    <div class="form-container">
+      <div class="form-box">
+        <h2 class="form-title">Daftar Sekarang Juga!</h2>
 
+        <input type="text" placeholder="Username" class="input" />
+        <input type="text" placeholder="Nama" class="input" />
+        <input type="text" placeholder="No. Telpon" class="input" />
+        <input type="password" placeholder="Password" class="input" />
 
-      <!-- Bagian Kanan (Sudah Punya Akun) -->
-      <div class="overlap">
+        <button class="register-button">Daftar</button>
 
-        <!-- Logo -->
-        <div class="logo-wrapper">
-          <img src="../images/logo.png" alt="Logo Senangkos" />
-        </div>
-
-        <!-- Teks dan tombol login -->
-        <div class="text-wrapper">Sudah Punya Akun ?</div>
-        <button class="button-primary-large" onclick="window.location.href='login.html'">Login</button>
-      </div>
-
-      <!-- Judul Atas -->
-      <div class="text-wrapper-2">Selamat Datang di <br><strong>Senangkos</strong></div>
-
-      <!-- Form Register -->
-      <div class="overlap-group">
-        <div class="popup-login">
-          <h2 class="register-title">Register</h2>
-
-          <input type="text" id="nama" placeholder="Nama Lengkap" class="input" />
-          <input type="username" id="username" placeholder="Username" class="input" />
-          <input type="text" id="hp" placeholder="Nomor Handphone" class="input" />
-          <input type="password" id="password" placeholder="Password" class="input" />
-
-          <button id="btnRegister" class="rectangle">Sign Up</button>
-        </div>
+        <p class="login-text">Sudah memiliki akun? <a href="login.html">Login di sini</a></p>
       </div>
     </div>
   </div>
+</body>
 
   <script src="../js/register.js"></script>
 

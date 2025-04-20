@@ -9,51 +9,35 @@
 <body>
 
   <div class="login">
-    <div class="div">
+    <div class="container">
+      
+      <!-- Logo Senangkos -->
       <div class="logo-wrapper">
         <img src="../images/logo.png" alt="Logo Senangkos" />
       </div>
-      <!-- Kiri - Dekorasi dan Daftar -->
-      <div class="overlap">z
-        <div class="overlap-group">
-          <p class="daftar-gabung">Daftar &amp; Gabung Menjadi Penghuni</p>
-          <div class="text-wrapper">Belum Punya Akun?</div>
-        </div>
-
-        <button class="button-primary-large" onclick="window.location.href='register.html'">
-          <div class="button-primary">Sign Up</div>
-        </button>
-      </div>
-
-      <!-- Kanan - Form Login -->
+  
+      <!-- Form Login -->
       <div class="popup-login">
-        <div class="login-sekarang-juga">Login <br />Sekarang Juga!</div>
-
-        <div class="group">
-          <div class="overlap-group-2">
-            <input type="username" id="username" class="rectangle" placeholder="Username" />
-          </div>
+        <div class="login-sekarang-juga">Login Sekarang Juga!</div>
+  
+        <div class="form-group">
+          <input type="text" id="username" class="input-field" placeholder="Username" />
         </div>
-
-        <div class="overlap-wrapper">
-          <div class="div-wrapper">
-            <input type="password" id="password" class="text-wrapper-3" placeholder="Password" />
-          </div>
+  
+        <div class="form-group">
+          <input type="password" id="password" class="input-field" placeholder="Password" />
         </div>
-
-        <div class="overlap-2" id="login-btn">
-          <div class="text-wrapper-4">Login</div>
-        </div>
-
+  
+        <p class="signup-link">Belum memiliki akun? <a href="register.html"><strong>Daftar di sini</strong></a></p>
+  
+        <div class="login-btn" id="login-btn">Login</div>
+  
         <p id="error-message" class="hidden" style="text-align:center; color:red; margin-top:10px;"></p>
       </div>
-
-      <!-- Judul utama -->
-      <div class="text-wrapper-5">Selamat Datang di Senangkos</div>
-
+  
     </div>
   </div>
-
+  
   <script src="../js/login.js"></script>
 
   <script src="../js/jquery-3.7.1.min.js"></script>
