@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('no_telp')->nullable();
             $table->string('password');
             $table->string('role');
-            $table->string('email')->unique(); // Jika perlu kolom email
+            $table->string('email')->unique()->nullable();
+            // Jika perlu kolom email
             $table->timestamp('email_verified_at')->nullable(); // Kolom verifikasi email
             $table->timestamps();
         });

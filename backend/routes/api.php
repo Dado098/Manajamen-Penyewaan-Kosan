@@ -15,6 +15,17 @@ use App\Http\Controllers\EmailController;
 Route::apiResource('users', UserController::class);
 Route::get('users/role/{role}', [UserController::class, 'getUsersByRole']);
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+
+
+
 //  Untuk CRUD Kamar
 Route::apiResource('kamars', KamarController::class);
 

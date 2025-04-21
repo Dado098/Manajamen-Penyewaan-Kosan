@@ -7,10 +7,6 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
-/**
- * @bodyParam username string required Username.
- * @bodyParam password string required Password.
- */
 class LoginRequest extends FormRequest
 {
     public function authorize()
@@ -36,11 +32,15 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        // Menambahkan pemeriksaan apakah email sudah diverifikasi
-        if (!$user->hasVerifiedEmail()) {
+        // Jika role adalah penyewa, periksa verifikasi email
+        if ($user->role === 'penyewa' && !$user->hasVerifiedEmail()) {
             throw ValidationException::withMessages([
                 'email' => ['Email belum diverifikasi.'],
             ]);
         }
+
+        // Menyimpan data user untuk digunakan di controller
+        $this->merge(['user' => $user]);
     }
 }
+

@@ -76,38 +76,31 @@ class AuthController extends Controller
         ], 201);
     }
 
-    /**
-     * Login user.
-     *
-     * Proses untuk melakukan login user dan memastikan email telah diverifikasi.
-     *
-     * @param \App\Http\Requests\Auth\LoginRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @response 200 {
-     *  "message": "Login berhasil",
-     *  "token": "1|xxx"
-     * }
-     * @response 400 {
-     *  "message": "Email belum diverifikasi."
-     * }
-     */
     public function login(LoginRequest $request)
     {
-        $user = User::where('username', $request->username)->first();
+        $user = $request->user;
 
-        // Jika email belum diverifikasi, kirimkan verifikasi ulang
-        if ($user && !$user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email belum diverifikasi.'], 400);
+        // Cek apakah email sudah diverifikasi untuk penyewa
+        if ($user->role === 'penyewa' && !$user->hasVerifiedEmail()) {
+            return response()->json([
+                'message' => 'Email belum diverifikasi.'
+            ], 400);
         }
 
+        // Buat token
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // Kirimkan response dengan token, role, dan email_verified_at
         return response()->json([
             'message' => 'Login berhasil',
             'token' => $token,
+            'role' => $user->role,
+            'email_verified_at' => $user->email_verified_at, // <- ini penting untuk frontend
         ]);
     }
+
+
+
 
     /**
      * Logout user (hapus semua token).

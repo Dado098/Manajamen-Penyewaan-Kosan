@@ -1,20 +1,12 @@
 <?php
 
 return [
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
-
+    'paths' => ['api/*'],
     'allowed_methods' => ['*'],
-
-    'allowed_origins' => ['*'], // atau ['http://localhost:3000'] kalau mau lebih ketat
-
-    'allowed_origins_patterns' => [],
-
+    'allowed_origins' => ['*'],  // Atau sesuaikan dengan frontend Anda
     'allowed_headers' => ['*'],
-
     'exposed_headers' => [],
-
     'max_age' => 0,
-
     'supports_credentials' => false,
 ];
 
