@@ -7,7 +7,9 @@ use App\Http\Controllers\KamarController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\KosanExportController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmailController;
 
 // Route untuk Manajemen User (Admin)
 Route::apiResource('users', UserController::class);
@@ -38,3 +40,21 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('logout', 'logout')->middleware('auth:sanctum');
 });
+
+
+
+// Verifikasi email (gunakan middleware signed agar hash bisa divalidasi Laravel)
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
+    ->middleware(['signed'])
+    ->name('verification.verify');
+
+// Tes kirim email
+Route::get('/tes-email', [EmailController::class, 'sendTestEmail']);
+
+// Contoh akses user yang sudah login & sudah verifikasi email
+Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+
+

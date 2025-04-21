@@ -35,5 +35,12 @@ class LoginRequest extends FormRequest
                 'username' => ['Username atau password salah.'],
             ]);
         }
+
+        // Menambahkan pemeriksaan apakah email sudah diverifikasi
+        if (!$user->hasVerifiedEmail()) {
+            throw ValidationException::withMessages([
+                'email' => ['Email belum diverifikasi.'],
+            ]);
+        }
     }
 }

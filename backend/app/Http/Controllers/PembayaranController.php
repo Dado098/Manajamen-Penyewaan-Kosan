@@ -51,13 +51,13 @@ class PembayaranController extends Controller
         return response()->json(new PembayaranResource($pembayaran), 200);
     }
 
-    /**
-     * Menyimpan data pembayaran dan menghasilkan Snap Token dari Midtrans.
-     *
-     * @param \App\Http\Requests\StorePembayaranRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function store(StorePembayaranRequest $request)
+   /**
+ * Menyimpan data pembayaran dan menghasilkan Snap Token dari Midtrans.
+ *
+ * @param \App\Http\Requests\StorePembayaranRequest $request
+ * @return \Illuminate\Http\JsonResponse
+ */
+public function store(StorePembayaranRequest $request)
 {
     // Inisialisasi konfigurasi Midtrans
     Config::$serverKey = env('MIDTRANS_SERVER_KEY');
@@ -76,8 +76,13 @@ class PembayaranController extends Controller
     // Buat pembayaran
     $pembayaran = Pembayaran::create($data);
 
-    // Ambil ulang model dengan relasi penyewa & pemesanan untuk akses aman
-    $pembayaran->load(['penyewa.user', 'pemesanan.kamar']);
+    // Load relasi: penyewa (user dengan role 'penyewa') & pemesanan.kamar
+    $pembayaran->load([
+        'penyewa' => function ($query) {
+            $query->where('role', 'penyewa');
+        },
+        'pemesanan.kamar'
+    ]);
 
     $paymentMethod = $request->input('payment_method'); // "virtual_account" atau "qr_code"
     $allowedBanks = ['cimb', 'bni', 'bri', 'mandiri', 'permata'];
@@ -93,9 +98,9 @@ class PembayaranController extends Controller
             'gross_amount' => (int) $pembayaran->total_tagihan,
         ],
         'customer_details' => [
-            'first_name' => $pembayaran->penyewa->nama_penyewa ?? 'Pengguna',
+            'first_name' => $pembayaran->penyewa->name ?? 'Pengguna',
             'email' => $pembayaran->penyewa->email ?? 'dummy@email.com',
-            'phone' => $pembayaran->penyewa->phone ?? '08123456789',
+            'phone' => $pembayaran->penyewa->no_telp ?? '08123456789',
         ],
         'item_details' => [
             [
@@ -122,7 +127,7 @@ class PembayaranController extends Controller
     $paymentUrl = "https://app.sandbox.midtrans.com/snap/v2/vtweb/" . $snapToken;
 
     // QR Code (jika dipilih)
-    if ($paymentMethod == 'qr_code') {
+    if ($paymentMethod === 'qr_code') {
         $qrCode = QrCode::size(300)->generate($paymentUrl);
         return response()->json([
             'message' => 'Pembayaran berhasil dibuat',
@@ -134,7 +139,7 @@ class PembayaranController extends Controller
     }
 
     // Virtual account
-    if ($paymentMethod == 'virtual_account') {
+    if ($paymentMethod === 'virtual_account') {
         return response()->json([
             'message' => 'Pembayaran berhasil dibuat',
             'snap_token' => $snapToken,

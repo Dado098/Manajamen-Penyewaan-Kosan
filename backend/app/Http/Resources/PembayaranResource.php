@@ -18,11 +18,12 @@ class PembayaranResource extends JsonResource
             'id' => $this->id,
             'metode_pembayaran' => $this->metode_pembayaran,
             'total_tagihan' => $this->total_tagihan,
+            'snap_token' => $this->snap_token, // ✅ Tambahan snap_token
             'penyewa' => [
-                'id' => $this->penyewa_id, // ID penyewa
-                'name' => $this->penyewa->name ?? 'Nama tidak ditemukan', // Menampilkan nama penyewa
-                'username' => $this->penyewa->username ?? 'Username tidak ditemukan', // Menampilkan username penyewa
-                'no_telp' => $this->penyewa->no_telp ?? 'Nomor telepon tidak ditemukan', // Menampilkan nomor telepon penyewa
+                'id' => $this->penyewa_id,
+                'name' => $this->penyewa->name ?? 'Nama tidak ditemukan',
+                'username' => $this->penyewa->username ?? 'Username tidak ditemukan',
+                'no_telp' => $this->penyewa->no_telp ?? 'Nomor telepon tidak ditemukan',
             ],
             'pemesanan_id' => $this->pemesanan_id,
             'qr_code' => $this->qr_code,

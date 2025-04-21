@@ -16,7 +16,8 @@ class Pembayaran extends Model
         'status',
         'penyewa_id',
         'pemesanan_id',
-        'qr_code'
+        'qr_code',
+        'snap_token',
     ];
 
     protected static function boot()

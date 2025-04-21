@@ -17,12 +17,14 @@ return new class extends Migration
             $table->decimal('total_tagihan', 15, 2);
             $table->enum('status', ['menunggu pembayaran', 'proses', 'sukses', 'gagal'])->default('menunggu pembayaran');
             $table->string('qr_code')->nullable();
+            $table->string('snap_token')->nullable(); // ✅ Tambahan kolom snap_token
 
             // Relasi antar table
             $table->foreignId('penyewa_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('pemesanan_id')->constrained('pemesanans')->onDelete('cascade');
             $table->timestamps();
         });
+
     }
 
     /**
