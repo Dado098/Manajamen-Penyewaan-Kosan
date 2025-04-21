@@ -75,6 +75,12 @@
         // Simpan token ke localStorage
         localStorage.setItem('token', response.token);
 
+        // Cek apakah email sudah diverifikasi
+        if (response.message && response.message === 'Email belum diverifikasi.') {
+          $("#error-message").removeClass('hidden').text('Email belum diverifikasi. Silakan cek email Anda untuk verifikasi.');
+          return;
+        }
+
         // Ambil data user (opsional)
         // Kalau mau, bisa fetch user detail disini
 
@@ -112,6 +118,7 @@
 });
 
   </script>
+  
 
 </body>
 </html>

@@ -1,38 +1,44 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register Senangkos</title>
-  <link rel="stylesheet" href="../css/register.css" />
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>Login</title>
+  <link rel="stylesheet" href="../css/login.css" />
 </head>
 <body>
-  <!-- Logo di kiri atas -->
-  <div class="logo-top">
-    <img src="../images/logo.png" alt="Logo Senangkos" class="logo-img" />
-  </div>
 
-  <!-- Container form -->
-  <div class="sign-up">
-    <div class="form-container">
-      <div class="form-box">
-        <h2 class="form-title">Daftar Sekarang Juga!</h2>
-
-        <input type="text" placeholder="Username" class="input" />
-        <input type="text" placeholder="Nama" class="input" />
-        <input type="text" placeholder="No. Telpon" class="input" />
-        <input type="password" placeholder="Password" class="input" />
-
-        <button class="register-button">Daftar</button>
-
-        <p class="login-text">Sudah memiliki akun? <a href="login.html">Login di sini</a></p>
+  <div class="login">
+    <div class="container">
+      
+      <!-- Logo Senangkos -->
+      <div class="logo-wrapper">
+        <img src="../images/logo.png" alt="Logo Senangkos" />
       </div>
+  
+      <!-- Form Login -->
+      <div class="popup-login">
+        <div class="login-sekarang-juga">Login Sekarang Juga!</div>
+  
+        <div class="form-group">
+          <input type="text" id="username" class="input-field" placeholder="Username" />
+        </div>
+  
+        <div class="form-group">
+          <input type="password" id="password" class="input-field" placeholder="Password" />
+        </div>
+  
+        <p class="signup-link">Belum memiliki akun? <a href="register.html"><strong>Daftar di sini</strong></a></p>
+  
+        <div class="login-btn" id="login-btn">Login</div>
+  
+        <p id="error-message" class="hidden" style="text-align:center; color:red; margin-top:10px;"></p>
+      </div>
+  
     </div>
   </div>
-</body>
-
-  <script src="../js/register.js"></script>
+  
+  <script src="../js/login.js"></script>
 
   <script src="../js/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -41,53 +47,78 @@
 
   <script>
     $(document).ready(function () {
-  $('#btnRegister').on('click', function (e) {
+  $("#login-btn").click(function (e) {
     e.preventDefault();
 
-    let name = $('#nama').val();
-    let username = $('#username').val();
-    let no_telp = $('#hp').val();
-    let password = $('#password').val();
-    let role = 'penyewa'; // default role saat register (bisa disesuaikan)
+    const username = $("#username").val();
+    const password = $("#password").val();
+
+    // Clear error message dulu
+    $("#error-message").addClass('hidden').text('');
+
+    // Validasi simple
+    if (!username || !password) {
+      $("#error-message").removeClass('hidden').text('Username dan Password wajib diisi.');
+      return;
+    }
 
     $.ajax({
-      url: 'http://localhost:8000/api/register',
-      method: 'POST',
+      url: "http://localhost:8000/api/login", // Ganti dengan URL API kamu
+      method: "POST",
       data: {
-        name: name,
         username: username,
-        no_telp: no_telp,
-        password: password,
-        role: role,
+        password: password
       },
       success: function (response) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Berhasil Daftar!',
-          text: 'Silakan login untuk melanjutkan.',
-        }).then(() => {
-          window.location.href = 'login.html';
+        console.log(response);
+
+        // Simpan token ke localStorage
+        localStorage.setItem('token', response.token);
+
+        // Cek apakah email sudah diverifikasi
+        if (response.message && response.message === 'Email belum diverifikasi.') {
+          $("#error-message").removeClass('hidden').text('Email belum diverifikasi. Silakan cek email Anda untuk verifikasi.');
+          return;
+        }
+
+        // Ambil data user (opsional)
+        // Kalau mau, bisa fetch user detail disini
+
+        // Redirect sesuai role
+        $.ajax({
+          url: "http://localhost:8000/api/user", // API yang ngasih data user yang login
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + response.token
+          },
+          success: function (userData) {
+            if (userData.role === 'pemilik') {
+              window.location.href = "../../frontend-admin/adminview/indexadmin.html";
+            } else if (userData.role === 'penyewa') {
+              window.location.href = "homepage.html";
+            } else {
+              $("#error-message").removeClass('hidden').text('Role tidak dikenali.');
+            }
+          },
+          error: function () {
+            $("#error-message").removeClass('hidden').text('Gagal mengambil data user.');
+          }
         });
       },
       error: function (xhr) {
-        let errors = xhr.responseJSON.errors;
-        let message = xhr.responseJSON.message || 'Terjadi kesalahan';
-
-        let detail = '';
-        for (let key in errors) {
-          detail += `${errors[key][0]}<br>`;
+        console.log(xhr);
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          $("#error-message").removeClass('hidden').text(xhr.responseJSON.message);
+        } else {
+          $("#error-message").removeClass('hidden').text('Login gagal. Coba lagi.');
         }
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Gagal Daftar',
-          html: detail || message,
-        });
       }
     });
   });
 });
 
   </script>
+  
+
 </body>
 </html>
