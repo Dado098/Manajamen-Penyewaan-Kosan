@@ -14,16 +14,22 @@
     </div>
     <ul class="sidebar-menu">
       <li>
-        <img src="../images/icon-home.svg" class="icon">
-        <span class="sidebar-text">Dashboard</span>
+        <a href="indexadmin.html" class="sidebar-link">
+          <img src="../images/icon-home.svg" class="icon">
+          <span class="sidebar-text">Dashboard</span>
+        </a>
       </li>
       <li>
-        <img src="../images/icon-mkamar.svg" class="icon">
-        <span class="sidebar-text">Manajemen Kamar</span>
+        <a href="manajemenkamar.html" class="sidebar-link">
+          <img src="../images/icon-mkamar.svg" class="icon">
+          <span class="sidebar-text">Manajemen Kamar</span>
+        </a>
       </li>
       <li>
-        <img src="../images/icon-mkeuangan.svg" class="icon">
-        <span class="sidebar-text">Manajemen Keuangan</span>
+        <a href="manajemenkeuangan.html" class="sidebar-link">
+          <img src="../images/icon-mkeuangan.svg" class="icon">
+          <span class="sidebar-text">Manajemen Keuangan</span>
+        </a>
       </li>
     </ul>
   </div>
@@ -32,8 +38,8 @@
     <header>
       <div class="header-buttons-row">
         <div class="header-buttons">
-          <button class="btn-green">Lihat Web</button>
-          <button class="btn-red">Logout</button>
+          <button class="btn-green" onclick="window.open('/')">Lihat Web</button>
+          <button class="btn-red" onclick="logout()">Logout</button>
         </div>
       </div>
       <div class="greeting">
@@ -45,29 +51,13 @@
     <div class="main-content">
       <section class="form-kamar">
         <h3>Tambah Kamar Baru</h3>
-        <form class="form-container">
-          <div class="form-group">
-            <label for="noKamar">No. Kamar</label>
-            <input type="text" id="noKamar" name="noKamar" placeholder="Contoh: A101" required />
-          </div>
-          
-          <div class="form-group">
-            <label for="penghuni">Nama Penghuni</label>
-            <select id="penghuni" name="penghuni" required>
-              <option value="">Pilih Penghuni</option>
-              <option value="Tersedia">A</option>
-              <option value="Terisi">B</option>
-              <option value="Perbaikan">C</option>
-            </select>
-          </div>
-      
+        <form class="form-container" id="formTambahKamar" enctype="multipart/form-data">
           <div class="form-group">
             <label for="status">Status</label>
             <select id="status" name="status" required>
               <option value="">Pilih Status</option>
-              <option value="Tersedia">Tersedia</option>
+              <option value="Tersedia">Kosong</option>
               <option value="Terisi">Terisi</option>
-              <option value="Perbaikan">Perbaikan</option>
             </select>
           </div>
 
@@ -77,16 +67,20 @@
           </div>
 
           <div class="form-group">
-            <label for="deskripsi">Deskripsi</label>
-            <input type="text" id="deskripsi" name="deskripsi" placeholder="Contoh: ABC" required />
+            <label for="fasilitas">Fasilitas</label>
+            <input type="text" id="fasilitas" name="fasilitas" placeholder="Contoh: Kamar mandi dalam, AC, WiFi" required />
           </div>
 
           <div class="form-group">
             <label for="gambar">Upload Foto Kamar</label>
-            <input type="file" id="gambar" name="gambar" accept="image/*" />
+            <input type="file" id="image" name="image" accept="image/*" required />
           </div>
-      
-      
+
+          <div class="form-group">
+            <label for="luas">Luas Kamar</label>
+            <input type="text" id="luas" name="luas" placeholder="Contoh: 50x10" required />
+          </div>
+
           <div class="form-buttons">
             <button type="submit" class="btn-blue">Simpan</button>
             <button type="reset" class="btn-red">Reset</button>
@@ -95,5 +89,81 @@
       </section>
     </div>
   </div>
+
+  <!-- Sidebar active link -->
+  <script>
+    const currentPage = window.location.pathname.split("/").pop();
+    document.querySelectorAll(".sidebar-link").forEach(link => {
+      if (link.getAttribute("href") === currentPage) {
+        link.classList.add("active");
+      }
+    });
+  </script>
+
+  <!-- SweetAlert dan jQuery -->
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+
+  <!-- AJAX + Token Check -->
+  <script>
+ $('#formTambahKamar').submit(function (e) {
+  e.preventDefault();
+
+  if (!$(this).valid()) return; // validasi jQuery
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal!',
+      text: 'Anda harus login terlebih dahulu.',
+    });
+    return;
+  }
+
+  const formData = new FormData(this);
+
+  $.ajax({
+    url: 'http://localhost:8000/api/kamars',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    success: function (response) {
+      Swal.fire({
+        title: 'Sukses!',
+        text: response.message || 'Data kamar berhasil ditambahkan.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = 'manajemenkamar.html';
+      });
+    },
+    error: function (xhr) {
+      let msg = 'Terjadi kesalahan.';
+      if (xhr.status === 422) {
+        const errors = xhr.responseJSON.errors;
+        msg = Object.values(errors).map(err => err[0]).join('\n');
+      } else if (xhr.responseJSON && xhr.responseJSON.message) {
+        msg = xhr.responseJSON.message;
+      }
+
+      Swal.fire({
+        title: 'Gagal!',
+        text: msg,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
+  });
+});
+
+
+  </script>
 </body>
 </html>
