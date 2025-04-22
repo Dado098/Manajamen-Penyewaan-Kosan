@@ -8,18 +8,33 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <header>
-    <div class="logo">senangkos<sup>®</sup></div>
-    <nav>
-      <a href="homepage.html">HOME</a>
-      <a href="#">Explore Kamar</a>
-      <a href="#" class="active">Kamar Anda</a>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <img src="../images/logo.png" alt="Logo Senangkos" />
+    </div>
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="homepage.html" class="home">Home</a></li>
+        <li><a href="explorekmr.html"class="kmr">Explore Kamar</a></li>
+        <li><a href="#">Kamar Anda</a></li>
+      </ul>
     </nav>
-    <div class="profile-icon">👤</div>
+    <div class="profile-icon">
+      <a href="profile.html">
+        <img src="../images/iconp.png" alt="Profil" />
+      </a>
+    </div>
   </header>
 
+  <!-- Hero Section -->
   <section class="hero">
-    <h1>Pilih Kamar Sesukamu</h1>
+    <div class="hero-content">
+      <h1>
+        <span>Pilih Kamar</span>
+        <span>Sesukamu</span>
+      </h1>
+      
   </section>
 
   <section class="kamar-list">
@@ -33,6 +48,7 @@
 
   <section class="kenapa">
     <p>Temukan kamar yang paling cocok untukmu dan nikmati tinggal nyaman serasa di rumah sendiri.</p>
+      <p>Klik kamar untuk melihat detail dan mulai sewa sekarang!</p>
     <h3>Kenapa Pilih Kami?</h3>
     <ul>
       <li>✅ Booking Online Mudah</li>
@@ -42,26 +58,27 @@
     </ul>
   </section>
 
-  <footer>
-    <div class="footer-section">
-      <div class="logo-footer">senangkos<sup>®</sup></div>
-      <p>2025 © senangkos! All rights reserved.</p>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-container">
+        <div class="footer-left">
+          <img src="../images/logo.png" alt="Logo Senangkos" class="footer-logo">
+        </div>
+        <div class="footer-center footer-nav">
+          <a href="homepage.html">Home</a>
+          <a href="explorekmr.html" class="lihat-kamar">Explore Kamar</a>
+          <a href="kamaranda.html">Kamar Anda</a>
+          <a href="profile.html">Profile</a>
+
+        </div>
+      </div>      
     </div>
-    <div class="footer-section">
-      <h4>LINKS</h4>
-      <p>Home</p>
-      <p>Menu</p>
-      <p>Process</p>
+    <div class="footer-bottom">
+      <div class="footer-left">© 2025 Senangkos. All rights reserved.</div>
+      <div class="footer-right">Website by Gondrong</div>
     </div>
-    <div class="footer-section">
-      <h4>SOCIALS</h4>
-      <p>hejvet.id</p>
-      <p>[placeholder]</p>
-    </div>
-    <div class="footer-section">
-      <h4>CONTACTS</h4>
-      <p>[placeholder]</p>
-    </div>
+    
   </footer>
 
   <script src="../js/explorekmr.js"></script>

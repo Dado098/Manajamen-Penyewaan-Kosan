@@ -3,7 +3,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #f3ded2; /* Warna krem */
+    background-color: #97D94D; /* Warna krem */
 }
 
 /* Container utama */
@@ -41,7 +41,7 @@ h2 {
 
 .jam-ikon {
     font-size: 32px;
-    color: #cc6600;
+    color: #30aa1d;
     margin: 12px 0;
 }
 
@@ -73,7 +73,7 @@ form label {
 /* Tombol Kirim */
 button {
     padding: 12px 24px;
-    background-color: #cc6600;
+    background-color: #328300;
     color: white;
     border: none;
     border-radius: 8px;
@@ -82,5 +82,5 @@ button {
 }
 
 button:hover {
-    background-color: #b35400;
+    background-color: #97D94D;
 }

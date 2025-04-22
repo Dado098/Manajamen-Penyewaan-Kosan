@@ -2,7 +2,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background: #e2e5dc;
+    background: #ffffff;
     color: #111;
   }
   
@@ -137,20 +137,24 @@ body {
     flex-wrap: wrap;
   }
   .card {
-    background: #A1DB60;
-    padding: 20px;
-    width: 200px;
+    background: #fcfcfc;
+    padding: 30px 20px; /* Menambah padding untuk ruang di dalam kartu */
+    width: 250px; /* Meningkatkan lebar kartu */
     border-radius: 12px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  }
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Meningkatkan bayangan */
+    margin: 20px; /* Memberi jarak antar kartu */
+    border: 2px solid rgb(116, 114, 114); /* Menambahkan garis hitam di luar kartu */
+}
   .card img {
     width: 100%;
+    max-height: 180px; /* ✅ Batasi tinggi maksimal gambar */
+    object-fit: contain; /* ✅ Potong gambar agar tetap proporsional */
     border-radius: 10px;
   }
   .card button {
     margin-top: 10px;
     padding: 5px 15px;
-    background: #2d1f1d;
+    background: #328300;
     color: white;
     border: none;
     cursor: pointer;
@@ -162,29 +166,71 @@ body {
     border-radius: 10px;
   }
   
-  /* Footer */
-  footer {
-    background: #97D94D;
-    color: rgb(255, 255, 255);
-    padding: 40px;
+  .footer {
+    width: 100%;
+    font-family: Arial, sans-serif;
   }
-  .footer-content {
+  
+  .footer-top {
+    background-color: #86D52B;
+    padding: 20px 0;
+  }
+  
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* dari center jadi space-between */
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+  
+/* Footer */
+.footer-logo {
+    width: 150px;
+    height: auto;
+    position: relative;
+    left: -100px; /* geser ke kiri */
+}
+
+
+.footer-nav {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    transform: translateX(-400px); /* geser ke kiri */
+  }
+  
+  
+  .footer-nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-nav a:hover {
+    color: #f0f0f0;
+  }
+  
+  .footer-bottom {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
-  }
-  .column {
-    min-width: 150px;
-  }
-  .column a {
-    display: block;
+    align-items: center;
+    background-color: #97D94D;
+    padding: 10px 20px;
+    font-size: 16px;
     color: white;
-    margin: 5px 0;
-    text-decoration: none;
   }
-  .footer-note {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 0.9em;
+  
+  .footer-left {
+    margin-left: 50px; /* geser dikit ke kanan */
+  }
+  .footer-right {
+    margin-right: 50px; /* geser dikit ke kiri */
   }
   

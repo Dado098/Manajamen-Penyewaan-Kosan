@@ -1,32 +1,35 @@
-$(document).ready(function () {
-  $('#formPembayaran').submit(function (e) {
-    e.preventDefault(); // Mencegah form reload
+$('#pay-button').click(function (e) {
+  e.preventDefault();
 
-    // Ambil data dari form
-    var nama = $('input[name="nama"]').val();
-    var nominal = $('input[name="nominal"]').val();
-    var bank = $('select[name="bank"]').val();
+  const nama = $('input[name=nama]').val();
+  const bank = $('#bank').val();
 
-    // Persiapkan data untuk dikirim
-    var formData = {
+  $.ajax({
+    url: '../snap/transaction.php',
+    method: 'POST',
+    data: {
       nama: nama,
-      nominal: nominal,
-      metode: "virtual-account",
-      bank: bank
-    };
-
-    // Kirim AJAX
-    $.ajax({
-      url: 'proses_pembayaran.php',
-      type: 'POST',
-      data: formData,
-      success: function (response) {
-        alert("Pembayaran berhasil: " + response);
-        // window.location.href = 'halaman_sukses.html';
-      },
-      error: function (xhr, status, error) {
-        alert("Terjadi kesalahan: " + error);
-      }
-    });
+      bank: bank,
+      amount: 1500000
+    },
+    success: function (snapToken) {
+      snap.pay(snapToken, {
+        onSuccess: function (result) {
+          alert("Pembayaran berhasil!");
+          console.log(result);
+        },
+        onPending: function (result) {
+          alert("Menunggu pembayaran!");
+          console.log(result);
+        },
+        onError: function (result) {
+          alert("Pembayaran gagal!");
+          console.log(result);
+        },
+        onClose: function () {
+          alert("Popup pembayaran ditutup.");
+        }
+      });
+    }
   });
 });

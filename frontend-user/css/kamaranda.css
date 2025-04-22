@@ -3,7 +3,7 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: #f3ded2; /* Warna latar belakang */
+    background-color: #97D94D; /* Warna latar belakang */
     font-family: 'Arial', sans-serif;
 }
 
@@ -38,13 +38,19 @@ body {
 
 /* Panah kembali di pojok kiri atas */
 .back {
-    position: fixed; /* Menggunakan fixed agar panah tetap berada di tempat meski halaman di-scroll */
-    left: 70px; /* Menjauhkan panah dari kiri sedikit lebih jauh */
-    top: 70px; /* Menjauhkan panah dari atas sedikit lebih jauh */
-    font-size: 50px; /* Ukuran besar untuk panah */
+    position: absolute;
+    top: 20px;
+    left: 20px;
     cursor: pointer;
-    color: #020202;
-}
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .back:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  
 /* Box transaksi dengan border dan latar belakang putih */
 .box-transaksi {
     border: 1px solid #2d2d2d;
@@ -87,3 +93,10 @@ body {
         font-size: 28px;
     }
 }
+
+
+
+
+
+
+

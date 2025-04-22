@@ -1,32 +1,23 @@
 body {
   font-family: Arial, sans-serif;
-  background: #f2f2f2;
+  background: #97D94D;
   padding: 40px;
   color: #333;
 }
 
 .container {
   max-width: 600px;
-  margin: auto;
+  margin: 100px auto; /* Margin atas dan bawah 60px, dan kiri-kanan auto untuk tengah */
   background: #fff;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
 }
 
-.back-button {
-  background: none;
-  border: none;
-  font-size: 30px;
-  color: #000000;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-
 h2 {
   text-align: center;
   margin-bottom: 30px;
-  color: #4d342f;
+  color: #000000;
 }
 
 .room-details {
@@ -50,7 +41,7 @@ h2 {
   margin: 0;
   font-size: 18px;
   font-weight: bold;
-  color: #4d342f;
+  color: #fbfbfb;
 }
 
 .room-info p {
@@ -59,7 +50,7 @@ h2 {
 
 .price {
   font-weight: bold;
-  color: #e74c3c;
+  color: #9a9a9a;
 }
 
 .payment-method {
@@ -89,11 +80,29 @@ input {
   border: 1px solid #ccc;
   border-radius: 8px;
 }
+.button-group {
+  display: flex;
+  justify-content: center; /* bisa diganti ke 'space-between' kalau mau penuh */
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.can-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #fff;         /* Warna putih */
+  color: #000;                    /* Teks hitam */
+  border: 2px solid #000;         /* Border hitam */
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 
 .pay-button {
   width: auto;
   padding: 12px 24px;
-  background-color: #4d342f;
+  background-color: #328300;
   color: white;
   font-size: 16px;
   font-weight: bold;
@@ -102,8 +111,20 @@ input {
   cursor: pointer;
   transition: background-color 0.3s ease;
   text-align: center;
+  text-decoration: none;
 }
 
 .pay-button:hover {
-  background-color: #3b2622;
+  background-color: #97D94D;
 }
+.cancel-btn {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #fff;         /* Warna putih */
+  color: #000;                    /* Teks hitam */
+  border: 2px solid #000;         /* Border hitam */
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
