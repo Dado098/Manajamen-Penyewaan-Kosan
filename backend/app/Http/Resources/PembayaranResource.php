@@ -28,6 +28,7 @@ class PembayaranResource extends JsonResource
             'pemesanan_id' => $this->pemesanan_id,
             'qr_code' => $this->qr_code,
             'created_at' => $this->created_at,
+            'status' => $this->status,
             'updated_at' => $this->updated_at,
         ];
     }
