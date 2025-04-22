@@ -53,54 +53,65 @@
     const username = $("#username").val();
     const password = $("#password").val();
 
+    // Clear error message dulu
     $("#error-message").addClass('hidden').text('');
 
+    // Validasi simple
     if (!username || !password) {
       $("#error-message").removeClass('hidden').text('Username dan Password wajib diisi.');
       return;
     }
 
     $.ajax({
-      url: "http://localhost:8000/api/login",
+      url: "http://localhost:8000/api/login", // Ganti dengan URL API kamu
       method: "POST",
       data: {
         username: username,
         password: password
       },
       success: function (response) {
-        // Simpan token
-        localStorage.setItem("token", response.token);
+        console.log(response);
 
-        // Cek role dan verifikasi email
-        if (response.role === "pemilik") {
-          // Pemilik bisa langsung masuk
-          window.location.href = "../../frontend-admin/adminview/indexadmin.html";
-        } else if (response.role === "penyewa") {
-          // Penyewa harus verifikasi email dulu
-          if (!response.email_verified_at) {
-            $("#error-message").removeClass('hidden').text("Email harus diverifikasi terlebih dahulu. Silakan cek email Anda.");
-            return;
-          }
-          window.location.href = "homepage.html";
-        } else {
-          // Role tidak dikenali → tampilkan seolah belum verifikasi
-          $("#error-message").removeClass('hidden').text("Email harus diverifikasi terlebih dahulu. Silakan cek email Anda.");
+        // Simpan token ke localStorage
+        localStorage.setItem('token', response.token);
+
+        // Cek apakah email sudah diverifikasi
+        if (response.message && response.message === 'Email belum diverifikasi.') {
+          $("#error-message").removeClass('hidden').text('Email belum diverifikasi. Silakan cek email Anda untuk verifikasi.');
+          return;
         }
+
+        // Ambil data user (opsional)
+        // Kalau mau, bisa fetch user detail disini
+
+        // Redirect sesuai role
+        $.ajax({
+          url: "http://localhost:8000/api/user", // API yang ngasih data user yang login
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + response.token
+          },
+          success: function (userData) {
+            if (userData.role === 'pemilik') {
+              window.location.href = "../../frontend-admin/adminview/indexadmin.html";
+            } else if (userData.role === 'penyewa') {
+              window.location.href = "homepage.html";
+            } else {
+              $("#error-message").removeClass('hidden').text('Role tidak dikenali.');
+            }
+          },
+          error: function () {
+            $("#error-message").removeClass('hidden').text('Gagal mengambil data user.');
+          }
+        });
       },
       error: function (xhr) {
-        let errorMsg = "Login gagal. Coba lagi.";
-        if (xhr.responseJSON) {
-          const res = xhr.responseJSON;
-          if (res.errors?.email) {
-            errorMsg = res.errors.email[0];
-          } else if (res.errors?.username) {
-            errorMsg = res.errors.username[0];
-          } else if (res.message) {
-            errorMsg = res.message;
-          }
+        console.log(xhr);
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          $("#error-message").removeClass('hidden').text(xhr.responseJSON.message);
+        } else {
+          $("#error-message").removeClass('hidden').text('Login gagal. Coba lagi.');
         }
-
-        $("#error-message").removeClass('hidden').text(errorMsg);
       }
     });
   });

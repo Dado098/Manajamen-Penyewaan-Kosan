@@ -14,16 +14,22 @@
     </div>
     <ul class="sidebar-menu">
       <li>
-        <img src="../images/icon-home.svg" class="icon">
-        <span class="sidebar-text">Dashboard</span>
+        <a href="indexadmin.html" class="sidebar-link">
+          <img src="../images/icon-home.svg" class="icon">
+          <span class="sidebar-text">Dashboard</span>
+        </a>
       </li>
       <li>
-        <img src="../images/icon-mkamar.svg" class="icon">
-        <span class="sidebar-text">Manajemen Kamar</span>
+        <a href="manajemenkamar.html" class="sidebar-link">
+          <img src="../images/icon-mkamar.svg" class="icon">
+          <span class="sidebar-text">Manajemen Kamar</span>
+        </a>
       </li>
       <li>
-        <img src="../images/icon-mkeuangan.svg" class="icon">
-        <span class="sidebar-text">Manajemen Keuangan</span>
+        <a href="manajemenkeuangan.html" class="sidebar-link">
+          <img src="../images/icon-mkeuangan.svg" class="icon">
+          <span class="sidebar-text">Manajemen Keuangan</span>
+        </a>
       </li>
     </ul>
   </div>
@@ -102,5 +108,15 @@
       </section>
     </div>
   </div>
+
+  <script>
+    const currentPage = window.location.pathname.split("/").pop();
+    document.querySelectorAll(".sidebar-link").forEach(link => {
+      if (link.getAttribute("href") === currentPage) {
+        link.classList.add("active");
+      }
+    });
+  </script>
+
 </body>
 </html>

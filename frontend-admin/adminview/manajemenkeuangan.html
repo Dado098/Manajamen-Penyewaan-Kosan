@@ -6,6 +6,7 @@
   <title>Manajemen Keuangan | SenangKos</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/adminstyle.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
 </head>
 <body>
   <div class="sidebar">
@@ -14,16 +15,22 @@
     </div>
     <ul class="sidebar-menu">
       <li>
-        <img src="../images/icon-home.svg" class="icon">
-        <span class="sidebar-text">Dashboard</span>
+        <a href="indexadmin.html" class="sidebar-link">
+          <img src="../images/icon-home.svg" class="icon">
+          <span class="sidebar-text">Dashboard</span>
+        </a>
       </li>
       <li>
-        <img src="../images/icon-mkamar.svg" class="icon">
-        <span class="sidebar-text">Manajemen Kamar</span>
+        <a href="manajemenkamar.html" class="sidebar-link">
+          <img src="../images/icon-mkamar.svg" class="icon">
+          <span class="sidebar-text">Manajemen Kamar</span>
+        </a>
       </li>
       <li>
-        <img src="../images/icon-mkeuangan.svg" class="icon">
-        <span class="sidebar-text">Manajemen Keuangan</span>
+        <a href="manajemenkeuangan.html" class="sidebar-link">
+          <img src="../images/icon-mkeuangan.svg" class="icon">
+          <span class="sidebar-text">Manajemen Keuangan</span>
+        </a>
       </li>
     </ul>
   </div>
@@ -47,51 +54,27 @@
         <div class="summary-header">
           <h3>Daftar Transaksi</h3>
           <div class="table-actions-left">
-            <button class="btn-blue">Tambah</button>
+            <a href="manajemenkeuangan-post.html" class="btn-blue" th:href="@{/manajemenkeuangan-post.html (id=${reach.id})}">Tambah</a>
             <button class="btn-green">Ekspor</button>
           </div>
         </div>
         <div class="room-table-wrapper">
-          <table>
+          <table id="pembayaran-table">
             <thead>
               <tr>
-                <th>Nama Penghuni</th>
-                <th>No. Kamar</th>
+                <th>No. Pembayaran</th>
+                <th>Metode Pembayaran</th>
                 <th>Jumlah Bayar</th>
-                <th>Tanggal Bayar</th>
-                <th>Status</th>
-                <th>Metode Bayar</th>
-                <th>Bukti Bayar</th>
+                <th>QR</th>
+                <th>Snap Token</th>
+                <th>Nama Penghuni</th>
+                <th>No. Pemesanan</th>
+                <th>Tanggal Pembayaran</th>
                 <th>Aksi</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td data-label="Nama Penghuni">Dimas</td>
-                <td data-label="No. Kamar">A001</td>
-                <td data-label="Jumlah Bayar">Rp1.500.000</td>
-                <td data-label="Tanggal Bayar">01 April 2025</td>
-                <td data-label="Status"><span class="badge badge-full">Lunas</span></td>
-                <td data-label="Metode Bayar">Transfer</td>
-                <td data-label="Bukti Bayar"><a href="#">Lihat</a></td>
-                <td data-label="Aksi">
-                  <button class="btn-action edit">Edit</button>
-                  <button class="btn-action delete">Hapus</button>
-                </td>
-              </tr>
-              <tr>
-                <td data-label="Nama Penghuni">Tungtungtung</td>
-                <td data-label="No. Kamar">A002</td>
-                <td data-label="Jumlah Bayar">Rp1.400.000</td>
-                <td data-label="Tanggal Bayar">01 April 2025</td>
-                <td data-label="Status"><span class="badge badge-empty">Belum Lunas</span></td>
-                <td data-label="Metode Bayar">Cash</td>
-                <td data-label="Bukti Bayar">-</td>
-                <td data-label="Aksi">
-                  <button class="btn-action edit">Edit</button>
-                  <button class="btn-action delete">Hapus</button>
-                </td>
-              </tr>
+            <tbody id="pembayaran-table-body">
+              <!-- Data akan dimuat via JavaScript -->
             </tbody>
           </table>
         </div>
@@ -102,7 +85,7 @@
         <div class="table-actions-left">
           <button class="btn-green">Ekspor</button>
         </div>
-        <table>
+        <table id="aktivitas-table">
           <thead>
             <tr>
               <th>No.</th>
@@ -111,23 +94,143 @@
               <th>Waktu</th>
             </tr>
           </thead>
-          <tbody>
-              <tr>
-                <td data-label="No.">1</td>
-                <td data-label="Aktivitas">Pembayaran Masuk</td>
-                <td data-label="Deskripsi">User A membayar Rp700.000</td>
-                <td data-label="Waktu">2025-04-03 10:30</td>
-              </tr>
-              <tr>
-                <td data-label="No.">2</td>
-                <td data-label="Aktivitas">Konfirmasi Pembayaran</td>
-                <td data-label="Deskripsi">Pembayaran User B dikonfirmasi</td>
-                <td data-label="Waktu">2025-04-03 09:45</td>
-              </tr>
-            </tbody>
+          <tbody id="aktivitas-table-body">
+            <!-- Data akan dimuat via JavaScript -->
+          </tbody>
         </table>
       </section>
     </div>
   </div>
+
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    $(document).ready(function () {
+      // Ambil data pembayaran
+      $.ajax({
+        url: 'http://localhost:8000/api/pembayarans',
+        method: 'GET',
+        success: function (response) {
+          const data = response.data || response;
+          const tbody = $('#pembayaran-table-body');
+          tbody.empty();
+  
+          data.forEach((item, index) => {
+            const row = `
+              <tr>
+                <td>${item.id}</td>
+                <td>${item.metode_pembayaran}</td>
+                <td>Rp${parseInt(item.total_tagihan).toLocaleString('id-ID')}</td>
+                <td>${item.qr_code ? `<a href="${item.qr_code}" target="_blank">Lihat</a>` : '-'}</td>
+                <td>${item.snap_token || '-'}</td>
+                <td>${item.penyewa ? item.penyewa.name : item.penyewa_id}</td>
+                <td>${item.pemesanan_id}</td>
+                <td>${new Date(item.created_at).toLocaleString('id-ID')}</td>
+                <td>
+                <button class="btn-action edit" data-id="${item.id}">Edit</button>
+                <button class="btn-action delete" data-id="${item.id}">Hapus</button>
+                </td>
+              </tr>`;
+            tbody.append(row);
+          });
+  
+          // Inisialisasi DataTable setelah data dimuat
+          $('#pembayaran-table').DataTable({
+            destroy: true // tambahkan destroy agar tidak error jika diinisialisasi ulang
+          });
+        },
+        error: function (err) {
+          console.error("Gagal memuat data pembayaran:", err);
+        }
+      });
+  
+      // Ambil aktivitas terbaru
+      $.ajax({
+        url: 'http://localhost:8000/api/aktivitas',
+        method: 'GET',
+        success: function (response) {
+          const aktivitasList = response.data || response;
+          const tbody = $('#aktivitas-table-body');
+          tbody.empty();
+  
+          aktivitasList.forEach((item, index) => {
+            const row = `
+              <tr>
+                <td>${index + 1}</td>
+                <td>${item.jenis}</td>
+                <td>${item.deskripsi}</td>
+                <td>${item.waktu}</td>
+              </tr>`;
+            tbody.append(row);
+          });
+  
+          // Inisialisasi DataTable untuk tabel aktivitas
+          $('#aktivitas-table').DataTable({
+            destroy: true
+          });
+        },
+        error: function (err) {
+          console.error("Gagal memuat aktivitas:", err);
+        }
+      });
+  
+      // Hapus data pembayaran
+      $(document).on('click', '.btn-action.delete', function () {
+        const id = $(this).data('id');
+        Swal.fire({
+          title: 'Apakah Anda yakin?',
+          text: 'Data pembayaran ini akan dihapus secara permanen.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Ya, hapus!',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: `http://localhost:8000/api/pembayarans/${id}`,
+              type: 'DELETE',
+              success: function () {
+                Swal.fire('Berhasil!', 'Data pembayaran telah dihapus.', 'success').then(() => {
+                  location.reload();
+                });
+              },
+              error: function () {
+                Swal.fire('Gagal!', 'Terjadi kesalahan saat menghapus data.', 'error');
+              }
+            });
+          }
+        });
+      });
+
+      // Edit data pembayaran
+      $(document).on('click', '.btn-action.edit', function () {
+        const id = $(this).data('id');
+        Swal.fire({
+          title: 'Edit Data Pembayaran',
+          text: `Apakah Anda ingin mengedit data pembayaran dengan ID: ${id}?`,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, lanjutkan',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.setItem('editPembayaranId', id);
+            window.location.href = 'manajemenkeuangan-update.html'; // sesuaikan dengan halaman edit kamu
+          }
+        });
+      });
+            // Active sidebar link
+            const currentPage = window.location.pathname.split("/").pop();
+      document.querySelectorAll(".sidebar-link").forEach(link => {
+        if (link.getAttribute("href") === currentPage) {
+          link.classList.add("active");
+        }
+      });
+    });
+  </script>
 </body>
 </html>

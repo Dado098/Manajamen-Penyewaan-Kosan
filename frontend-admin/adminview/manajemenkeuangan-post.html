@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tambah Transaksi | SenangKos</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-xh6JNQcHqund0MZXYXW2gV7KnL6XLZ7OeT+KhpafSkpeb7lcyL2V+F7fG1Evk9WDEvNLf2Hx7oM5t3RxwZ5qYQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/adminstyle.css" />
 </head>
 <body>
@@ -13,18 +13,9 @@
       <img src="../images/logosenangkos.svg" alt="Logo" class="logo">
     </div>
     <ul class="sidebar-menu">
-      <li>
-        <img src="../images/icon-home.svg" class="icon">
-        <span class="sidebar-text">Dashboard</span>
-      </li>
-      <li>
-        <img src="../images/icon-mkamar.svg" class="icon">
-        <span class="sidebar-text">Manajemen Kamar</span>
-      </li>
-      <li>
-        <img src="../images/icon-mkeuangan.svg" class="icon">
-        <span class="sidebar-text">Manajemen Keuangan</span>
-      </li>
+      <li><a href="indexadmin.html" class="sidebar-link"><img src="../images/icon-home.svg" class="icon"><span class="sidebar-text">Dashboard</span></a></li>
+      <li><a href="manajemenkamar.html" class="sidebar-link"><img src="../images/icon-mkamar.svg" class="icon"><span class="sidebar-text">Manajemen Kamar</span></a></li>
+      <li><a href="manajemenkeuangan.html" class="sidebar-link"><img src="../images/icon-mkeuangan.svg" class="icon"><span class="sidebar-text">Manajemen Keuangan</span></a></li>
     </ul>
   </div>
 
@@ -32,8 +23,8 @@
     <header>
       <div class="header-buttons-row">
         <div class="header-buttons">
-          <button class="btn-green">Lihat Web</button>
-          <button class="btn-red">Logout</button>
+          <button class="btn-green" onclick="window.open('/')">Lihat Web</button>
+          <button class="btn-red" onclick="logout()">Logout</button>
         </div>
       </div>
       <div class="greeting">
@@ -45,55 +36,62 @@
     <div class="main-content">
       <section class="form-kamar">
         <h3>Tambah Transaksi Manual</h3>
-        <form class="form-container">          
+        <form id="formTransaksi" class="form-container" enctype="multipart/form-data">          
           <div class="form-group">
-            <label for="penghuni">Nama Penghuni</label>
-            <select id="penghuni" name="penghuni" required>
-              <option value="">Pilih Penghuni</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
+            <label for="penyewa_id">Nama Penghuni</label>
+            <select id="penyewa_id" name="penyewa_id" required>
+              <option value="">Pilih Penyewa</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="harga">No. Kamar</label>
-            <input type="number" id="noKamar" name="noKamar" placeholder="Contoh: A001" required />
+            <label for="pemesanan_id">No. Pemesanan</label>
+            <select id="pemesanan_id" name="pemesanan_id" required>
+              <option value="">Pilih No. Pemesanan</option>
+            </select>
           </div>
 
           <div class="form-group">
-            <label for="harga">Jumlah Bayar (Rp)</label>
-            <input type="number" id="harga" name="harga" placeholder="Contoh: 850000" required />
+            <label for="total_tagihan">Jumlah Bayar (Rp)</label>
+            <input type="number" id="total_tagihan" name="total_tagihan" placeholder="Contoh: 850000" required />
           </div>
 
           <div class="form-group">
             <label for="tglbayar">Tanggal Bayar</label>
             <input type="date" id="tglbayar" name="tglbayar" required/>
           </div>
-      
+
           <div class="form-group">
             <label for="status">Status Pembayaran</label>
             <select id="status" name="status" required>
-              <option value="">Pilih Status</option>
               <option value="Lunas">Lunas</option>
               <option value="Belum Lunas">Belum Lunas</option>
             </select>
           </div>
+
           <div class="form-group">
-            <label for="metodepembayaran">Metode Pembayaran</label>
-            <select id="metodepembayaran" name="metodepembayaran" required>
-              <option value="">Pilih Metode Pembayaran</option>
-              <option value="ewallet">E-Wallet</option>
-              <option value="qris">QRIS</option>
+            <label for="payment_method">Metode Pembayaran</label>
+            <select id="payment_method" name="payment_method" required>
+              <option value="virtual_account">Virtual Account</option>
+              <option value="qr_code">QRIS</option>
+            </select>
+            <select name="bank" id="bankSelect">
+              <option value="">Pilih Bank</option>
+              <option value="cimb">CIMB</option>
+              <option value="bni">BNI</option>
+              <option value="bri">BRI</option>
+              <option value="mandiri">Mandiri</option>
+              <option value="permata">Permata</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="gambar">Upload Bukti Pembayaran</label>
-            <input type="file" id="gambar" name="gambar" accept="image/*" />
+            <label for="qr_code">Upload Bukti Pembayaran</label>
+            <input type="file" id="qr_code" name="qr_code" accept="image/*" />
+            <input type="hidden" name="qr_code" id="qr_code_base64" />
+            <img id="qr_preview" src="#" alt="Preview QR Code" style="max-width: 200px; margin-top: 10px; display: none;" />
           </div>
-      
-      
+
           <div class="form-buttons">
             <button type="submit" class="btn-blue">Simpan</button>
             <button type="reset" class="btn-red">Reset</button>
@@ -102,5 +100,147 @@
       </section>
     </div>
   </div>
+
+  <!-- Plugin dan script tambahan -->
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+
+  <script>
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal!',
+      text: 'Anda harus login terlebih dahulu.',
+    }).then(() => {
+      window.location.href = 'login.html';
+    });
+  }
+
+  const pemesananData = [];
+
+  // Load penyewa
+  $(document).ready(function () {
+    $.ajax({
+      url: 'http://localhost:8000/api/users?role=penyewa',
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      success: function (res) {
+        const penyewaSelect = $('#penyewa_id');
+        penyewaSelect.empty().append('<option value="">Pilih Penyewa</option>');
+        res.forEach(user => {
+          penyewaSelect.append(`<option value="${user.id}">${user.name}</option>`);
+        });
+      },
+      error: function (xhr) {
+        console.error("Error ambil penyewa:", xhr.responseText);
+      }
+    });
+
+    // Load pemesanan
+    $.ajax({
+      url: 'http://localhost:8000/api/pemesanans',
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      success: function (res) {
+        const select = $('#pemesanan_id');
+        select.empty().append('<option value="">Pilih No. Pemesanan</option>');
+        const data = Array.isArray(res) ? res : res.data;
+        data.forEach(p => {
+          const label = `#${p.id} - ${p.user?.name ?? 'Tanpa Nama'} (${p.kamar?.nama_kamar ?? 'Tanpa Kamar'})`;
+          select.append(`<option value="${p.id}">${label}</option>`);
+        });
+      },
+      error: function (xhr) {
+        console.error("Gagal load data pemesanan:", xhr.responseText);
+      }
+    });
+  });
+
+  // Convert gambar ke base64 & tampilkan preview
+  $('#qr_code').on('change', function () {
+    const file = this.files[0];
+    const preview = $('#qr_preview');
+    const hiddenInput = $('#qr_code_base64');
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        const base64String = reader.result;
+        hiddenInput.val(base64String);
+        preview.attr('src', base64String).show();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      hiddenInput.val('');
+      preview.hide();
+    }
+  });
+
+  // Submit form transaksi
+  $('#formTransaksi').submit(function (e) {
+    e.preventDefault();
+    if (!$(this).valid()) return;
+
+    const formData = new FormData(this);
+    formData.append('snap_token', '');
+
+    const qrBase64 = $('#qr_code_base64').val();
+    formData.set('qr_code', qrBase64); // Pastikan ditambahkan/di-set manual
+
+    $.ajax({
+      url: "http://localhost:8000/api/pembayarans",
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (response) {
+        Swal.fire({
+          title: 'Sukses!',
+          text: response.message || 'Transaksi berhasil ditambahkan.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          window.location.href = 'manajemenkeuangan.html';
+        });
+      },
+      error: function (xhr) {
+        let msg = 'Terjadi kesalahan.';
+        if (xhr.status === 422) {
+          const errors = xhr.responseJSON.errors;
+          msg = Object.values(errors).map(err => err[0]).join('\n');
+        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+          msg = xhr.responseJSON.message;
+        }
+
+        Swal.fire({
+          title: 'Gagal!',
+          text: msg,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
+  });
+
+    // Highlight menu aktif
+    const currentPage = window.location.pathname.split("/").pop();
+  document.querySelectorAll(".sidebar-link").forEach(link => {
+    if (link.getAttribute("href") === currentPage) {
+      link.classList.add("active");
+    }
+  });
+
+  </script>
 </body>
 </html>
