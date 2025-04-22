@@ -28,7 +28,7 @@ class StoreKamarRequest extends FormRequest
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'fasilitas' => 'required|string',
             'status' => 'nullable|string',
-            'luas' => 'required|numeric', // validasi baru untuk luas
+            'luas' => 'required|string', // validasi baru untuk luas
         ];
 
     }
