@@ -28,6 +28,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //  Untuk CRUD Kamar
 Route::apiResource('kamars', KamarController::class);
+Route::middleware('auth:sanctum')->apiResource('kamars', KamarController::class);
+
 
 // Untuk Export Data Kamar ke GeoJSON
 Route::get('kamars/export', [KosanExportController::class, 'export']);
