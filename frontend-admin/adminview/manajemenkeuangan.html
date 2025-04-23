@@ -54,7 +54,7 @@
         <div class="summary-header">
           <h3>Daftar Transaksi</h3>
           <div class="table-actions-left">
-            <button class="btn-blue">Tambah</button>
+            <a href="manajemenkeuangan-post.html" class="btn-blue" th:href="@{/manajemenkeuangan-post.html (id=${reach.id})}">Tambah</a>
             <button class="btn-green">Ekspor</button>
           </div>
         </div>
@@ -129,8 +129,8 @@
                 <td>${item.pemesanan_id}</td>
                 <td>${new Date(item.created_at).toLocaleString('id-ID')}</td>
                 <td>
-                  <button class="btn-action edit" data-id="${item.id}">Edit</button>
-                  <button class="btn-action delete" data-id="${item.id}">Hapus</button>
+                <button class="btn-action edit" data-id="${item.id}">Edit</button>
+                <button class="btn-action delete" data-id="${item.id}">Hapus</button>
                 </td>
               </tr>`;
             tbody.append(row);
@@ -176,10 +176,9 @@
         }
       });
   
-      // Tombol hapus
+      // Hapus data pembayaran
       $(document).on('click', '.btn-action.delete', function () {
         const id = $(this).data('id');
-  
         Swal.fire({
           title: 'Apakah Anda yakin?',
           text: 'Data pembayaran ini akan dihapus secara permanen.',
@@ -206,11 +205,10 @@
           }
         });
       });
-  
-      // Tombol edit
+
+      // Edit data pembayaran
       $(document).on('click', '.btn-action.edit', function () {
         const id = $(this).data('id');
-  
         Swal.fire({
           title: 'Edit Data Pembayaran',
           text: `Apakah Anda ingin mengedit data pembayaran dengan ID: ${id}?`,
@@ -221,9 +219,16 @@
         }).then((result) => {
           if (result.isConfirmed) {
             localStorage.setItem('editPembayaranId', id);
-            window.location.href = 'editpembayaran.html';
+            window.location.href = 'manajemenkeuangan-update.html'; // sesuaikan dengan halaman edit kamu
           }
         });
+      });
+            // Active sidebar link
+            const currentPage = window.location.pathname.split("/").pop();
+      document.querySelectorAll(".sidebar-link").forEach(link => {
+        if (link.getAttribute("href") === currentPage) {
+          link.classList.add("active");
+        }
       });
     });
   </script>
