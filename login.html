@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="../css/login.css" />
+</head>
+<body>
+
+  <div class="login">
+    <div class="container">
+      
+      <!-- Logo Senangkos -->
+      <div class="logo-wrapper">
+        <img src="../images/logo.png" alt="Logo Senangkos" />
+      </div>
+  
+      <!-- Form Login -->
+      <div class="popup-login">
+        <div class="login-sekarang-juga">Login Sekarang Juga!</div>
+  
+        <div class="form-group">
+          <input type="text" id="username" class="input-field" placeholder="Username" />
+        </div>
+  
+        <div class="form-group">
+          <input type="password" id="password" class="input-field" placeholder="Password" />
+        </div>
+  
+        <p class="signup-link">Belum memiliki akun? <a href="register.html"><strong>Daftar di sini</strong></a></p>
+  
+        <div class="login-btn" id="login-btn">Login</div>
+  
+        <p id="error-message" class="hidden" style="text-align:center; color:red; margin-top:10px;"></p>
+      </div>
+  
+    </div>
+  </div>
+  
+  <script src="../js/login.js"></script>
+
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+  $("#login-btn").click(function (e) {
+    e.preventDefault();
+
+    const username = $("#username").val();
+    const password = $("#password").val();
+
+    // Clear error message dulu
+    $("#error-message").addClass('hidden').text('');
+
+    // Validasi simple
+    if (!username || !password) {
+      $("#error-message").removeClass('hidden').text('Username dan Password wajib diisi.');
+      return;
+    }
+
+    $.ajax({
+      url: "http://localhost:8000/api/login", // Ganti dengan URL API kamu
+      method: "POST",
+      data: {
+        username: username,
+        password: password
+      },
+      success: function (response) {
+        console.log(response);
+
+        // Simpan token ke localStorage
+        localStorage.setItem('token', response.token);
+
+        // Cek apakah email sudah diverifikasi
+        if (response.message && response.message === 'Email belum diverifikasi.') {
+          $("#error-message").removeClass('hidden').text('Email belum diverifikasi. Silakan cek email Anda untuk verifikasi.');
+          return;
+        }
+
+        // Ambil data user (opsional)
+        // Kalau mau, bisa fetch user detail disini
+
+        // Redirect sesuai role
+        $.ajax({
+          url: "http://localhost:8000/api/user", // API yang ngasih data user yang login
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + response.token
+          },
+          success: function (userData) {
+            if (userData.role === 'pemilik') {
+              window.location.href = "../../frontend-admin/adminview/indexadmin.html";
+            } else if (userData.role === 'penyewa') {
+              window.location.href = "homepage.html";
+            } else {
+              $("#error-message").removeClass('hidden').text('Role tidak dikenali.');
+            }
+          },
+          error: function () {
+            $("#error-message").removeClass('hidden').text('Gagal mengambil data user.');
+          }
+        });
+      },
+      error: function (xhr) {
+        console.log(xhr);
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          $("#error-message").removeClass('hidden').text(xhr.responseJSON.message);
+        } else {
+          $("#error-message").removeClass('hidden').text('Login gagal. Coba lagi.');
+        }
+      }
+    });
+  });
+});
+
+  </script>
+  
+
+</body>
+</html>

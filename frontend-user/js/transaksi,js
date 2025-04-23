@@ -1,0 +1,37 @@
+$(document).ready(function() {
+    // Mengatur ketika form disubmit
+    $('#formBukti').submit(function(event) {
+      event.preventDefault(); // Mencegah form disubmit secara default
+  
+      // Mendapatkan file yang diupload
+      var fileInput = $('#buktiPembayaran')[0];
+      var file = fileInput.files[0]; // Mengambil file pertama yang dipilih
+  
+      if (file) {
+        var formData = new FormData(); // Membuat objek FormData untuk mengirim data ke server
+        formData.append('buktiPembayaran', file); // Menambahkan file ke dalam formData
+  
+        // Mengirim data ke server menggunakan AJAX
+        $.ajax({
+          url: 'proses_upload.php', // Ganti dengan URL yang sesuai untuk server kamu
+          type: 'POST',
+          data: formData,
+          processData: false, // Jangan mengubah data
+          contentType: false, // Jangan set Content-Type (karena kita menggunakan FormData)
+          success: function(response) {
+            // Menangani respons dari server (misalnya sukses upload)
+            alert('Bukti pembayaran berhasil dikirim!');
+            // Bisa menambahkan logika lain untuk merespons keberhasilan
+          },
+          error: function() {
+            // Menangani error jika ada masalah dengan upload
+            alert('Terjadi kesalahan saat mengirim bukti pembayaran. Silakan coba lagi.');
+          }
+        });
+      } else {
+        // Menampilkan pesan jika tidak ada file yang dipilih
+        alert('Silakan pilih file untuk diupload.');
+      }
+    });
+  });
+  

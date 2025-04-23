@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Halaman Pembayaran</title>
+  <link rel="stylesheet" href="../css/halamanpembayaran.css" />
+  
+  <!-- Midtrans Snap -->
+  <script type="text/javascript"
+    src="https://app.sandbox.midtrans.com/snap/snap.js"
+    data-client-key="SB-Mid-client-huB6drUtGM6XMmZ6"></script>
+</head>
+<body>
+  <div class="container">
+   
+    <!-- Judul Halaman -->
+    <h2>Halaman Pembayaran</h2>
+
+    <!-- Gambar Kamar dan Detail -->
+    <div class="room-details">
+      <img src="../images/kamar1.png" alt="Gambar Kamar" class="room-image" />
+      <div class="room-info">
+        <div class="room-detail">
+          <p><strong>Luas Kamar:</strong> 25 m²</p>
+        </div>
+        <div class="room-detail">
+          <p><strong>Deskripsi:</strong> Kamar nyaman, dilengkapi dengan AC dan tempat tidur besar.</p>
+        </div>
+        <div class="room-detail">
+          <p><strong>Total Pembayaran:</strong> <span class="price">Rp 600.000</span></p>
+        </div>
+      </div>
+    </div>
+    
+    
+
+    <!-- Form Pembayaran -->
+    <form id="formPembayaran">
+      <label>Nama Pemesan:</label>
+      <input type="text" name="nama" required />
+
+      <div class="button-group">
+        <a href="explorekmr.html" class="cancel-btn">Cancel</a>
+        <a href="transaksi.html" class="pay-button">Booking</a>
+      </div>      
+    </form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    document.getElementById("pay-button").addEventListener("click", function () {
+      let nama = document.querySelector('input[name="nama"]').value;
+
+      if (nama.trim() === "") {
+        alert("Harap masukkan nama pemesan.");
+        return;
+      }
+
+      fetch("../php/transaction.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nama: nama,
+          harga: 600000,
+          kamar: "Kamar No. 1"
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.snap_token) {
+            // Langsung ke Midtrans dengan token
+            window.snap.pay(data.snap_token);
+          } else {
+            alert("Gagal mendapatkan Snap Token.");
+            console.error("Respon:", data);
+          }
+        })
+        .catch((err) => {
+          alert("Terjadi kesalahan.");
+          console.error(err);
+        });
+    });
+  </script>
+</body>
+</html>

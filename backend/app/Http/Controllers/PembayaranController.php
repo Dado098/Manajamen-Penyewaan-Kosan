@@ -11,6 +11,8 @@ use Illuminate\Http\Response;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Midtrans\Snap;
 use Midtrans\Config;
+use Midtrans\Notification;
+use Illuminate\Http\Request;
 
 class PembayaranController extends Controller
 {
@@ -59,97 +61,70 @@ class PembayaranController extends Controller
  */
 public function store(StorePembayaranRequest $request)
 {
-    // Inisialisasi konfigurasi Midtrans
-    Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+    // Inisialisasi Midtrans
+    Config::$serverKey   = env('MIDTRANS_SERVER_KEY');
     Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
-    Config::$isSanitized = true;
-    Config::$is3ds = true;
+    Config::$isSanitized  = true;
+    Config::$is3ds        = true;
 
+    // Validasi dan data awal
     $data = $request->validated();
-
-    // Tambahkan penyewa_id dari input request
     $data['penyewa_id'] = $request->input('penyewa_id');
+    $data['qr_code']    = Str::uuid();
 
-    // Tambahkan qr_code UUID
-    $data['qr_code'] = Str::uuid();
-
-    // Buat pembayaran
+    // Simpan dulu record minimal
     $pembayaran = Pembayaran::create($data);
 
-    // Load relasi: penyewa (user dengan role 'penyewa') & pemesanan.kamar
-    $pembayaran->load([
-        'penyewa' => function ($query) {
-            $query->where('role', 'penyewa');
-        },
-        'pemesanan.kamar'
-    ]);
+    // Generate order_id unik
+    $orderId = 'ORDER-' . $pembayaran->id . '-' . now()->timestamp;
+    $pembayaran->order_id = $orderId;
+    $pembayaran->save();
 
-    $paymentMethod = $request->input('payment_method'); // "virtual_account" atau "qr_code"
-    $allowedBanks = ['cimb', 'bni', 'bri', 'mandiri', 'permata'];
-    $selectedBank = $request->input('bank');
+    // Load relasi
+    $pembayaran->load(['penyewa', 'pemesanan.kamar']);
 
-    if (!in_array($selectedBank, $allowedBanks)) {
-        return response()->json(['message' => 'Metode pembayaran tidak valid untuk bank yang dipilih'], 400);
-    }
-
+    // Persiapkan param Midtrans
     $params = [
         'transaction_details' => [
-            'order_id' => 'ORDER-' . $pembayaran->id . '-' . now()->timestamp,
+            'order_id'     => $orderId,
             'gross_amount' => (int) $pembayaran->total_tagihan,
         ],
-        'customer_details' => [
-            'first_name' => $pembayaran->penyewa->name ?? 'Pengguna',
-            'email' => $pembayaran->penyewa->email ?? 'dummy@email.com',
-            'phone' => $pembayaran->penyewa->no_telp ?? '08123456789',
+        'customer_details'   => [
+            'first_name' => $pembayaran->penyewa->name,
+            'email'      => $pembayaran->penyewa->email,
+            'phone'      => $pembayaran->penyewa->no_telp,
         ],
-        'item_details' => [
-            [
-                'id' => 'PEMESANAN-' . $pembayaran->pemesanan->id,
-                'price' => (int) $pembayaran->total_tagihan,
-                'quantity' => 1,
-                'name' => 'Pembayaran Kamar ' . ($pembayaran->pemesanan->kamar->nama ?? 'Kamar Tidak Ditemukan'),
-            ]
+        'item_details'       => [[
+            'id'       => 'PEMESANAN-' . $pembayaran->pemesanan->id,
+            'price'    => (int) $pembayaran->total_tagihan,
+            'quantity' => 1,
+            'name'     => 'Pembayaran Kamar ' . $pembayaran->pemesanan->kamar->nama,
+        ]],
+        'payment_type'       => 'bank_transfer',
+        'bank_transfer'      => [
+            'bank' => $request->input('bank'),
         ],
-        'payment_type' => 'bank_transfer',
-        'bank_transfer' => [
-            'bank' => $selectedBank,
-        ]
     ];
 
-    // Buat Snap Token Midtrans
+    // Dapatkan snap token
     $snapToken = Snap::getSnapToken($params);
 
     // Simpan snap token
     $pembayaran->snap_token = $snapToken;
     $pembayaran->save();
 
-    // Buat URL pembayaran
-    $paymentUrl = "https://app.sandbox.midtrans.com/snap/v2/vtweb/" . $snapToken;
+    // Build response
+    $response = [
+        'message'    => 'Pembayaran berhasil dibuat',
+        'order_id'   => $orderId,
+        'snap_token' => $snapToken,
+        'payment_url'=> "https://app.sandbox.midtrans.com/snap/v2/vtweb/{$snapToken}",
+        'data'       => new PembayaranResource($pembayaran),
+    ];
 
-    // QR Code (jika dipilih)
-    if ($paymentMethod === 'qr_code') {
-        $qrCode = QrCode::size(300)->generate($paymentUrl);
-        return response()->json([
-            'message' => 'Pembayaran berhasil dibuat',
-            'snap_token' => $snapToken,
-            'payment_url' => $paymentUrl,
-            'qr_code' => base64_encode($qrCode),
-            'data' => new PembayaranResource($pembayaran),
-        ], 201);
-    }
-
-    // Virtual account
-    if ($paymentMethod === 'virtual_account') {
-        return response()->json([
-            'message' => 'Pembayaran berhasil dibuat',
-            'snap_token' => $snapToken,
-            'payment_url' => $paymentUrl,
-            'data' => new PembayaranResource($pembayaran),
-        ], 201);
-    }
-
-    return response()->json(['message' => 'Metode pembayaran tidak valid'], 400);
+    return response()->json($response, 201);
 }
+
 
 
     /**
@@ -171,4 +146,58 @@ public function store(StorePembayaranRequest $request)
 
         return response($qrCode, 200)->header('Content-Type', 'image/png');
     }
+
+     /**
+     * Webhook handler Midtrans.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function notification(Request $request)
+{
+    $notif = $request->all();
+
+    // Signature key verification
+    $serverKey = config('midtrans.server_key');
+    $expectedSignature = hash('sha512',
+        $notif['order_id'] .
+        $notif['status_code'] .
+        $notif['gross_amount'] .
+        $serverKey
+    );
+
+    if ($notif['signature_key'] !== $expectedSignature) {
+        return response()->json(['message' => 'Invalid signature'], 403);
+    }
+
+    // Temukan pembayaran berdasarkan order_id
+    $pembayaran = \App\Models\Pembayaran::where('order_id', $notif['order_id'])->first();
+
+    if (!$pembayaran) {
+        return response()->json(['message' => 'Pembayaran tidak ditemukan'], 404);
+    }
+
+    // Update status pembayaran
+    switch ($notif['transaction_status']) {
+        case 'settlement':
+            $pembayaran->status = 'sukses';
+            break;
+        case 'pending':
+            $pembayaran->status = 'proses';
+            break;
+        case 'deny':
+        case 'cancel':
+        case 'expire':
+            $pembayaran->status = 'gagal';
+            break;
+        default:
+            $pembayaran->status = 'proses';
+    }
+
+    $pembayaran->save();
+
+    return response()->json(['message' => 'Notification received'], 200);
+}
+
+
 }

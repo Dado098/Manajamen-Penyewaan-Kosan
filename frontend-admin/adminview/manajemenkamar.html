@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manajemen Kamar | SenangKos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/adminstyle.css" />
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo-container">
+      <img src="../images/logosenangkos.svg" alt="Logo" class="logo">
+    </div>
+    <ul class="sidebar-menu">
+      <li>
+        <a href="indexadmin.html" class="sidebar-link">
+          <img src="../images/icon-home.svg" class="icon">
+          <span class="sidebar-text">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="manajemenkamar.html" class="sidebar-link">
+          <img src="../images/icon-mkamar.svg" class="icon">
+          <span class="sidebar-text">Manajemen Kamar</span>
+        </a>
+      </li>
+      <li>
+        <a href="manajemenkeuangan.html" class="sidebar-link">
+          <img src="../images/icon-mkeuangan.svg" class="icon">
+          <span class="sidebar-text">Manajemen Keuangan</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="content-wrapper">
+    <header>
+      <div class="header-buttons-row">
+        <div class="header-buttons">
+          <button class="btn-green">Tambah Kamar</button>
+          <button class="btn-red">Logout</button>
+        </div>
+      </div>
+      <div class="greeting">
+        <h2>Manajemen Kamar</h2>
+        <p>Kelola kamar kos Anda dengan mudah</p>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <section class="summary">
+        <div class="summary-header">
+          <h3>Daftar Kamar</h3>
+          <div class="table-actions-left">
+            <a href="manajemenkamar-post.html" class="btn-blue" th:href="@{/manajemenkamar-post.html (id=${reach.id})}">Tambah</a>
+            <button class="btn-green">Ekspor</button>
+          </div>
+        </div>
+        <div class="room-table-wrapper">
+          <table id="table-kamar" class="display">
+            <thead>
+              <tr>
+                <th>No. Kamar</th>
+                <th>Status</th>
+                <th>Harga</th>
+                <th>Fasilitas</th>
+                <th>Foto</th>
+                <th>Luas</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="kamar-table-body">
+              <!-- Baris kamar akan dimuat otomatis -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="pemesanan">
+        <h3>Daftar Pemesanan</h3>
+        <div class="table-actions-left">
+          <button class="btn-green">Ekspor</button>
+        </div>
+        <table id="table-pemesanan" class="display">
+          <thead>
+            <tr>
+              <th>No. Pemesanan</th>
+              <th>No. Kamar</th>
+              <th>Tanggal Masuk</th>
+              <th>Tanggal Keluar</th>
+              <th>Tanggal Pemesanan</th>
+            </tr>
+          </thead>
+          <tbody id="pemesanan-table-body">
+            <!-- Pemesanans akan dimuat otomatis -->
+          </tbody>
+        </table>
+      </section>
+
+      <section class="activity">
+        <h3>Aktivitas Terbaru</h3>
+        <div class="table-actions-left">
+          <button class="btn-green">Ekspor</button>
+        </div>
+        <table id="table-aktivitas" class="display">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Aktivitas</th>
+              <th>Deskripsi</th>
+              <th>Waktu</th>
+            </tr>
+          </thead>
+          <tbody id="aktivitas-table-body">
+            <!-- Aktivitas akan dimuat otomatis -->
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script>
+
+function deleteKamar(id, buttonElement) {
+      // Konfirmasi penghapusan dengan SweetAlert
+      Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to undo this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, cancel!'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              $.ajax({
+                  url: `http://localhost:8000/api/kamars/${id}`, // API URL untuk delete kamar
+                  type: 'DELETE',
+                  headers: {
+                      'Authorization': 'Bearer ' + localStorage.getItem('token') // Jika menggunakan token untuk autentikasi
+                  },
+                  success: function(response) {
+                      // Menampilkan notifikasi berhasil
+                      Swal.fire({
+                          title: 'Deleted!',
+                          text: 'The room has been deleted.',
+                          icon: 'success',
+                          confirmButtonText: 'OK'
+                      });
+
+                      // Hapus baris kamar dari tabel setelah berhasil dihapus
+                      $(buttonElement).closest('tr').remove(); // Menghapus baris terkait
+                  },
+                  error: function(xhr, status, error) {
+                      // Menangani error dengan memberikan pesan yang lebih jelas
+                      if (xhr.status === 401) {
+                          Swal.fire({
+                              title: 'Unauthorized',
+                              text: 'You do not have permission to delete this room.',
+                              icon: 'error',
+                              confirmButtonText: 'OK'
+                          });
+                      } else if (xhr.status === 404) {
+                          Swal.fire({
+                              title: 'Not Found',
+                              text: 'Room not found.',
+                              icon: 'error',
+                              confirmButtonText: 'OK'
+                          });
+                      } else {
+                          Swal.fire({
+                              title: 'Error!',
+                              text: 'Failed to delete room. Please try again later.',
+                              icon: 'error',
+                              confirmButtonText: 'OK'
+                          });
+                      }
+                      console.error('Error:', xhr.responseText);
+                  }
+              });
+          }
+      });
+  }
+    $(document).ready(function () {
+      // Ambil data kamar
+      $.ajax({
+        url: 'http://localhost:8000/api/kamars',
+        method: 'GET',
+        success: function (response) {
+          const tbody = $('#kamar-table-body');
+          tbody.empty();
+
+          response.forEach((kamar, index) => {
+            const badge = kamar.status === 'Terisi'
+              ? '<span class="badge badge-red">Terisi</span>'
+              : '<span class="badge badge-green">Kosong</span>';
+            const foto = kamar.image_url
+              ? `<img src="${kamar.image_url}" class="room-photo" alt="Foto ${kamar.id}">`
+              : '-';
+
+            const row = `
+              <tr>
+                <td data-label="No. Kamar">${kamar.id}</td>
+                <td data-label="Status">${badge}</td>
+                <td data-label="Harga">Rp${parseInt(kamar.harga).toLocaleString('id-ID')}</td>
+                <td data-label="Fasilitas">${kamar.fasilitas || '-'}</td>
+                <td data-label="Foto">
+                  <img src="http://localhost:8000/storage/${kamar.image}" alt="Foto Kamar ${kamar.id}" style="max-width: 100px; height: auto;">
+                </td>
+                <td data-label="Luas">${kamar.luas} m²</td>
+                <td data-label="Aksi">
+                  <a href="manajemenkamar-update.html?id=${kamar.id}" button class="btn-action edit" data-id="${kamar.id}">Edit</a>
+                  <button class="btn-action delete" onclick="deleteKamar(${kamar.id}, this)">Hapus</button>
+                </td>
+              </tr>`;
+            tbody.append(row);
+          });
+
+          // Aktifkan DataTable untuk tabel kamar
+          $('#table-kamar').DataTable({
+            responsive: true,
+            pageLength: 5,
+            language: {
+              url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
+            }
+          });
+        },
+        error: function (err) {
+          console.error("Gagal memuat data kamar:", err);
+        }
+      });
+
+
+      // Ambil aktivitas terbaru
+      $.ajax({
+        url: 'http://localhost:8000/api/aktivitas',
+        method: 'GET',
+        success: function (res) {
+          const tbody = $('#aktivitas-table-body');
+          tbody.empty();
+
+          res.forEach((item, index) => {
+            const row = `
+              <tr>
+                <td>${index + 1}</td>
+                <td>${item.jenis}</td>
+                <td>${item.deskripsi}</td>
+                <td>${item.waktu}</td>
+              </tr>`;
+            tbody.append(row);
+          });
+
+          // Aktifkan DataTable untuk tabel aktivitas
+          $('#table-aktivitas').DataTable({
+            responsive: true,
+            pageLength: 5,
+            language: {
+              url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
+            }
+          });
+        },
+        error: function (err) {
+          console.error("Gagal memuat aktivitas:", err);
+        }
+      });
+
+      // Ambil data pemesanan
+      $.ajax({
+        url: 'http://localhost:8000/api/pemesanans',
+        method: 'GET',
+        success: function (response) {
+          const tbody = $('#pemesanan-table-body');
+          tbody.empty();
+
+          response.forEach((pemesanan, index) => {
+            const foto = pemesanan.image
+              ? `<img src="${pemesanan.image}" class="room-photo" alt="Foto Kamar">`
+              : '-';
+
+            const row = `
+              <tr>
+                <td>${index + 1}</td>
+                <td>${pemesanan.kamar_id}</td>
+                <td>${pemesanan.tgl_masuk}</td>
+                <td>${pemesanan.tgl_keluar}</td>
+                <td>${pemesanan.created_at}</td>
+              </tr>`;
+            tbody.append(row);
+          });
+
+          // Aktifkan DataTable untuk tabel pemesanan
+          $('#table-pemesanan').DataTable({
+            responsive: true,
+            pageLength: 5,
+            language: {
+              url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
+            }
+          });
+        },
+        error: function (err) {
+          console.error("Gagal memuat data pemesanan:", err);
+        }
+      });
+
+      // Tombol logout (tidak aktif karena tidak ada login)
+      $('.btn-red').on('click', function () {
+        alert("Logout tidak aktif di mode non-login.");
+      });
+    });
+  </script>
+  
+  <script>
+    const currentPage = window.location.pathname.split("/").pop();
+    document.querySelectorAll(".sidebar-link").forEach(link => {
+      if (link.getAttribute("href") === currentPage) {
+        link.classList.add("active");
+      }
+    });
+  </script>
+
+</body>
+</html>

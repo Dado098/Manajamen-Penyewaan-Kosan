@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tambah Transaksi | SenangKos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-xh6JNQcHqund0MZXYXW2gV7KnL6XLZ7OeT+KhpafSkpeb7lcyL2V+F7fG1Evk9WDEvNLf2Hx7oM5t3RxwZ5qYQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/adminstyle.css" />
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo-container">
+      <img src="../images/logosenangkos.svg" alt="Logo" class="logo">
+    </div>
+    <ul class="sidebar-menu">
+      <li>
+        <a href="indexadmin.html" class="sidebar-link">
+          <img src="../images/icon-home.svg" class="icon">
+          <span class="sidebar-text">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="manajemenkamar.html" class="sidebar-link">
+          <img src="../images/icon-mkamar.svg" class="icon">
+          <span class="sidebar-text">Manajemen Kamar</span>
+        </a>
+      </li>
+      <li>
+        <a href="manajemenkeuangan.html" class="sidebar-link">
+          <img src="../images/icon-mkeuangan.svg" class="icon">
+          <span class="sidebar-text">Manajemen Keuangan</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="content-wrapper">
+    <header>
+      <div class="header-buttons-row">
+        <div class="header-buttons">
+          <button class="btn-green">Lihat Web</button>
+          <button class="btn-red">Logout</button>
+        </div>
+      </div>
+      <div class="greeting">
+        <h2>Manajemen Kamar</h2>
+        <p>Update Informasi Kamar</p>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <section class="form-kamar">
+        <h3>Update Kamar</h3>
+        <form class="form-container">
+          <div class="form-group">
+            <label for="penghuni">Nama Penghuni</label>
+            <select id="penghuni" name="penghuni" required>
+              <option value="">Pilih Penghuni</option>
+              <option value="Tersedia">A</option>
+              <option value="Terisi">B</option>
+              <option value="Perbaikan">C</option>
+            </select>
+          </div>
+      
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status" required>
+              <option value="">Pilih Status</option>
+              <option value="Tersedia">Tersedia</option>
+              <option value="Terisi">Terisi</option>
+              <option value="Perbaikan">Perbaikan</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="harga">Harga per Bulan (Rp)</label>
+            <input type="number" id="harga" name="harga" placeholder="Contoh: 850000" required />
+          </div>
+
+          <div class="form-group">
+            <label for="deskripsi">Deskripsi</label>
+            <input type="text" id="deskripsi" name="deskripsi" placeholder="Contoh: ABC" required />
+          </div>
+
+          <div class="form-group">
+            <label for="gambar">Upload Foto Kamar</label>
+            <input type="file" id="gambar" name="gambar" accept="image/*" />
+          </div>
+      
+      
+          <div class="form-buttons">
+            <button type="submit" class="btn-blue">Simpan</button>
+            <button type="reset" class="btn-red">Reset</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const currentPage = window.location.pathname.split("/").pop();
+    document.querySelectorAll(".sidebar-link").forEach(link => {
+      if (link.getAttribute("href") === currentPage) {
+        link.classList.add("active");
+      }
+    });
+  </script>
+
+</body>
+</html>
