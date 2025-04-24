@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailController;
 
+
 // Route untuk Manajemen User (Admin)
 Route::apiResource('users', UserController::class);
 Route::get('users/role/{role}', [UserController::class, 'getUsersByRole']);
@@ -70,6 +71,13 @@ Route::get('/tes-email', [EmailController::class, 'sendTestEmail']);
 Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::post('midtrans/notification', [PembayaranController::class, 'notification']);
+
+
+Route::post('midtrans/notification', [PembayaranController::class, 'notification'])->withoutMiddleware(['auth:sanctum']);
+
 
 
 

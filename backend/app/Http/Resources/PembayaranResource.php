@@ -16,6 +16,7 @@ class PembayaranResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'order_id' => $this->order_id, // ✅ Ditambahkan order_id
             'metode_pembayaran' => $this->metode_pembayaran,
             'total_tagihan' => $this->total_tagihan,
             'snap_token' => $this->snap_token, // ✅ Tambahan snap_token
