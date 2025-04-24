@@ -276,6 +276,18 @@ color: #2D734E;
 border-radius: 6px;
 }
 
+.badge-yellow {
+  background-color: #FFF2C9;
+  color: #8E633E;
+  border-radius: 6px;
+  }
+
+.badge-blue {
+background-color: #C9F0FF;
+color: #3E8D8E;
+border-radius: 6px;
+}
+
 /* Room table wrapper */
 .room-table-wrapper {
 overflow-x: auto;
@@ -320,11 +332,12 @@ cursor: pointer;
 
 .btn-action.edit {
 background-color: #4CAF50;
+text-decoration: none;
 color: white;
 }
 
 .btn-action.delete {
-background-color: #E53935;
+background-color: #B72345;
 color: white;
 }
 

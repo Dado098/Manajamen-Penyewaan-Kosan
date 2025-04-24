@@ -40,7 +40,7 @@
     <header>
       <div class="header-buttons-row">
         <div class="header-buttons">
-          <button class="btn-green" onclick="window.location.href='../../homepage.html'">Lihat Web</button>
+          <button class="btn-green" onclick="window.location.href='../../frontend-user/html/homepage.html'">Lihat Web</button>
           <button class="btn-red" id="logoutBtn">Logout</button>
         </div>
       </div>
@@ -54,10 +54,9 @@
       <section class="summary">
         <h3>Ringkasan Data Penyewaan</h3>
         <div class="summary-cards">
-          <div class="card"><p>Total Kamar</p><h2>15</h2></div>
-          <div class="card"><p>Kamar Kosong</p><h2>0</h2></div>
-          <div class="card"><p>Pendapatan Bulan Ini</p><h2>Rp9100k</h2></div>
-          <div class="card"><p>Pembayaran Tertunda</p><h2>Rp1400k</h2></div>
+          <div class="card"><p>Total Kamar</p><h2 id="total-kamar">0</h2></div>
+          <div class="card"><p>Kamar Kosong</p><h2 id="kamar-kosong">0</h2></div>
+          <div class="card"><p>Pendapatan Bulan Ini</p><h2 id="pendapatan">Rp0</h2></div>
         </div>
       </section>
 
@@ -118,6 +117,7 @@
 
   <script>
     $(document).ready(function () {
+      loadRingkasanData(); // <--- Tambahkan ini
       $('#logoutBtn').click(function () {
         Swal.fire({
           title: 'Konfirmasi',
@@ -142,6 +142,31 @@
           }
         });
       });
+    });
+  
+      function loadRingkasanData() {
+      $.ajax({
+        url: 'http://localhost:8000/api/kamars', // Ganti dengan endpoint yang sesuai untuk kamar
+        method: 'GET',
+        success: function (res) {
+          let totalKamar = res.length; // Hitung total kamar
+          let kamarKosong = res.filter(kamar => kamar.status === 'Kosong').length; // Hitung kamar kosong
+          let pendapatan = res.reduce((total, kamar) => {
+            // Asumsikan 'pendapatan' adalah nilai yang ada di tiap data kamar
+            return total + (kamar.status === 'terisi' ? kamar.harga : 0);
+          }, 0);
+
+          // Update elemen HTML dengan hasil perhitungan
+          $('#total-kamar').text(totalKamar);
+          $('#kamar-kosong').text(kamarKosong);
+          $('#pendapatan').text('Rp' + pendapatan.toLocaleString());
+        },
+        error: function (err) {
+          console.error("Gagal memuat data kamar:", err);
+        }
+      });
+    }
+      
       // Load data penyewa
       $.ajax({
         url: 'http://localhost:8000/api/users?role=penyewa',
@@ -203,7 +228,6 @@
           link.classList.add("active");
         }
       });
-    });
   </script>
 </body>
 </html>

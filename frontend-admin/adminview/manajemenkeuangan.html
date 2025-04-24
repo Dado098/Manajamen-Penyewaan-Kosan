@@ -39,8 +39,8 @@
     <header>
       <div class="header-buttons-row">
         <div class="header-buttons">
-          <button class="btn-green">Lihat Website</button>
-          <button class="btn-red">Logout</button>
+          <button class="btn-green" onclick="window.location.href='../../frontend-user/html/homepage.html'">Lihat Web</button>
+          <button class="btn-red" id="logoutBtn">Logout</button>
         </div>
       </div>
       <div class="greeting">
@@ -65,6 +65,7 @@
                 <th>No. Pembayaran</th>
                 <th>Metode Pembayaran</th>
                 <th>Jumlah Bayar</th>
+                <th>Status</th>
                 <th>QR</th>
                 <th>Snap Token</th>
                 <th>Nama Penghuni</th>
@@ -102,11 +103,43 @@
     </div>
   </div>
 
+
   <script src="../js/jquery-3.7.1.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
   <script>
+
+$(document).ready(function () {
+      $('#logoutBtn').click(function () {
+        Swal.fire({
+          title: 'Konfirmasi',
+          text: "Anda yakin ingin logout?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Ya, logout!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.removeItem("token"); // Hapus token login
+            Swal.fire({
+              title: 'Berhasil!',
+              text: 'Anda telah logout.',
+              icon: 'success',
+              timer: 1500,
+              showConfirmButton: false
+            }).then(() => {
+              window.location.href = '../../frontend-user/html/login.html'; // Arahkan ke halaman login
+            });
+          }
+        });
+      });
+    });
+
     $(document).ready(function () {
       // Ambil data pembayaran
       $.ajax({
@@ -116,21 +149,35 @@
           const data = response.data || response;
           const tbody = $('#pembayaran-table-body');
           tbody.empty();
-  
+
           data.forEach((item, index) => {
+            let badge = '';
+            console.log('STATUS:', item.status);
+            console.log('ITEM:', item);
+            if (item.status === 'sukses') {
+              badge = '<span class="badge badge-green">Sukses</span>';
+            } else if (item.status === 'gagal') {
+              badge = '<span class="badge badge-red">Gagal</span>';
+            } else if (item.status === 'proses') {
+              badge = '<span class="badge badge-yellow">Pending</span>';
+            } else if (item.status === 'menunggu pembayaran') {
+              badge = '<span class="badge badge-blue">Menunggu Pembayaran</span>';
+            }
+
             const row = `
               <tr>
                 <td>${item.id}</td>
                 <td>${item.metode_pembayaran}</td>
                 <td>Rp${parseInt(item.total_tagihan).toLocaleString('id-ID')}</td>
+                <td data-label="Status">${badge}</td>
                 <td>${item.qr_code ? `<a href="${item.qr_code}" target="_blank">Lihat</a>` : '-'}</td>
                 <td>${item.snap_token || '-'}</td>
                 <td>${item.penyewa ? item.penyewa.name : item.penyewa_id}</td>
                 <td>${item.pemesanan_id}</td>
                 <td>${new Date(item.created_at).toLocaleString('id-ID')}</td>
                 <td>
-                <button class="btn-action edit" data-id="${item.id}">Edit</button>
-                <button class="btn-action delete" data-id="${item.id}">Hapus</button>
+                  <button class="btn-action edit" data-id="${item.id}">Edit</button>
+                  <button class="btn-action delete" data-id="${item.id}">Hapus</button>
                 </td>
               </tr>`;
             tbody.append(row);
