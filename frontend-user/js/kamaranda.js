@@ -3,4 +3,7 @@ $(document).ready(function () {
       window.location.href = 'pembayaran.html';
     });
   });
+  function goBack() {
+    window.history.back();
+  }
   

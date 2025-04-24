@@ -24,7 +24,7 @@ $(document).ready(function () {
           <div class="card">
             <img src="${kamar.img}" alt="Kamar No ${kamar.no}">
             <h4>Kamar No ${kamar.no}</h4>
-            <p>📷 ${kamar.harga}</p>
+            <p> ${kamar.harga}</p>
             <button>Cek Detail Kamar</button>
           </div>
         `);
@@ -40,4 +40,10 @@ $(document).ready(function () {
       renderKamar(lantai);
     });
   });
+  // Event delegation untuk tombol cek detail
+$(document).on("click", "button:contains('Cek Detail Kamar')", function () {
+  const kamarNo = $(this).siblings("h4").text().replace("Kamar No ", "");
+  window.location.href = `detailkamar${kamarNo}.html`;
+});
+
   

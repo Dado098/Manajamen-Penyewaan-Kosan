@@ -4,50 +4,123 @@
   <meta charset="UTF-8" />
   <title>Halaman Pembayaran</title>
   <link rel="stylesheet" href="../css/halamanpembayaran.css" />
+
+  <!-- Midtrans Snap -->
+  <script type="text/javascript"
+    src="https://app.sandbox.midtrans.com/snap/snap.js"
+    data-client-key="SB-Mid-client-huB6drUtGM6XMmZ6"></script>
 </head>
 <body>
   <div class="container">
-    <!-- Tombol Kembali -->
-    <button class="back-button" onclick="window.history.back();">&#60;</button>
-
-    <!-- Judul Halaman -->
     <h2>Halaman Pembayaran</h2>
 
-    <!-- Gambar Kamar dan Detail -->
     <div class="room-details">
       <img src="../images/kamar1.png" alt="Gambar Kamar" class="room-image" />
       <div class="room-info">
-        <h3>Kamar No. 1</h3>
-        <p>Luas Kamar: 25 m²</p>
-        <p>Deskripsi: Kamar nyaman, dilengkapi dengan AC dan tempat tidur besar.</p>
-        <p>Total Pembayaran: <span class="price">Rp 1.500.000</span></p>
+        <div class="room-detail">
+          <p><strong>Luas Kamar:</strong> 25 m²</p>
+        </div>
+        <div class="room-detail">
+          <p><strong>Deskripsi:</strong> Kamar nyaman, dilengkapi dengan AC dan tempat tidur besar.</p>
+        </div>
+        <div class="room-detail">
+          <p><strong>Total Pembayaran:</strong> <span class="price">Rp 600.000</span></p>
+        </div>
       </div>
     </div>
 
-    <!-- Pilihan Bank -->
-    <div class="payment-method">
-      <p>Pilih Bank Virtual Account:</p>
-      <select name="bank" required>
-        <option value="bca">BCA</option>
-        <option value="bni">BNI</option>
-        <option value="bri">BRI</option>
-        <option value="mandiri">Mandiri</option>
-      </select>
-    </div>
-
-    <!-- Form Pembayaran -->
     <form id="formPembayaran">
       <label>Nama Pemesan:</label>
       <input type="text" name="nama" required />
 
+      <label>Metode Pembayaran:</label>
+      <select name="payment_method" required>
+        <option value="virtual_account">Virtual Account</option>
+        <option value="qr_code">QR Code</option>
+      </select>
 
-      <div style="text-align: center;">
-        <button type="submit" class="pay-button">Bayar</button>
+      <label>Pilih Bank:</label>
+      <select name="bank" required>
+        <option value="bni">BNI</option>
+        <option value="bri">BRI</option>
+        <option value="cimb">CIMB</option>
+        <option value="mandiri">Mandiri</option>
+        <option value="permata">Permata</option>
+      </select>
+
+      <div class="button-group">
+        <a href="explorekmr.html" class="cancel-btn">Cancel</a>
+        <button type="submit" class="pay-button">Booking Sekarang</button>
       </div>
     </form>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="../js/halamanpembayaran.js"></script>
+  <!-- jQuery & SweetAlert -->
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    $(document).ready(function () {
+      $('#formPembayaran').submit(function (e) {
+        e.preventDefault();
+
+        const namaPemesan = $('input[name="nama"]').val();
+        const paymentMethod = $('select[name="payment_method"]').val();
+        const selectedBank = $('select[name="bank"]').val();
+
+        const token = localStorage.getItem('token');
+        const penyewa_id = localStorage.getItem('penyewa_id'); // kamu bisa sesuaikan
+        const pemesanan_id = localStorage.getItem('pemesanan_id'); // sesuaikan juga
+
+        if (!token || !penyewa_id || !pemesanan_id) {
+          Swal.fire('Gagal!', 'Anda harus login & pilih kamar terlebih dahulu.', 'error');
+          return;
+        }
+
+        $.ajax({
+          url: 'http://localhost:8000/api/pembayarans',
+          type: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          data: {
+            penyewa_id: penyewa_id,
+            pemesanan_id: pemesanan_id,
+            payment_method: paymentMethod,
+            bank: selectedBank,
+            total_tagihan: 600000 // sesuaikan jika dinamis
+          },
+          success: function (response) {
+            if (response.snap_token) {
+              snap.pay(response.snap_token, {
+                onSuccess: function (result) {
+                  Swal.fire('Berhasil!', 'Pembayaran berhasil dilakukan.', 'success').then(() => {
+                    window.location.href = 'transaksi.html';
+                  });
+                },
+                onPending: function (result) {
+                  Swal.fire('Menunggu!', 'Pembayaran Anda sedang diproses.', 'info');
+                },
+                onError: function (result) {
+                  Swal.fire('Error!', 'Terjadi kesalahan dalam pembayaran.', 'error');
+                },
+                onClose: function () {
+                  Swal.fire('Dibatalkan!', 'Anda menutup popup pembayaran.', 'info');
+                }
+              });
+            } else {
+              Swal.fire('Error!', 'Snap token tidak ditemukan.', 'error');
+            }
+          },
+          error: function (xhr) {
+            let message = 'Gagal memproses pembayaran.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            Swal.fire('Error', message, 'error');
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

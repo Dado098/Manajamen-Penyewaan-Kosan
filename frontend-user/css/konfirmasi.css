@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
+    background-color: #97D94D;
     padding: 40px;
     text-align: center;
   }
@@ -9,7 +9,7 @@ body {
     background: #fff;
     padding: 30px;
     max-width: 500px;
-    margin: auto;
+    margin: 100px auto;
     border-radius: 8px;
     box-shadow: 0 0 8px rgba(0,0,0,0.1);
   }
@@ -48,7 +48,7 @@ body {
   
   #btnKontakPengelola {
     padding: 12px 25px;
-    background-color: #2B1B12; /* Warna WhatsApp */
+    background-color: #328300; /* Warna WhatsApp */
     color: white;
     border: none;
     cursor: pointer;
@@ -56,6 +56,6 @@ body {
   }
   
   #btnKontakPengelola:hover {
-    background-color: #128C7E;
+    background-color: #97D94D;
   }
   

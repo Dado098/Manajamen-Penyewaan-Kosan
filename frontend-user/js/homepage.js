@@ -1,18 +1,32 @@
-$(document).ready(function () {
-    // Ketika tombol "Lihat Kamar" diklik
-    $('.lihat-kamar').click(function () {
-      $.ajax({
-        url: 'http://localhost:3000/data', // Endpoint server
-        method: 'GET', // Metode permintaan
-        success: function (response) {
-          // Menampilkan data yang diterima dari server di dalam #result
-          alert(response.message); // Menampilkan pesan dalam bentuk alert
-        },
-        error: function (err) {
-          // Menangani error jika permintaan gagal
-          console.log('Error:', err);
-        }
+<script>
+  $(document).ready(function () {
+    $('#loginBtn').click(function () {
+      window.location.href = 'login.html';
+    });
+
+    $('#signupBtn, .signupRedirect').click(function () {
+      window.location.href = 'register.html';
+    });
+
+    // AJAX untuk Cek Detail Kamar
+    $('.cekdtlkamarRedirect').click(function () {
+      const targetPage = $(this).data('target');
+
+      $('#ajax-container').fadeOut(200, function () {
+        $.ajax({
+          url: targetPage,
+          method: 'GET',
+          success: function (response) {
+            $('#ajax-container').html(response).fadeIn(300);
+            $('html, body').animate({
+              scrollTop: $('#ajax-container').offset().top
+            }, 500);
+          },
+          error: function () {
+            $('#ajax-container').html('<p>Gagal memuat detail kamar.</p>').fadeIn(300);
+          }
+        });
       });
     });
   });
-  
+</script>
