@@ -4,25 +4,32 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Request untuk validasi input saat membuat pembayaran perpanjangan.
+ */
 class StorePembayaranPerpanjanganRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Menentukan apakah user berhak melakukan request ini.
+     *
+     * @return bool
      */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Aturan validasi untuk pembayaran perpanjangan.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            //
+            'metode_pembayaran' => 'required|string|max:50',
+            'total_tagihan'     => 'required|numeric|min:0',
+            'pemesanan_id'      => 'required|exists:pemesanans,id',
         ];
     }
 }
