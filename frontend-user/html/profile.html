@@ -38,25 +38,64 @@
       </div>
     </div>
   </div>
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
 
   <script>
-    // Cek jika ada data profil di LocalStorage saat halaman dimuat
-    window.onload = function () {
-      const userProfile = JSON.parse(localStorage.getItem("userProfile"));
-      if (userProfile) {
-        // Tampilkan data profil yang disimpan di LocalStorage
-        document.getElementById("profile-name").textContent = userProfile.nama;
-        document.getElementById("profile-nama").textContent = userProfile.nama;
-        document.getElementById("profile-email").textContent = userProfile.email;
-        document.getElementById("profile-hp").textContent = userProfile.hp;
-      }
-    };
+    $(document).ready(function () {
+      // Ambil token dari localStorage
+      const token = localStorage.getItem('token'); // pastikan saat login kamu simpan token ke localStorage
   
-    // Handle tombol "Keluar" (logout) dan arahkan ke halaman awal lainnya
-    document.querySelector(".btn-logout").addEventListener("click", function () {
-      // Keluar dari akun, bisa redirect atau menghapus LocalStorage
-      localStorage.removeItem("userProfile");
-      window.location.href = "homepage.html";  // Arahkan ke halaman homepage.html atau halaman lainnya
+      if (!token) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Token Hilang',
+          text: 'Silakan login kembali.'
+        }).then(() => {
+          window.location.href = "login.html"; // Arahkan ke login page
+        });
+        return;
+      }
+  
+      // Panggil API user yang sedang login
+      $.ajax({
+        url: '/api/user', // biasanya endpoint ambil user login
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        dataType: 'json',
+        success: function(user) {
+          // Tampilkan data user ke halaman profil
+          $("#profile-name").text(user.nama);
+          $("#profile-nama").text(user.nama);
+          $("#profile-email").text(user.email);
+          $("#profile-hp").text(user.hp);
+  
+          // Simpan juga ke localStorage kalau mau
+          localStorage.setItem("userProfile", JSON.stringify(user));
+        },
+        error: function(xhr, status, error) {
+          console.error("Gagal ambil data user:", error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Session Expired',
+            text: 'Sesi anda habis, silahkan login ulang.'
+          }).then(() => {
+            localStorage.removeItem("token");
+            window.location.href = "login.html";
+          });
+        }
+      });
+  
+      // Handle logout
+      $(".btn-logout").on('click', function () {
+        localStorage.removeItem("userProfile");
+        localStorage.removeItem("token");
+        window.location.href = "homepage.html";
+      });
     });
   </script>
   
