@@ -37,64 +37,70 @@
     $(document).ready(function () {
       $('#btnRegister').on('click', function (e) {
         e.preventDefault();
-   
-        let name = $('#nama').val();
-        let username = $('#username').val();
-        let no_telp = $('#hp').val();
-        let email = $('#email').val();
-        let password = $('#password').val();
-        let password_confirmation = $('#password_confirmation').val(); // Tambahkan konfirmasi password
-        let role = 'penyewa';
-   
+  
+        // Ambil data form
+        const formData = {
+          name: $('#nama').val(),
+          username: $('#username').val(),
+          no_telp: $('#hp').val(),
+          email: $('#email').val(),
+          password: $('#password').val(),
+          password_confirmation: $('#password_confirmation').val(), // penting untuk validasi konfirmasi
+          role: 'penyewa'
+        };
+  
+        // Validasi sederhana sebelum kirim (opsional, biar lebih UX friendly)
+        if (!formData.name || !formData.username || !formData.no_telp || !formData.email || !formData.password || !formData.password_confirmation) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Semua kolom wajib diisi!',
+            text: 'Mohon lengkapi semua field.'
+          });
+          return;
+        }
+  
+        // Kirim ke server
         $.ajax({
           url: 'http://localhost:8000/api/register',
-          type: 'POST',
-          data: {
-            name: name,
-            username: username,
-            no_telp: no_telp,
-            email: email,
-            password: password,
-            password_confirmation: password_confirmation, // Kirimkan password_confirmation
-            role: role
-          },
+          method: 'POST',
+          data: formData,
+          dataType: 'json',
           success: function (response) {
             Swal.fire({
               icon: 'success',
               title: 'Pendaftaran Berhasil!',
-              html: 'Silakan cek email Anda untuk <b>verifikasi akun</b> terlebih dahulu. Setelah itu, Anda bisa login.',
+              html: 'Silakan cek email Anda untuk <b>verifikasi akun</b> sebelum login.',
             }).then(() => {
               window.location.href = 'login.html';
             });
           },
           error: function (xhr) {
-            let message = 'Terjadi kesalahan saat mendaftar';
-   
-            try {
-              if (xhr.responseJSON) {
-                message = xhr.responseJSON.message || message;
-                if (xhr.responseJSON.errors) {
-                  let detail = '';
-                  for (let key in xhr.responseJSON.errors) {
-                    detail += `${xhr.responseJSON.errors[key][0]}<br>`;
-                  }
-                  message = detail || message;
-                }
+            let message = 'Terjadi kesalahan saat mendaftar.';
+  
+            if (xhr.responseJSON) {
+              if (xhr.responseJSON.message) {
+                message = xhr.responseJSON.message;
               }
-            } catch (e) {
-              console.error('Error parsing response:', e);
+  
+              if (xhr.responseJSON.errors) {
+                message = '';
+                $.each(xhr.responseJSON.errors, function (key, value) {
+                  message += value[0] + '<br>';
+                });
+              }
             }
-   
+  
             Swal.fire({
               icon: 'error',
-              title: 'Gagal Daftar',
+              title: 'Gagal Mendaftar',
               html: message,
             });
           }
         });
       });
     });
-   </script>
+  </script>
+  
    
   
 
