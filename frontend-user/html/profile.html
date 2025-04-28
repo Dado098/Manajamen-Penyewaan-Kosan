@@ -13,21 +13,21 @@
       <img src="../images/ph.jpg" alt="Profil" />
 
       <!-- Nama -->
-      <h1 id="profile-name">Indira Sistamarien</h1>
+      <h1 id="profile-name"></h1>
 
       <!-- Data Diri -->
       <div class="data-diri">
         <div class="data-row">
           <div class="data-label">Nama</div>
-          <div class="data-value" id="profile-nama">Indira Sistamarien</div>
+          <div class="data-value" id="profile-nama"></div>
         </div>
         <div class="data-row">
           <div class="data-label">Email</div>
-          <div class="data-value" id="profile-email">asikinbosss@gmail.com</div>
+          <div class="data-value" id="profile-email"></div>
         </div>
         <div class="data-row">
           <div class="data-label">Nomor HP</div>
-          <div class="data-value" id="profile-hp">0878-3214-8897</div>
+          <div class="data-value" id="profile-hp"></div>
         </div>
       </div>
       
@@ -45,40 +45,51 @@
 
   <script>
     $(document).ready(function () {
-      // Ambil token dari localStorage
-      const token = localStorage.getItem('token'); // pastikan saat login kamu simpan token ke localStorage
+      const userToken = localStorage.getItem('token');
   
-      if (!token) {
+      if (!userToken) {
         Swal.fire({
           icon: 'error',
           title: 'Token Hilang',
           text: 'Silakan login kembali.'
         }).then(() => {
-          window.location.href = "login.html"; // Arahkan ke login page
+          window.location.href = "login.html";
         });
         return;
       }
   
-      // Panggil API user yang sedang login
+      // Cek apakah token dalam bentuk string biasa atau JSON
+      let token = userToken;
+      try {
+        const parsed = JSON.parse(userToken);
+        if (parsed.token) {
+          token = parsed.token;
+        }
+      } catch (e) {
+        // Plain string, langsung pakai
+      }
+  
+      // URL API endpoint user yang benar
       $.ajax({
-        url: '/api/user', // biasanya endpoint ambil user login
+        url: 'http://localhost:8000/api/user', // <<--- ganti ke /api/user
         method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + token
         },
         dataType: 'json',
-        success: function(user) {
-          // Tampilkan data user ke halaman profil
-          $("#profile-name").text(user.nama);
-          $("#profile-nama").text(user.nama);
-          $("#profile-email").text(user.email);
-          $("#profile-hp").text(user.hp);
+        success: function(response) {
+          console.log(response); // debug dulu lihat isinya apa
+          const user = response; // biasanya API user langsung kirim object
   
-          // Simpan juga ke localStorage kalau mau
+          $("#profile-name").text(user.name || "Nama tidak ditemukan");
+          $("#profile-nama").text(user.name || "Nama tidak ditemukan");
+          $("#profile-email").text(user.email || "Email tidak ditemukan");
+          $("#profile-hp").text(user.no_telp || "No HP tidak ditemukan");
+  
           localStorage.setItem("userProfile", JSON.stringify(user));
         },
         error: function(xhr, status, error) {
-          console.error("Gagal ambil data user:", error);
+          console.error("Gagal ambil data user:", xhr.responseText);
           Swal.fire({
             icon: 'error',
             title: 'Session Expired',
@@ -90,7 +101,7 @@
         }
       });
   
-      // Handle logout
+      // Logout
       $(".btn-logout").on('click', function () {
         localStorage.removeItem("userProfile");
         localStorage.removeItem("token");
