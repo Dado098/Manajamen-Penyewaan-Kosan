@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Info Kamar</title>
+  <link rel="stylesheet" href="../css/kamaruser.css" />
+</head>
+<body>
+  <section class="container">
+    <header>
+      <span class="back" onclick="goBack()" title="Kembali">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </span>
+      <h2>Kamar Anda</h2>
+    </header>
+
+    <div class="card">
+      <img src="../images/kamar.jpg" alt="Foto Kamar">
+      <div class="info">
+        <h3>Kamar No 1</h3>
+        <p>Luas kamar <strong>6 m²</strong></p>
+        <p>Status <strong>Aktif (Disewa )</strong></p>
+        <p>Tanggal Masuk <strong>25 April 2025</strong></p>
+      </div>
+    </div>
+
+    <h3 class="subtitle">History Pembayaran</h3>
+    <div class="history-card">
+      <div class="history-item">
+        <div class="check">✅</div>
+        <div class="tanggal">12 April 2025</div>
+        <div class="jumlah">Rp1.500.000</div>
+        <div class="status">Lunas</div>
+      </div>
+      <div class="history-item">
+        <div class="check">✅</div>
+        <div class="tanggal">12 Mei 2025</div>
+        <div class="jumlah">Rp1.500.000</div>
+        <div class="status">Lunas</div>
+      </div>
+
+      <button class="btn-bayar">Bayar Lagi</button>
+    </div>
+  </section>
+</body>
+<script>
+    function goBack() {
+      window.location.href = "homeuser.html"; // ganti sesuai tujuanmu
+    }
+  </script>
+  
+</html>

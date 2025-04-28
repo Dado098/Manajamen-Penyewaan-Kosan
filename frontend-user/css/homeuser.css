@@ -1,0 +1,330 @@
+/* Global Styles */
+body { 
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: #111;
+}
+
+/* Header */
+.header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+}
+
+/* Logo di kiri */
+.logo {
+    height: 40px;
+    margin-left: 20px;
+}
+
+/* Navbar di tengah */
+.nav-menu {
+    margin-left: 40px;
+}
+
+.nav-menu ul {
+    list-style: none;
+    display: flex;
+    gap: 120px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+}
+.nav-menu ul li {
+    margin: 0 40px; /* Memberikan jarak horizontal di antara item */
+}
+
+
+.nav-menu ul li a.home {
+    color: black;
+}
+
+/* Profil di kanan */
+.profile-icon {
+    margin-right: 20px;
+    cursor: pointer;
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: none;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: url('../images/hero-bg.png') no-repeat center center/cover;
+    display: flex;
+    align-items: flex-start; /* Mengubah ke posisi kiri atas */
+    justify-content: flex-start; /* Mengatur konten ke kiri */
+    color: white;
+    overflow: hidden;
+}
+
+.overlay-rrt {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 60px 20px;
+    max-width: 700px;
+    margin-left: 20px; /* Mengatur margin kiri untuk memberi jarak */
+    margin-top: 175px; /* Menggeser konten ke bawah */
+}
+
+.hero h1 {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.hero h1 span {
+    display: block;
+    font-size: 4rem;
+}
+.layanan-teks {
+    font-size: 22px;
+    font-weight: 500;
+    color: white; /* atau sesuaikan dengan background */
+    text-align: center;
+    margin-top: 20px;
+}
+
+.layanan-teks span {
+    display: inline-block;  /* Membuat dua span dalam satu baris */
+    line-height: 1.5;        /* Menambah jarak antar baris jika diperlukan */
+}
+
+.layanan-teks span:first-child {
+    margin-bottom: 15px;  /* Memberikan jarak bawah pada span pertama */
+}
+/* Tombol di dalam card */
+.card button {
+    margin-top: 10px;
+    padding: 5px 15px;
+    background: #328300;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  .cekdtlkamarRedirect {
+    margin-top: auto;
+    padding: 5px 15px;
+    background: #328300;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    align-self: center;
+  }
+  
+.info-kamar {
+    background-color: #dfe2dc;
+    padding: 40px 20px;
+    text-align: center;
+    font-family: sans-serif;
+  }
+  
+  .info-kamar h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+  
+  .kartu-kamar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0dbd2;
+    border: 1px solid #999;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+    gap: 20px;
+  }
+  
+  .gambar-kamar {
+    width: 200px;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .detail-kamar {
+    text-align: left;
+  }
+  
+  .detail-kamar h3 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .detail-kamar p {
+    margin: 5px 0;
+    font-size: 1rem;
+  }
+  
+/
+/* Lokasi */
+.lokasi iframe {
+    border-radius: 10px;
+    width: 100%;
+    height: 450px;
+}
+
+.footer {
+    width: 100%;
+    font-family: Arial, sans-serif;
+  }
+  
+  .footer-top {
+    background-color: #86D52B;
+    padding: 20px 0;
+  }
+  
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* dari center jadi space-between */
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+  
+/* Footer */
+.footer-logo {
+    width: 150px;
+    height: auto;
+    position: relative;
+    left: -100px; /* geser ke kiri */
+}
+
+
+.footer-nav {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    transform: translateX(-400px); /* geser ke kiri */
+  }
+  
+  
+  .footer-nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-nav a:hover {
+    color: #f0f0f0;
+  }
+  
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #97D94D;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+  }
+  
+  .footer-left {
+    margin-left: 50px; /* geser dikit ke kanan */
+  }
+  .footer-right {
+    margin-right: 50px; /* geser dikit ke kiri */
+  }
+  
+
+
+/* --- Media Queries for Responsiveness --- */
+
+/* Responsif untuk tampilan mobile (max-width 768px) */
+@media (max-width: 768px) {
+    .nav-menu ul {
+        flex-direction: column; /* Ubah navbar menjadi kolom */
+        gap: 20px;
+        margin-left: 0;
+        text-align: center;
+    }
+    .hero h1 {
+        font-size: 2rem; /* Menyesuaikan ukuran teks untuk layar kecil */
+    }
+    .hero-buttons a {
+        padding: 8px 16px; /* Ukuran tombol lebih kecil */
+    }
+    .kamar-list {
+        flex-direction: column;
+    }
+    .card {
+        width: 100%; /* Kartu mengisi seluruh lebar layar */
+        margin: 10px 0;
+    }
+    .footer-content {
+        flex-direction: column; /* Membuat footer kolom */
+        text-align: center;
+    }
+    .column {
+        width: 100%;
+    }
+}
+
+/* Responsif untuk tampilan mobile lebih kecil (max-width 480px) */
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 1.5rem; /* Ukuran font lebih kecil lagi */
+    }
+    .hero-buttons a {
+        padding: 6px 12px; /* Menyesuaikan ukuran tombol */
+        font-size: 0.9rem;
+    }
+    .card {
+        width: 100%; /* Kartu mengisi seluruh lebar layar */
+        margin: 10px 0;
+    }
+    .profile-icon {
+        margin-right: 10px;
+    }
+    .footer-content {
+        flex-direction: column; /* Membuat footer lebih rapi */
+        text-align: center;
+    }
+}

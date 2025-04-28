@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -24,11 +23,41 @@
 
       <label for="password">Password</label>
       <input type="password" id="password" placeholder="Masukkan password" />
-      <a href="profile.html" class="edit-button">Edit Profil</a>
 
+      <button class="edit-button">Simpan Profil</button>
     </div>
   </div>
 
-  <script src="../js/editprofile.js"></script>
+  <script>
+    // Cek jika ada data profil di LocalStorage saat halaman dimuat
+    window.onload = function () {
+      const userProfile = JSON.parse(localStorage.getItem("userProfile"));
+      if (userProfile) {
+        // Isi form dengan data profil yang ada
+        document.getElementById("email").value = userProfile.email;
+        document.getElementById("nama").value = userProfile.nama;
+        document.getElementById("hp").value = userProfile.hp;
+      }
+    };
+
+    // Ketika tombol Simpan Profil diklik
+    document.querySelector(".edit-button").addEventListener("click", function (e) {
+      e.preventDefault();
+
+      // Ambil data dari input form
+      const updatedProfile = {
+        email: document.getElementById("email").value,
+        nama: document.getElementById("nama").value,
+        hp: document.getElementById("hp").value,
+        password: document.getElementById("password").value
+      };
+
+      // Simpan data ke LocalStorage
+      localStorage.setItem("userProfile", JSON.stringify(updatedProfile));
+
+      // Arahkan kembali ke halaman profil
+      window.location.href = "profile.html";
+    });
+  </script>
 </body>
 </html>

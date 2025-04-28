@@ -2,10 +2,9 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Profil Senangkos</title>
   <link rel="stylesheet" href="../css/profile.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <div class="profil">
@@ -14,49 +13,50 @@
       <img src="../images/ph.jpg" alt="Profil" />
 
       <!-- Nama -->
-      <h1>Indira Sistamarien</h1>
+      <h1 id="profile-name">Indira Sistamarien</h1>
 
       <!-- Data Diri -->
       <div class="data-diri">
         <div class="data-row">
           <div class="data-label">Nama</div>
-          <div class="data-value">Indira Sistamarien</div>
+          <div class="data-value" id="profile-nama">Indira Sistamarien</div>
         </div>
         <div class="data-row">
           <div class="data-label">Email</div>
-          <div class="data-value">asikinbosss@gmail.com</div>
+          <div class="data-value" id="profile-email">asikinbosss@gmail.com</div>
         </div>
         <div class="data-row">
           <div class="data-label">Nomor HP</div>
-          <div class="data-value">0878-3214-8897</div>
+          <div class="data-value" id="profile-hp">0878-3214-8897</div>
         </div>
       </div>
       
       <!-- Tombol -->
       <div class="button-group">
         <a href="editprofile.html"><button class="btn-edit">Edit Profil</button></a>
-        <button class="btn-backacount">Keluar Akun</button>
         <button class="btn-logout">Keluar</button>
       </div>
     </div>
   </div>
-  
-  <script>
-    // Handle tombol "Keluar" (kembali ke halaman sebelumnya)
-    document.querySelector(".btn-logout").addEventListener("click", function () {
-      // Cek apakah ada halaman sebelumnya dalam window history
-      if (window.history.length > 1) {
-        window.history.back(); // Mengarah ke halaman sebelumnya jika ada
-      } else {
-        // Jika tidak ada halaman sebelumnya, fallback ke homepage
-        window.location.href = "homepage.html";
-      }
-    });
 
-    // Handle tombol "Keluar Akun" (logout ke halaman index)
-    document.querySelector(".btn-backacount").addEventListener("click", function () {
-      window.location.href = "index.html";
+  <script>
+    // Cek jika ada data profil di LocalStorage saat halaman dimuat
+    window.onload = function () {
+      const userProfile = JSON.parse(localStorage.getItem("userProfile"));
+      if (userProfile) {
+        // Tampilkan data profil yang disimpan di LocalStorage
+        document.getElementById("profile-name").textContent = userProfile.nama;
+        document.getElementById("profile-nama").textContent = userProfile.nama;
+        document.getElementById("profile-email").textContent = userProfile.email;
+        document.getElementById("profile-hp").textContent = userProfile.hp;
+      }
+    };
+  
+    // Handle tombol "Keluar" (logout) dan arahkan ke halaman awal lainnya
+    document.querySelector(".btn-logout").addEventListener("click", function () {
+      // Keluar dari akun, bisa redirect atau menghapus LocalStorage
+      localStorage.removeItem("userProfile");
+      window.location.href = "homepage.html";  // Arahkan ke halaman homepage.html atau halaman lainnya
     });
   </script>
-</body>
-</html>
+  
