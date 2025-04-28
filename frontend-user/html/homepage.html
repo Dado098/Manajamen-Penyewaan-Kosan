@@ -49,8 +49,8 @@
       <div class="card">
         <img src="../images/kamar.jpg" alt="Kamar No 1" />
         <div class="card-body">
-          <p>Kamar No 1</p>
-          <p>Rp600.000/bulan</p>
+          <p1></p1>
+          <p2></p2>
         </div>
         <a href="detailkamar1.html">
           <button class="cekdtlkamarRedirect">Cek Detail Kamar</button>
@@ -62,8 +62,8 @@
       <div class="card">
         <img src="../images/kamar.jpg" alt="Kamar No 2" />
         <div class="card-body">
-          <p>Kamar No 2</p>
-          <p>Rp600.000/bulan</p>
+          <p1></p1>
+          <p2></p2>
         </div>
         <a href="detailkamar2.html">
           <button class="cekdtlkamarRedirect">Cek Detail Kamar</button>
@@ -75,8 +75,8 @@
       <div class="card">
         <img src="../images/kamar.jpg" alt="Kamar No 3" />
         <div class="card-body">
-          <p>Kamar No 3</p>
-          <p>Rp600.000/bulan</p>
+          <p1></p1>
+          <p2></p2>
         </div>
         <a href="detailkamar3.html">
           <button class="cekdtlkamarRedirect">Cek Detail Kamar</button>
@@ -151,6 +151,40 @@
       });
     });
   </script>
+
+<script src="../js/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+<script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $.ajax({
+      url: 'http://localhost:8000/api/kamars',
+      method: 'GET',
+      dataType: 'json',
+      success: function (data) {
+        const kamarTerbatas = data.slice(2, 5);
+
+        $('.kamar-list .card').each(function (index) {
+          if (index < kamarTerbatas.length) {
+            const kamar = kamarTerbatas[index];
+            const imageUrl = `http://localhost:8000/storage/${kamar.image}`;
+
+            $(this).find('img').attr('src', imageUrl);
+            $(this).find('img').attr('alt', `Foto Kamar ${kamar.id}`);
+            $(this).find('p2').text('Rp ' + parseInt(kamar.harga + '/bulan').toLocaleString());
+            $(this).find('p1').text('Kamar ' + parseInt(kamar.id).toLocaleString());
+
+          }
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error('Gagal memuat data kamar:', error);
+      }
+    });
+  });
+</script>
 
   <script src="../js/homepage.js"></script>
   <div id="ajax-container" style="display: none;"></div>

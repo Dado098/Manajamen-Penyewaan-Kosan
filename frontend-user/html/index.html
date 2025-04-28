@@ -106,5 +106,40 @@
 
   <script src="../js/index.js"></script>
 
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $.ajax({
+        url: 'http://localhost:8000/api/kamars',
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+          const kamarTerbatas = data.slice(2, 5);
+  
+          $('.kamar-list .card').each(function (index) {
+            if (index < kamarTerbatas.length) {
+              const kamar = kamarTerbatas[index];
+              const imageUrl = `http://localhost:8000/storage/${kamar.image}`;
+  
+              $(this).find('img').attr('src', imageUrl);
+              $(this).find('img').attr('alt', `Foto Kamar ${kamar.id}`);
+              $(this).find('p').text('Kamar ' + parseInt(kamar.id).toLocaleString());
+              // $(this).find('p').text('Rp ' + parseInt(kamar.harga).toLocaleString());
+            }
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error('Gagal memuat data kamar:', error);
+        }
+      });
+    });
+  </script>
+  
+
+
 </body>
 </html>
