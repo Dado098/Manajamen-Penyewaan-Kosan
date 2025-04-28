@@ -18,15 +18,18 @@ use Illuminate\Support\Facades\Hash;
  */
 class AuthController extends Controller
 {
-        public function verifyEmail(Request $request, $id, $hash)
+    public function verifyEmail(Request $request, $id, $hash)
     {
+        if (! URL::hasValidSignature($request)) {
+            return response()->json(['message' => 'Link verifikasi tidak valid atau sudah kadaluarsa.'], 403);
+        }
+
         $user = User::findOrFail($id);
 
         if ($user->hasVerifiedEmail()) {
             return response()->json(['message' => 'Email sudah diverifikasi.']);
         }
 
-        // Verifikasi email menggunakan hash (ganti getEmailVerificationHash dengan hash_equals + sha1)
         if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
             return response()->json(['message' => 'Verifikasi gagal.'], 400);
         }
@@ -36,6 +39,7 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Email berhasil diverifikasi.']);
     }
+
 
     /**
      * Register user baru.

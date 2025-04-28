@@ -74,6 +74,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request 
     return $request->user();
 });
 
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return response()->json(['message' => 'Link verifikasi dikirim ulang.']);
+})->middleware(['auth:sanctum', 'throttle:6,1']);
+
+
 
 Route::post('midtrans/notification', [PembayaranController::class, 'notification']);
 
