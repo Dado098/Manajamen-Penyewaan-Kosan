@@ -41,6 +41,10 @@ Route::get('kamars/export', [KosanExportController::class, 'export']);
 
 // Route Untuk CRUD Pemesanan
 Route::apiResource('pemesanans', PemesananController::class);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/pemesanans', [PemesananController::class, 'store']);
+});
+
 
 // Route untuk Pembayaran
 Route::apiResource('pembayarans', PembayaranController::class);
@@ -87,14 +91,14 @@ Route::post('midtrans/notification', [PembayaranController::class, 'notification
 Route::post('midtrans/notification', [PembayaranController::class, 'notification'])->withoutMiddleware(['auth:sanctum']);
 
 
-// Route untuk Pembayaran
-Route::apiResource('pembayarans', PembayaranPerpanjanganController::class);
+// // Route untuk Pembayaran
+// Route::apiResource('pembayarans', PembayaranPerpanjanganController::class);
 
-// Route untuk Pembayaran berdasarkan ID Pemesanan (QRCode)
-Route::get('pembayarans/{id}/qrcode', [PembayaranPerpanjanganController::class, 'generateQRCode'])->name('pembayarans.qrcode');
+// // Route untuk Pembayaran berdasarkan ID Pemesanan (QRCode)
+// Route::get('pembayarans/{id}/qrcode', [PembayaranPerpanjanganController::class, 'generateQRCode'])->name('pembayarans.qrcode');
 
-Route::post('midtrans/notification', [PembayaranPerpanjanganController::class, 'notification']);
+// Route::post('midtrans/notification', [PembayaranPerpanjanganController::class, 'notification']);
 
 
-Route::post('midtrans/notification', [PembayaranPerpanjanganController::class, 'notification'])->withoutMiddleware(['auth:sanctum']);
+// Route::post('midtrans/notification', [PembayaranPerpanjanganController::class, 'notification'])->withoutMiddleware(['auth:sanctum']);
 

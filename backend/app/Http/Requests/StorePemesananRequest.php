@@ -12,11 +12,13 @@ class StorePemesananRequest extends FormRequest
     }
 
     public function rules()
-    {
-        return [
-            'tgl_masuk' => 'nullable|date',
-            'tgl_keluar' => 'nullable|date|after:tgl_masuk',
-            'kamar_id' => 'required|exists:kamars,id',
-        ];
-    }
+{
+    return [
+        'tgl_masuk'  => 'nullable|date',
+        'tgl_keluar' => 'nullable|date|after:tgl_masuk',
+        'kamar_id'   => 'required|exists:kamars,id',
+        'penyewa_id' => 'sometimes|exists:users,id', // Validasi jika disertakan manual
+    ];
+}
+
 }
