@@ -26,7 +26,7 @@
         <strong>Kamar No 6</strong> <span class="badge">Kost Putri</span>
       </div>
       <div>
-        <strong>Rp600.000/bulan</strong>
+        <strong class="harga-kamar">Rp600.000/bulan</strong>
       </div>
     </div>
 
@@ -54,5 +54,37 @@
       <a href="halamanpembayaran.html" class="booking-btn">Booking</a>
     </div>
   </div>
+
+  <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+    <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+  
+    <script>
+     $(document).ready(function () {
+    $.ajax({
+      url: 'http://localhost:8000/api/kamars', // Gantilah dengan URL API yang sesuai
+      method: 'GET',
+      dataType: 'json',
+      success: function (data) {
+     
+        const kamar = data[5]; 
+  
+        if (kamar) {
+          const hargaFormatted = `Rp ${parseInt(kamar.harga).toLocaleString()}/bulan`;
+  
+          $('.info-header').each(function () {
+            $(this).find('.harga-kamar').text(hargaFormatted);
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error('Gagal memuat data kamar:', error);
+      }
+    });
+  });
+  
+  
+    </script>
 </body>
 </html>

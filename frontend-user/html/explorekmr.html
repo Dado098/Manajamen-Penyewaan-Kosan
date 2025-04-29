@@ -82,6 +82,72 @@
   </footer>
 
   <script src="../js/explorekmr.js"></script>
+
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+  
+  <script>
+    $(document).ready(function () {
+      let allKamars = []; // simpan semua data kamar di sini setelah load pertama
+  
+      function displayKamarByLantai(lantai) {
+        $('#card-container').empty();
+  
+        let filteredKamars = [];
+  
+        // Aturan pembagian kamar berdasarkan lantai
+        if (lantai == 1) {
+          filteredKamars = allKamars.filter(kamar => kamar.id <= 5); // misal kamar id 1-5 untuk lantai 1
+        } else if (lantai == 2) {
+          filteredKamars = allKamars.filter(kamar => kamar.id > 5); // kamar id 6-10 untuk lantai 2
+        }
+  
+        if (filteredKamars.length === 0) {
+          $('#card-container').append('<p>Tidak ada kamar di lantai ini.</p>');
+          return;
+        }
+  
+        filteredKamars.forEach(kamar => {
+          const imageUrl = `http://localhost:8000/storage/${kamar.image}`;
+          const cardHtml = `
+            <div class="card">
+              <img src="${imageUrl}" alt="Kamar ${kamar.id}" />
+              <p1>Kamar ${kamar.id}</p1><br>
+              <p2>Rp ${parseInt(kamar.harga).toLocaleString()}/bulan</p2>
+            </div>
+          `;
+          $('#card-container').append(cardHtml);
+        });
+      }
+  
+      // Ambil semua kamar sekali saja saat halaman dimuat
+      $.ajax({
+        url: 'http://localhost:8000/api/kamars',
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+          allKamars = data;
+          displayKamarByLantai(1); // default tampilkan lantai 1
+        },
+        error: function (xhr, status, error) {
+          console.error('Gagal memuat data kamar:', error);
+          $('#card-container').html('<p>Gagal memuat data.</p>');
+        }
+      });
+  
+      // Event klik untuk tombol lantai
+      $('.tablinks').click(function () {
+        $('.tablinks').removeClass('active');
+        $(this).addClass('active');
+  
+        const lantai = $(this).data('lantai');
+        displayKamarByLantai(lantai);
+      });
+    });
+  </script>
+
 </body>
 </html>
 
