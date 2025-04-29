@@ -13,21 +13,21 @@
       <img src="../images/ph.jpg" alt="Profil" />
 
       <!-- Nama -->
-      <h1 id="profile-name">Indira Sistamarien</h1>
+      <h1 id="profile-name"></h1>
 
       <!-- Data Diri -->
       <div class="data-diri">
         <div class="data-row">
           <div class="data-label">Nama</div>
-          <div class="data-value" id="profile-nama">Indira Sistamarien</div>
+          <div class="data-value" id="profile-nama"></div>
         </div>
         <div class="data-row">
           <div class="data-label">Email</div>
-          <div class="data-value" id="profile-email">asikinbosss@gmail.com</div>
+          <div class="data-value" id="profile-email"></div>
         </div>
         <div class="data-row">
           <div class="data-label">Nomor HP</div>
-          <div class="data-value" id="profile-hp">0878-3214-8897</div>
+          <div class="data-value" id="profile-hp"></div>
         </div>
       </div>
       
@@ -38,25 +38,75 @@
       </div>
     </div>
   </div>
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
 
   <script>
-    // Cek jika ada data profil di LocalStorage saat halaman dimuat
-    window.onload = function () {
-      const userProfile = JSON.parse(localStorage.getItem("userProfile"));
-      if (userProfile) {
-        // Tampilkan data profil yang disimpan di LocalStorage
-        document.getElementById("profile-name").textContent = userProfile.nama;
-        document.getElementById("profile-nama").textContent = userProfile.nama;
-        document.getElementById("profile-email").textContent = userProfile.email;
-        document.getElementById("profile-hp").textContent = userProfile.hp;
-      }
-    };
+    $(document).ready(function () {
+      const userToken = localStorage.getItem('token');
   
-    // Handle tombol "Keluar" (logout) dan arahkan ke halaman awal lainnya
-    document.querySelector(".btn-logout").addEventListener("click", function () {
-      // Keluar dari akun, bisa redirect atau menghapus LocalStorage
-      localStorage.removeItem("userProfile");
-      window.location.href = "homepage.html";  // Arahkan ke halaman homepage.html atau halaman lainnya
+      if (!userToken) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Token Hilang',
+          text: 'Silakan login kembali.'
+        }).then(() => {
+          window.location.href = "login.html";
+        });
+        return;
+      }
+  
+      // Cek apakah token dalam bentuk string biasa atau JSON
+      let token = userToken;
+      try {
+        const parsed = JSON.parse(userToken);
+        if (parsed.token) {
+          token = parsed.token;
+        }
+      } catch (e) {
+        // Plain string, langsung pakai
+      }
+  
+      // URL API endpoint user yang benar
+      $.ajax({
+        url: 'http://localhost:8000/api/user', // <<--- ganti ke /api/user
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        dataType: 'json',
+        success: function(response) {
+          console.log(response); // debug dulu lihat isinya apa
+          const user = response; // biasanya API user langsung kirim object
+  
+          $("#profile-name").text(user.name || "Nama tidak ditemukan");
+          $("#profile-nama").text(user.name || "Nama tidak ditemukan");
+          $("#profile-email").text(user.email || "Email tidak ditemukan");
+          $("#profile-hp").text(user.no_telp || "No HP tidak ditemukan");
+  
+          localStorage.setItem("userProfile", JSON.stringify(user));
+        },
+        error: function(xhr, status, error) {
+          console.error("Gagal ambil data user:", xhr.responseText);
+          Swal.fire({
+            icon: 'error',
+            title: 'Session Expired',
+            text: 'Sesi anda habis, silahkan login ulang.'
+          }).then(() => {
+            localStorage.removeItem("token");
+            window.location.href = "login.html";
+          });
+        }
+      });
+  
+      // Logout
+      $(".btn-logout").on('click', function () {
+        localStorage.removeItem("userProfile");
+        localStorage.removeItem("token");
+        window.location.href = "homepage.html";
+      });
     });
   </script>
   
