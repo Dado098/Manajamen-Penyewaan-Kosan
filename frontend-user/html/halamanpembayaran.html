@@ -1,14 +1,41 @@
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Halaman Pembayaran</title>
-  <link rel="stylesheet" href="../css/halamanpembayaran.css" />
+  <meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 
+    'self'
+    https://app.sandbox.midtrans.com
+    https://*.sandbox.midtrans.com
+    https://cdn.jsdelivr.net
+    'unsafe-inline'
+    'unsafe-eval';
+  script-src-elem
+    'self'
+    https://app.sandbox.midtrans.com
+    https://*.sandbox.midtrans.com
+    https://cdn.jsdelivr.net
+    'unsafe-inline';
+  style-src
+    'self'
+    'unsafe-inline'
+    https://cdn.jsdelivr.net;
+  frame-src
+    https://app.sandbox.midtrans.com
+    https://*.sandbox.midtrans.com;
+  connect-src
+    'self'
+    http://localhost:8000
+    https://app.sandbox.midtrans.com
+    https://*.sandbox.midtrans.com;
+">
 
-  <!-- Midtrans Snap -->
-  <script type="text/javascript"
-    src="https://app.sandbox.midtrans.com/snap/snap.js"
-    data-client-key="SB-Mid-client-huB6drUtGM6XMmZ6"></script>
+
+  <title>Halaman Pembayaran</title>
+  <link rel="stylesheet" href="../css/halamanpembayaran.css" /> 
 </head>
 <body>
   <div class="container">
@@ -30,27 +57,10 @@
     </div>
 
     <form id="formPembayaran">
-      <label>Nama Pemesan:</label>
-      <input type="text" name="nama" required />
-
-      <label>Metode Pembayaran:</label>
-      <select name="payment_method" required>
-        <option value="virtual_account">Virtual Account</option>
-        <option value="qr_code">QR Code</option>
-      </select>
-
-      <label>Pilih Bank:</label>
-      <select name="bank" required>
-        <option value="bni">BNI</option>
-        <option value="bri">BRI</option>
-        <option value="cimb">CIMB</option>
-        <option value="mandiri">Mandiri</option>
-        <option value="permata">Permata</option>
-      </select>
 
       <div class="button-group">
         <a href="explorekmr.html" class="cancel-btn">Cancel</a>
-        <button type="submit" class="pay-button">Booking Sekarang</button>
+        <button type="button" class="pay-button" id="btn-bayar">Booking Sekarang</button>
       </div>
     </form>
   </div>
@@ -58,63 +68,26 @@
   <!-- jQuery & SweetAlert -->
   <script src="../js/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="YOUR_CLIENT_KEY"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+  
 
   <script>
-   $('#btnBooking').on('click', function (e) {
-  e.preventDefault();
-
-  const tglMasuk = $('#tgl_masuk').val();
-  const tglKeluar = $('#tgl_keluar').val();
-  const kamarId = $('#kamar_id').val();
-  const token = localStorage.getItem('token');
-
-  if (!token) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Tidak Login',
-      text: 'Silakan login terlebih dahulu.'
-    });
-    return;
-  }
-
-  if (!tglMasuk || !tglKeluar || !kamarId) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Form Tidak Lengkap',
-      text: 'Pastikan semua field terisi.'
-    });
-    return;
-  }
-
-  if (new Date(tglKeluar) <= new Date(tglMasuk)) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Tanggal Tidak Valid',
-      text: 'Tanggal keluar harus setelah tanggal masuk.'
-    });
-    return;
-  }
-
-  // Step 1: Booking dulu
-  $.ajax({
-    url: 'http://localhost:8000/api/pemesanans',
-    method: 'POST',
-    headers: {
-      Authorization: 'Bearer ' + token
-    },
-    data: {
-      tgl_masuk: tglMasuk,
-      tgl_keluar: tglKeluar,
-      kamar_id: kamarId
-    },
-    success: function (bookingResponse) {
-      const pemesananId = bookingResponse.id;
-      const penyewaId = bookingResponse.penyewa_id;
-      const totalTagihan = bookingResponse.total_tagihan; // pastikan API booking mengembalikan ini
-      const bank = $('#bank').val(); // misalnya kamu punya dropdown untuk pilih bank
-
-      // Step 2: Buat pembayaran
+    document.getElementById('btn-bayar').addEventListener('click', function () {
+      const token = localStorage.getItem('token');
+      const pemesanan_id = localStorage.getItem('pemesanan_id');
+      const penyewa_id = localStorage.getItem('penyewa_id');
+  
+      const bank = 'bni'; // langsung ditentukan
+      const total_tagihan = 600000;
+      const metode_pembayaran = bank + '_va';
+      const payment_method = 'virtual_account';
+  
+      if (!token || !pemesanan_id || !penyewa_id) {
+        Swal.fire('Gagal', 'Data tidak lengkap.', 'error');
+        return;
+      }
+  
       $.ajax({
         url: 'http://localhost:8000/api/pembayarans',
         method: 'POST',
@@ -122,42 +95,33 @@
           Authorization: 'Bearer ' + token
         },
         data: {
-          pemesanan_id: pemesananId,
-          penyewa_id: penyewaId,
-          total_tagihan: totalTagihan,
-          bank: bank
+          pemesanan_id,
+          penyewa_id,
+          total_tagihan,
+          metode_pembayaran,
+          payment_method,
+          bank
         },
-        success: function (paymentResponse) {
-          const paymentUrl = paymentResponse.payment_url;
-          Swal.fire({
-            icon: 'success',
-            title: 'Booking Berhasil!',
-            text: 'Mengalihkan ke halaman pembayaran...'
-          }).then(() => {
-            window.location.href = paymentUrl; // ⬅ ini redirect ke halaman Midtrans
-          });
+        success: function (res) {
+          if (res.payment_url) {
+            window.location.href = res.payment_url;
+          } else {
+            Swal.fire('Gagal', 'URL pembayaran tidak ditemukan.', 'error');
+          }
         },
         error: function (xhr) {
-          console.error('Error pembayaran:', xhr.responseText);
-          Swal.fire({
-            icon: 'error',
-            title: 'Gagal Buat Pembayaran',
-            text: 'Terjadi kesalahan saat membuat pembayaran.'
-          });
+          Swal.fire('Gagal', 'Gagal membuat pembayaran.', 'error');
+          console.error(xhr.responseText);
         }
       });
-    },
-    error: function (xhr) {
-      console.error('Error booking:', xhr.responseText);
-      Swal.fire({
-        icon: 'error',
-        title: 'Gagal Booking',
-        text: 'Terjadi kesalahan saat booking.'
-      });
-    }
-  });
-});
-
+    });
   </script>
+
+  <!-- <script src="halamanpembayaran.js"></script> -->
+  
+  
+  
+
+  
 </body>
 </html>
