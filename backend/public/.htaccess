@@ -22,4 +22,8 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    # Content-Security-Policy Header
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' https://app.sandbox.midtrans.com https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval'; frame-src https://app.sandbox.midtrans.com;"
+
 </IfModule>

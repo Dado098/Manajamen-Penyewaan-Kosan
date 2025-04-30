@@ -104,26 +104,34 @@ public function store(StorePembayaranRequest $request)
         'bank_transfer'      => [
             'bank' => $request->input('bank'),
         ],
-    ];
+        'callbacks' => [
+           'callbacks' => [
+             'finish' => ' https://19f9-103-47-133-185.ngrok-free.app/frontend-user/html/thankyou.html',
+        ],
 
-    // Dapatkan snap token
-    $snapToken = Snap::getSnapToken($params);
+                ],
+            ];
 
-    // Simpan snap token
-    $pembayaran->snap_token = $snapToken;
-    $pembayaran->save();
 
-    // Build response
-    $response = [
-        'message'    => 'Pembayaran berhasil dibuat',
-        'order_id'   => $orderId,
-        'snap_token' => $snapToken,
-        'payment_url'=> "https://app.sandbox.midtrans.com/snap/v2/vtweb/{$snapToken}",
-        'data'       => new PembayaranResource($pembayaran),
-    ];
+            // Dapatkan snap token
+            $snapToken = Snap::getSnapToken($params);
 
-    return response()->json($response, 201);
-}
+            // Simpan snap token
+            $pembayaran->snap_token = $snapToken;
+            $pembayaran->save();
+
+        // Tambahan pada bagian store()
+        $response = [
+            'message'    => 'Pembayaran berhasil dibuat',
+            'order_id'   => $orderId,
+            'snap_token' => $snapToken,
+            'payment_url'=> "https://app.sandbox.midtrans.com/snap/v2/vtweb/{$snapToken}",
+            'data'       => new PembayaranResource($pembayaran),
+        ];
+
+        return response()->json($response, 201);
+
+        }
 
 
 
