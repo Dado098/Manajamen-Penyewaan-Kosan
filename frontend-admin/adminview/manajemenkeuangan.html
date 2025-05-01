@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/adminstyle.css" />
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
 </head>
 <body>
   <div class="sidebar">
@@ -54,51 +55,29 @@
         <div class="summary-header">
           <h3>Daftar Transaksi</h3>
           <div class="table-actions-left">
-            <a href="manajemenkeuangan-post.html" class="btn-blue" th:href="@{/manajemenkeuangan-post.html (id=${reach.id})}">Tambah</a>
-            <button class="btn-green">Ekspor</button>
+            <button class="btn-green" id="customExportBtn">Ekspor</button>
           </div>
         </div>
         <div class="room-table-wrapper">
-          <table id="pembayaran-table">
+          <table id="table-transaksi">
             <thead>
               <tr>
                 <th>No. Pembayaran</th>
+                <th>Order Id</th>
                 <th>Metode Pembayaran</th>
                 <th>Jumlah Bayar</th>
                 <th>Status</th>
-                <th>QR</th>
-                <th>Snap Token</th>
                 <th>Nama Penghuni</th>
                 <th>No. Pemesanan</th>
                 <th>Tanggal Pembayaran</th>
                 <th>Aksi</th>
               </tr>
             </thead>
-            <tbody id="pembayaran-table-body">
+            <tbody id="tabel-transaksi">
               <!-- Data akan dimuat via JavaScript -->
             </tbody>
           </table>
         </div>
-      </section>
-
-      <section class="activity">
-        <h3>Aktivitas Terbaru</h3>
-        <div class="table-actions-left">
-          <button class="btn-green">Ekspor</button>
-        </div>
-        <table id="aktivitas-table">
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Aktivitas</th>
-              <th>Deskripsi</th>
-              <th>Waktu</th>
-            </tr>
-          </thead>
-          <tbody id="aktivitas-table-body">
-            <!-- Data akan dimuat via JavaScript -->
-          </tbody>
-        </table>
       </section>
     </div>
   </div>
@@ -110,48 +89,50 @@
   <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
   <!-- DataTables JS -->
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
-  <script>
-
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script>
 $(document).ready(function () {
-      $('#logoutBtn').click(function () {
+  // Logout button
+  $('#logoutBtn').click(function () {
+    Swal.fire({
+      title: 'Konfirmasi',
+      text: "Anda yakin ingin logout?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, logout!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("token");
         Swal.fire({
-          title: 'Konfirmasi',
-          text: "Anda yakin ingin logout?",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Ya, logout!'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            localStorage.removeItem("token"); // Hapus token login
-            Swal.fire({
-              title: 'Berhasil!',
-              text: 'Anda telah logout.',
-              icon: 'success',
-              timer: 1500,
-              showConfirmButton: false
-            }).then(() => {
-              window.location.href = '../../frontend-user/html/login.html'; // Arahkan ke halaman login
-            });
-          }
+          title: 'Berhasil!',
+          text: 'Anda telah logout.',
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false
+        }).then(() => {
+          window.location.href = '../../frontend-user/html/login.html';
         });
-      });
+      }
     });
+  });
 
-    $(document).ready(function () {
-      // Ambil data pembayaran
-      $.ajax({
-        url: 'http://localhost:8000/api/pembayarans',
-        method: 'GET',
-        success: function (response) {
-          const data = response.data || response;
-          const tbody = $('#pembayaran-table-body');
-          tbody.empty();
+  // Load data dari API
+  $.ajax({
+    url: "http://localhost:8000/api/pembayarans",
+    method: "GET",
+    success: function (data) {
+      const tableBody = $("#tabel-transaksi");
+      let rows = '';
 
-          data.forEach((item, index) => {
-            let badge = '';
+      data.forEach((item, index) => {
+        let badge = '';
             console.log('STATUS:', item.status);
             console.log('ITEM:', item);
             if (item.status === 'sukses') {
@@ -164,120 +145,135 @@ $(document).ready(function () {
               badge = '<span class="badge badge-blue">Menunggu Pembayaran</span>';
             }
 
-            const row = `
-              <tr>
-                <td>${item.id}</td>
-                <td>${item.metode_pembayaran}</td>
-                <td>Rp${parseInt(item.total_tagihan).toLocaleString('id-ID')}</td>
-                <td data-label="Status">${badge}</td>
-                <td>${item.qr_code ? `<a href="${item.qr_code}" target="_blank">Lihat</a>` : '-'}</td>
-                <td>${item.snap_token || '-'}</td>
-                <td>${item.penyewa ? item.penyewa.name : item.penyewa_id}</td>
-                <td>${item.pemesanan_id}</td>
-                <td>${new Date(item.created_at).toLocaleString('id-ID')}</td>
-                <td>
-                  <button class="btn-action edit" data-id="${item.id}">Edit</button>
-                  <button class="btn-action delete" data-id="${item.id}">Hapus</button>
-                </td>
-              </tr>`;
-            tbody.append(row);
-          });
-  
-          // Inisialisasi DataTable setelah data dimuat
-          $('#pembayaran-table').DataTable({
-            destroy: true // tambahkan destroy agar tidak error jika diinisialisasi ulang
-          });
-        },
-        error: function (err) {
-          console.error("Gagal memuat data pembayaran:", err);
-        }
+        rows += `
+          <tr>
+            <td>${item.id}</td>
+            <td>${item.order_id || '-'}</td>
+            <td>${item.metode_pembayaran || '-'}</td>
+            <td>Rp${Number(item.total_tagihan).toLocaleString('id-ID')}</td>
+            <td data-label="Status">${badge}</td>
+            <td>${item.penyewa?.name ?? '-'}</td>
+            <td>${item.pemesanan_id ?? '-'}</td>
+            <td>${new Date(item.created_at).toLocaleDateString('id-ID')}</td>
+            <td class="no-export">
+              <a href="manajemenkeuangan-update.html?id=${item.id}" button class="btn-action edit" data-id="${item.id}">Edit</a>
+            </td>
+          </tr>
+        `;
       });
-  
-      // Ambil aktivitas terbaru
-      $.ajax({
-        url: 'http://localhost:8000/api/aktivitas',
-        method: 'GET',
-        success: function (response) {
-          const aktivitasList = response.data || response;
-          const tbody = $('#aktivitas-table-body');
-          tbody.empty();
-  
-          aktivitasList.forEach((item, index) => {
-            const row = `
-              <tr>
-                <td>${index + 1}</td>
-                <td>${item.jenis}</td>
-                <td>${item.deskripsi}</td>
-                <td>${item.waktu}</td>
-              </tr>`;
-            tbody.append(row);
-          });
-  
-          // Inisialisasi DataTable untuk tabel aktivitas
-          $('#aktivitas-table').DataTable({
-            destroy: true
-          });
-        },
-        error: function (err) {
-          console.error("Gagal memuat aktivitas:", err);
-        }
+
+    tableBody.html(rows);
+
+      const currentDateTime = new Date().toLocaleString('id-ID', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
       });
-  
-      // Hapus data pembayaran
-      $(document).on('click', '.btn-action.delete', function () {
-        const id = $(this).data('id');
-        Swal.fire({
-          title: 'Apakah Anda yakin?',
-          text: 'Data pembayaran ini akan dihapus secara permanen.',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'Ya, hapus!',
-          cancelButtonText: 'Batal'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            $.ajax({
-              url: `http://localhost:8000/api/pembayarans/${id}`,
-              type: 'DELETE',
-              success: function () {
-                Swal.fire('Berhasil!', 'Data pembayaran telah dihapus.', 'success').then(() => {
-                  location.reload();
-                });
-              },
-              error: function () {
-                Swal.fire('Gagal!', 'Terjadi kesalahan saat menghapus data.', 'error');
-              }
-            });
+
+      dataTable = $("#table-transaksi").DataTable({
+      dom: 'lfrtip',
+      buttons: [
+        {
+          extend: 'excelHtml5',
+          title: `Data Transaksi Kos - ${currentDateTime}`,
+          className: 'd-none',
+          exportOptions: {
+            columns: ':not(.no-export)'
           }
+        },
+        {
+          extend: 'pdfHtml5',
+          title: `Data Transaksi Kos - ${currentDateTime}`,
+          className: 'd-none',
+          exportOptions: {
+            columns: ':not(.no-export)'
+          },
+          orientation: 'landscape',
+          pageSize: 'A4'
+        }
+      ]
+    });
+  },
+    error: function (xhr, status, error) {
+      console.error("Gagal memuat data pembayaran:", error);
+    },
+  });
+
+  
+
+$('#customExportBtn').on('click', function () {
+  Swal.fire({
+    title: 'Pilih Format Ekspor',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Excel',
+    denyButtonText: `PDF`,
+    cancelButtonText: 'Batal'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      dataTable.button('.buttons-excel').trigger();
+    } else if (result.isDenied) {
+      dataTable.button('.buttons-pdf').trigger();
+    }
+  });
+});
+
+    // Saat klik tombol edit
+    $(document).on("click", ".btn-edit", function () {
+        const id = $(this).data("id");
+        const status = $(this).data("status");
+        const metode = $(this).data("metode");
+
+        $("#edit-id").val(id);
+        $("#edit-status").val(status);
+        $("#edit-metode").val(metode);
+        $("#form-edit").show(); // Atau pakai modal
+    });
+
+    // Kirim PUT (update)
+    $("#btn-update").click(function () {
+        const id = $("#edit-id").val();
+        const status = $("#edit-status").val();
+        const metode = $("#edit-metode").val();
+
+        $.ajax({
+            url: `${apiUrl}/${id}`,
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({
+                status: status,
+                metode_pembayaran: metode
+            }),
+            success: function () {
+                alert("Data berhasil diperbarui.");
+                $("#form-edit").hide();
+                loadPembayarans();
+            },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert("Gagal memperbarui data.");
+            }
         });
       });
 
-      // Edit data pembayaran
-      $(document).on('click', '.btn-action.edit', function () {
-        const id = $(this).data('id');
-        Swal.fire({
-          title: 'Edit Data Pembayaran',
-          text: `Apakah Anda ingin mengedit data pembayaran dengan ID: ${id}?`,
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonText: 'Ya, lanjutkan',
-          cancelButtonText: 'Batal'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            localStorage.setItem('editPembayaranId', id);
-            window.location.href = 'manajemenkeuangan-update.html'; // sesuaikan dengan halaman edit kamu
-          }
-        });
-      });
-            // Active sidebar link
-            const currentPage = window.location.pathname.split("/").pop();
+      const currentPage = window.location.pathname.split("/").pop();
       document.querySelectorAll(".sidebar-link").forEach(link => {
-        if (link.getAttribute("href") === currentPage) {
+        const linkHref = link.getAttribute("href");
+        if (linkHref === currentPage) {
           link.classList.add("active");
-        }
-      });
+
+          const icon = link.querySelector(".icon");
+          const originalSrc = icon.getAttribute("src");
+
+          const greenSrc = originalSrc.replace(".svg", "-green.svg");
+          icon.setAttribute("src", greenSrc);
+      }
     });
-  </script>
+  });
+
+</script>
 </body>
 </html>

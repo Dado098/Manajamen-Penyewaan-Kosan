@@ -77,34 +77,6 @@
           </tbody>
         </table>
       </section>
-
-      <section class="activity">
-        <h3>Aktivitas Terbaru</h3>
-        <table id="tabel-aktivitas" class="display">
-          <thead>
-            <tr>
-              <th>Tanggal</th>
-              <th>Nama Penghuni</th>
-              <th>Kamar</th>
-              <th>Jenis Aktivitas</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td data-label="Tanggal">16 Maret 2025</td>
-              <td data-label="Nama Penghuni">Wawan Putih</td>
-              <td data-label="Kamar">A001</td>
-              <td data-label="Jenis Aktivitas">Pembayaran Bulanan</td>
-            </tr>
-            <tr>
-              <td data-label="Tanggal">12 Maret 2025</td>
-              <td data-label="Nama Penghuni">Tungtungtung</td>
-              <td data-label="Kamar">A002</td>
-              <td data-label="Jenis Aktivitas">Pindahan Masuk</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
     </div>
   </div>
 
@@ -166,6 +138,34 @@
         }
       });
     }
+
+      // Ambil data pembayaran untuk hitung pendapatan bulan ini
+    $.ajax({
+      url: 'http://localhost:8000/api/pembayarans',
+      method: 'GET',
+      success: function (res) {
+        const today = new Date();
+        const currentMonth = today.getMonth(); // bulan dimulai dari 0
+        const currentYear = today.getFullYear();
+
+        const transaksiBulanIni = res.filter(item => {
+        const tanggal = new Date(item.created_at); // atau item.created_at jika 'tanggal' tidak ada
+        const bulan = tanggal.getMonth() + 1;
+        const tahun = tanggal.getFullYear();
+        return item.status === 'sukses' && bulan === currentMonth && tahun === currentYear;
+      });
+
+        // Hitung total tagihan
+        const totalPendapatan = transaksiBulanIni.reduce((sum, item) => {
+                return sum + (parseFloat(item.total_tagihan) || 0);
+              }, 0);
+
+              $('#pendapatan').text('Rp' + totalPendapatan.toLocaleString());
+            },
+            error: function (err) {
+              console.error("Gagal memuat data pembayaran:", err);
+            }
+          });
       
       // Load data penyewa
       $.ajax({
@@ -212,22 +212,20 @@
         }
       });
 
-      // Inisialisasi DataTable untuk tabel statis aktivitas
-      $('#tabel-aktivitas').DataTable({
-        responsive: true,
-        pageLength: 5,
-        language: {
-          url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
-        }
-      });
-
-      // Active sidebar link
       const currentPage = window.location.pathname.split("/").pop();
-      document.querySelectorAll(".sidebar-link").forEach(link => {
-        if (link.getAttribute("href") === currentPage) {
-          link.classList.add("active");
-        }
-      });
+    document.querySelectorAll(".sidebar-link").forEach(link => {
+      const linkHref = link.getAttribute("href");
+      if (linkHref === currentPage) {
+        link.classList.add("active");
+
+        const icon = link.querySelector(".icon");
+        const originalSrc = icon.getAttribute("src");
+
+        const greenSrc = originalSrc.replace(".svg", "-green.svg");
+        icon.setAttribute("src", greenSrc);
+      }
+    });
+    
   </script>
 </body>
 </html>

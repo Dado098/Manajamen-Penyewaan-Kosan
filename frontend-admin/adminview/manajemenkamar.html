@@ -56,7 +56,7 @@
           <h3>Daftar Kamar</h3>
           <div class="table-actions-left">
             <a href="manajemenkamar-post.html" class="btn-blue" th:href="@{/manajemenkamar-post.html (id=${reach.id})}">Tambah</a>
-            <button class="btn-green">Ekspor</button>
+            <button class="btn-green" id="customExportBtn">Ekspor</button>
           </div>
         </div>
         <div class="room-table-wrapper">
@@ -82,7 +82,7 @@
       <section class="pemesanan">
         <h3>Daftar Pemesanan</h3>
         <div class="table-actions-left">
-          <button class="btn-green">Ekspor</button>
+          <button class="btn-green" id="customExportBtnPemesanan">Ekspor</button>
         </div>
         <table id="table-pemesanan" class="display">
           <thead>
@@ -99,26 +99,6 @@
           </tbody>
         </table>
       </section>
-
-      <section class="activity">
-        <h3>Aktivitas Terbaru</h3>
-        <div class="table-actions-left">
-          <button class="btn-green">Ekspor</button>
-        </div>
-        <table id="table-aktivitas" class="display">
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Aktivitas</th>
-              <th>Deskripsi</th>
-              <th>Waktu</th>
-            </tr>
-          </thead>
-          <tbody id="aktivitas-table-body">
-            <!-- Aktivitas akan dimuat otomatis -->
-          </tbody>
-        </table>
-      </section>
     </div>
   </div>
 
@@ -128,9 +108,16 @@
   <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
   <!-- DataTables JS -->
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
-$(document).ready(function () {
+  <script>
+    $(document).ready(function () {
+      // Logout handler
       $('#logoutBtn').click(function () {
         Swal.fire({
           title: 'Konfirmasi',
@@ -142,7 +129,7 @@ $(document).ready(function () {
           confirmButtonText: 'Ya, logout!'
         }).then((result) => {
           if (result.isConfirmed) {
-            localStorage.removeItem("token"); // Hapus token login
+            localStorage.removeItem("token");
             Swal.fire({
               title: 'Berhasil!',
               text: 'Anda telah logout.',
@@ -150,73 +137,12 @@ $(document).ready(function () {
               timer: 1500,
               showConfirmButton: false
             }).then(() => {
-              window.location.href = '../../frontend-user/html/login.html'; // Arahkan ke halaman login
+              window.location.href = '../../frontend-user/html/login.html';
             });
           }
         });
       });
-    });
-
-function deleteKamar(id, buttonElement) {
-      // Konfirmasi penghapusan dengan SweetAlert
-      Swal.fire({
-          title: 'Are you sure?',
-          text: "You won't be able to undo this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, delete it!',
-          cancelButtonText: 'No, cancel!'
-      }).then((result) => {
-          if (result.isConfirmed) {
-              $.ajax({
-                  url: `http://localhost:8000/api/kamars/${id}`, // API URL untuk delete kamar
-                  type: 'DELETE',
-                  headers: {
-                      'Authorization': 'Bearer ' + localStorage.getItem('token') // Jika menggunakan token untuk autentikasi
-                  },
-                  success: function(response) {
-                      // Menampilkan notifikasi berhasil
-                      Swal.fire({
-                          title: 'Deleted!',
-                          text: 'The room has been deleted.',
-                          icon: 'success',
-                          confirmButtonText: 'OK'
-                      });
-
-                      // Hapus baris kamar dari tabel setelah berhasil dihapus
-                      $(buttonElement).closest('tr').remove(); // Menghapus baris terkait
-                  },
-                  error: function(xhr, status, error) {
-                      // Menangani error dengan memberikan pesan yang lebih jelas
-                      if (xhr.status === 401) {
-                          Swal.fire({
-                              title: 'Unauthorized',
-                              text: 'You do not have permission to delete this room.',
-                              icon: 'error',
-                              confirmButtonText: 'OK'
-                          });
-                      } else if (xhr.status === 404) {
-                          Swal.fire({
-                              title: 'Not Found',
-                              text: 'Room not found.',
-                              icon: 'error',
-                              confirmButtonText: 'OK'
-                          });
-                      } else {
-                          Swal.fire({
-                              title: 'Error!',
-                              text: 'Failed to delete room. Please try again later.',
-                              icon: 'error',
-                              confirmButtonText: 'OK'
-                          });
-                      }
-                      console.error('Error:', xhr.responseText);
-                  }
-              });
-          }
-      });
-  }
-    $(document).ready(function () {
+  
       // Ambil data kamar
       $.ajax({
         url: 'http://localhost:8000/api/kamars',
@@ -224,15 +150,12 @@ function deleteKamar(id, buttonElement) {
         success: function (response) {
           const tbody = $('#kamar-table-body');
           tbody.empty();
-
-          response.forEach((kamar, index) => {
+  
+          response.forEach((kamar) => {
             const badge = kamar.status === 'Terisi'
               ? '<span class="badge badge-red">Terisi</span>'
               : '<span class="badge badge-green">Kosong</span>';
-            const foto = kamar.image_url
-              ? `<img src="${kamar.image_url}" class="room-photo" alt="Foto ${kamar.id}">`
-              : '-';
-
+  
             const row = `
               <tr>
                 <td data-label="No. Kamar">${kamar.id}</td>
@@ -244,61 +167,71 @@ function deleteKamar(id, buttonElement) {
                 </td>
                 <td data-label="Luas">${kamar.luas} m²</td>
                 <td data-label="Aksi">
-                  <a href="manajemenkamar-update.html?id=${kamar.id}" button class="btn-action edit" data-id="${kamar.id}">Edit</a>
+                  <a href="manajemenkamar-update.html?id=${kamar.id}" class="btn-action edit" data-id="${kamar.id}">Edit</a>
                   <button class="btn-action delete" onclick="deleteKamar(${kamar.id}, this)">Hapus</button>
                 </td>
               </tr>`;
             tbody.append(row);
           });
-
-          // Aktifkan DataTable untuk tabel kamar
-          $('#table-kamar').DataTable({
+  
+          const currentDateTime = new Date().toLocaleString('id-ID', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+          });
+  
+          const dataTable = $("#table-kamar").DataTable({
+            dom: 'lfrtip',
+            buttons: [
+              {
+                extend: 'excelHtml5',
+                title: `Data Kamar Kos - ${currentDateTime}`,
+                exportOptions: {
+                  columns: ':not(.no-export)'
+                }
+              },
+              {
+                extend: 'pdfHtml5',
+                title: `Data Kamar Kos - ${currentDateTime}`,
+                exportOptions: {
+                  columns: ':not(.no-export)'
+                },
+                orientation: 'landscape',
+                pageSize: 'A4'
+              }
+            ],
             responsive: true,
             pageLength: 5,
             language: {
               url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
             }
+          });
+  
+          $('#customExportBtn').on('click', function () {
+            Swal.fire({
+              title: 'Pilih Format Ekspor',
+              showDenyButton: true,
+              showCancelButton: true,
+              confirmButtonText: 'Excel',
+              denyButtonText: `PDF`,
+              cancelButtonText: 'Batal'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                dataTable.button('.buttons-excel').trigger();
+              } else if (result.isDenied) {
+                dataTable.button('.buttons-pdf').trigger();
+              }
+            });
           });
         },
         error: function (err) {
           console.error("Gagal memuat data kamar:", err);
         }
       });
-
-
-      // Ambil aktivitas terbaru
-      $.ajax({
-        url: 'http://localhost:8000/api/aktivitas',
-        method: 'GET',
-        success: function (res) {
-          const tbody = $('#aktivitas-table-body');
-          tbody.empty();
-
-          res.forEach((item, index) => {
-            const row = `
-              <tr>
-                <td>${index + 1}</td>
-                <td>${item.jenis}</td>
-                <td>${item.deskripsi}</td>
-                <td>${item.waktu}</td>
-              </tr>`;
-            tbody.append(row);
-          });
-
-          // Aktifkan DataTable untuk tabel aktivitas
-          $('#table-aktivitas').DataTable({
-            responsive: true,
-            pageLength: 5,
-            language: {
-              url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
-            }
-          });
-        },
-        error: function (err) {
-          console.error("Gagal memuat aktivitas:", err);
-        }
-      });
-
+  
       // Ambil data pemesanan
       $.ajax({
         url: 'http://localhost:8000/api/pemesanans',
@@ -306,12 +239,8 @@ function deleteKamar(id, buttonElement) {
         success: function (response) {
           const tbody = $('#pemesanan-table-body');
           tbody.empty();
-
+  
           response.forEach((pemesanan, index) => {
-            const foto = pemesanan.image
-              ? `<img src="${pemesanan.image}" class="room-photo" alt="Foto Kamar">`
-              : '-';
-
             const row = `
               <tr>
                 <td>${index + 1}</td>
@@ -322,30 +251,79 @@ function deleteKamar(id, buttonElement) {
               </tr>`;
             tbody.append(row);
           });
-
-          // Aktifkan DataTable untuk tabel pemesanan
-          $('#table-pemesanan').DataTable({
+  
+          const currentDateTime = new Date().toLocaleString('id-ID', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+          });
+  
+          const pemesananDataTable = $('#table-pemesanan').DataTable({
+            dom: 'lfrtip',
+            buttons: [
+              {
+                extend: 'excelHtml5',
+                title: `Data Pemesanan Kos - ${currentDateTime}`,
+                exportOptions: {
+                  columns: ':not(.no-export)'
+                }
+              },
+              {
+                extend: 'pdfHtml5',
+                title: `Data Pemesanan Kos - ${currentDateTime}`,
+                exportOptions: {
+                  columns: ':not(.no-export)'
+                },
+                orientation: 'landscape',
+                pageSize: 'A4'
+              }
+            ],
             responsive: true,
             pageLength: 5,
             language: {
               url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
             }
           });
+  
+          $('#customExportBtnPemesanan').on('click', function () {
+            Swal.fire({
+              title: 'Pilih Format Ekspor',
+              showDenyButton: true,
+              showCancelButton: true,
+              confirmButtonText: 'Excel',
+              denyButtonText: `PDF`,
+              cancelButtonText: 'Batal'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                pemesananDataTable.button('.buttons-excel').trigger();
+              } else if (result.isDenied) {
+                pemesananDataTable.button('.buttons-pdf').trigger();
+              }
+            });
+          });
         },
         error: function (err) {
           console.error("Gagal memuat data pemesanan:", err);
         }
       });
-
-  const currentPage = window.location.pathname.split("/").pop();
-    document.querySelectorAll(".sidebar-link").forEach(link => {
-      if (link.getAttribute("href") === currentPage) {
-        link.classList.add("active");
-      }
+  
+      // Sidebar aktif
+      const currentPage = window.location.pathname.split("/").pop();
+      document.querySelectorAll(".sidebar-link").forEach(link => {
+        const linkHref = link.getAttribute("href");
+        if (linkHref === currentPage) {
+          link.classList.add("active");
+          const icon = link.querySelector(".icon");
+          const originalSrc = icon.getAttribute("src");
+          const greenSrc = originalSrc.replace(".svg", "-green.svg");
+          icon.setAttribute("src", greenSrc);
+        }
+      });
     });
-      
-    });
-  </script>
+  </script>  
 
 </body>
 </html>
