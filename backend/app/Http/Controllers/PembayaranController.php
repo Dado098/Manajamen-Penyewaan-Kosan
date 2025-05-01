@@ -61,77 +61,74 @@ class PembayaranController extends Controller
  */
 public function store(StorePembayaranRequest $request)
 {
-    // Inisialisasi Midtrans
-    Config::$serverKey   = env('MIDTRANS_SERVER_KEY');
+    // 1. Konfigurasi Midtrans
+    Config::$serverKey    = env('MIDTRANS_SERVER_KEY');
     Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
     Config::$isSanitized  = true;
     Config::$is3ds        = true;
 
-    // Validasi dan data awal
+    // 2. Validasi & data awal
     $data = $request->validated();
     $data['penyewa_id'] = $request->input('penyewa_id');
-    $data['qr_code']    = Str::uuid();
+    $data['qr_code']    = Str::uuid(); // Bisa diganti QR real jika pakai QRIS
 
-    // Simpan dulu record minimal
-    $pembayaran = Pembayaran::create($data);
+    // 3. Simpan pembayaran awal
+    $pembayaran = Pembayaran::create([
+        'pemesanan_id'      => $data['pemesanan_id'],
+        'penyewa_id'        => $data['penyewa_id'],
+        'total_tagihan'     => $data['total_tagihan'],
+        'status'            => 'menunggu pembayaran',
+        'qr_code'           => $data['qr_code'],
+        'metode_pembayaran' => 'Bank Transfer', // akan diisi oleh notifikasi Midtrans
+    ]);
 
-    // Generate order_id unik
+    // 4. Generate order ID unik
     $orderId = 'ORDER-' . $pembayaran->id . '-' . now()->timestamp;
     $pembayaran->order_id = $orderId;
     $pembayaran->save();
 
-    // Load relasi
+    // 5. Load relasi
     $pembayaran->load(['penyewa', 'pemesanan.kamar']);
 
-    // Persiapkan param Midtrans
+    // 6. Setup parameter Snap
     $params = [
         'transaction_details' => [
             'order_id'     => $orderId,
             'gross_amount' => (int) $pembayaran->total_tagihan,
         ],
-        'customer_details'   => [
+        'customer_details' => [
             'first_name' => $pembayaran->penyewa->name,
             'email'      => $pembayaran->penyewa->email,
             'phone'      => $pembayaran->penyewa->no_telp,
         ],
-        'item_details'       => [[
+        'item_details' => [[
             'id'       => 'PEMESANAN-' . $pembayaran->pemesanan->id,
             'price'    => (int) $pembayaran->total_tagihan,
             'quantity' => 1,
             'name'     => 'Pembayaran Kamar ' . $pembayaran->pemesanan->kamar->nama,
         ]],
-        'payment_type'       => 'bank_transfer',
-        'bank_transfer'      => [
-            'bank' => $request->input('bank'),
-        ],
         'callbacks' => [
-           'callbacks' => [
-             'finish' => ' https://19f9-103-47-133-185.ngrok-free.app/frontend-user/html/thankyou.html',
+            'finish' => 'http://127.0.0.1:5500/frontend-user/html/transaksi.html',
         ],
+    ];
 
-                ],
-            ];
+    // 7. Dapatkan Snap Token dari Midtrans
+    $snapToken = Snap::getSnapToken($params);
 
+    // 8. Simpan Snap Token
+    $pembayaran->snap_token = $snapToken;
+    $pembayaran->save();
 
-            // Dapatkan snap token
-            $snapToken = Snap::getSnapToken($params);
+    // 9. Kirim response ke frontend
+    return response()->json([
+        'message'     => 'Pembayaran berhasil dibuat',
+        'order_id'    => $orderId,
+        'snap_token'  => $snapToken,
+        'payment_url' => "https://app.sandbox.midtrans.com/snap/v2/vtweb/{$snapToken}",
+        'data'        => new PembayaranResource($pembayaran),
+    ], 201);
+}
 
-            // Simpan snap token
-            $pembayaran->snap_token = $snapToken;
-            $pembayaran->save();
-
-        // Tambahan pada bagian store()
-        $response = [
-            'message'    => 'Pembayaran berhasil dibuat',
-            'order_id'   => $orderId,
-            'snap_token' => $snapToken,
-            'payment_url'=> "https://app.sandbox.midtrans.com/snap/v2/vtweb/{$snapToken}",
-            'data'       => new PembayaranResource($pembayaran),
-        ];
-
-        return response()->json($response, 201);
-
-        }
 
 
 

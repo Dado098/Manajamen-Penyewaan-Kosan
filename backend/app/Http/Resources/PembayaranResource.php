@@ -7,30 +7,34 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class PembayaranResource extends JsonResource
 {
     /**
-     * Transformasikan sumber daya menjadi array.
+     * Transformasi sumber daya menjadi array JSON.
      *
      * @param \Illuminate\Http\Request $request
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
-            'id' => $this->id,
-            'order_id' => $this->order_id, // ✅ Ditambahkan order_id
+            'id'                => $this->id,
+            'order_id'          => $this->order_id,
             'metode_pembayaran' => $this->metode_pembayaran,
-            'total_tagihan' => $this->total_tagihan,
-            'snap_token' => $this->snap_token, // ✅ Tambahan snap_token
+            'total_tagihan'     => $this->total_tagihan,
+            'snap_token'        => $this->snap_token,
+            'qr_code'           => $this->qr_code,
+            'status'            => $this->status,
+            'created_at'        => $this->created_at,
+            'updated_at'        => $this->updated_at,
+
+            // Relasi ke penyewa
             'penyewa' => [
-                'id' => $this->penyewa_id,
-                'name' => $this->penyewa->name ?? 'Nama tidak ditemukan',
-                'username' => $this->penyewa->username ?? 'Username tidak ditemukan',
-                'no_telp' => $this->penyewa->no_telp ?? 'Nomor telepon tidak ditemukan',
+                'id'       => $this->penyewa_id,
+                'name'     => optional($this->penyewa)->name ?? null,
+                'username' => optional($this->penyewa)->username ?? null,
+                'no_telp'  => optional($this->penyewa)->no_telp ?? null,
             ],
+
+            // Relasi ke pemesanan
             'pemesanan_id' => $this->pemesanan_id,
-            'qr_code' => $this->qr_code,
-            'created_at' => $this->created_at,
-            'status' => $this->status,
-            'updated_at' => $this->updated_at,
         ];
     }
 }
