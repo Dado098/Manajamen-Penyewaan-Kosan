@@ -32,7 +32,7 @@
   <section class="hero">
     <div class="hero-content">
       <h1>
-        <span>Hallo, User</span>
+        <span>Hallo,</span>
         <span>Selamat datang !</span>
       </h1>
       <div class="hero-buttons">
@@ -159,12 +159,32 @@
 
 <script>
   $(document).ready(function () {
+    const token = localStorage.getItem('token');
+
+    // Ambil nama user
+    if (token) {
+      $.ajax({
+        url: 'http://localhost:8000/api/user',
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function (user) {
+          $('.hero-content h1 span:first').text('Hallo, ' + user.name); // Ganti "Hallo, User" dengan nama asli
+        },
+        error: function () {
+          console.error('Gagal mengambil data pengguna');
+        }
+      });
+    }
+
+    // Ambil data kamar
     $.ajax({
       url: 'http://localhost:8000/api/kamars',
       method: 'GET',
       dataType: 'json',
       success: function (data) {
-        const kamarTerbatas = data.slice(2, 5);
+        const kamarTerbatas = data.slice(0, 5);
 
         $('.kamar-list .card').each(function (index) {
           if (index < kamarTerbatas.length) {
@@ -173,9 +193,8 @@
 
             $(this).find('img').attr('src', imageUrl);
             $(this).find('img').attr('alt', `Foto Kamar ${kamar.id}`);
-            $(this).find('p2').text('Rp ' + parseInt(kamar.harga + '/bulan').toLocaleString());
-            $(this).find('p1').text('Kamar ' + parseInt(kamar.id).toLocaleString());
-
+            $(this).find('p2').text('Rp ' + parseInt(kamar.harga).toLocaleString() + ' /bulan');
+            $(this).find('p1').text('Kamar ' + kamar.id);
           }
         });
       },
@@ -185,6 +204,7 @@
     });
   });
 </script>
+
 
   <script src="../js/homepage.js"></script>
   <div id="ajax-container" style="display: none;"></div>

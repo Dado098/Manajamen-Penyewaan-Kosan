@@ -73,49 +73,51 @@
   
 
   <script>
-    document.getElementById('btn-bayar').addEventListener('click', function () {
-      const token = localStorage.getItem('token');
-      const pemesanan_id = localStorage.getItem('pemesanan_id');
-      const penyewa_id = localStorage.getItem('penyewa_id');
+    $(document).ready(function () {
+      $('#btn-bayar').on('click', function (e) {
+        e.preventDefault();
   
-      const bank = 'bni'; // langsung ditentukan
-      const total_tagihan = 600000;
-      const metode_pembayaran = bank + '_va';
-      const payment_method = 'virtual_account';
+        const token = localStorage.getItem('token');
+        const pemesanan_id = localStorage.getItem('pemesanan_id');
+        const penyewa_id = localStorage.getItem('penyewa_id');
+        const total_tagihan = 600000;
   
-      if (!token || !pemesanan_id || !penyewa_id) {
-        Swal.fire('Gagal', 'Data tidak lengkap.', 'error');
-        return;
-      }
-  
-      $.ajax({
-        url: 'http://localhost:8000/api/pembayarans',
-        method: 'POST',
-        headers: {
-          Authorization: 'Bearer ' + token
-        },
-        data: {
-          pemesanan_id,
-          penyewa_id,
-          total_tagihan,
-          metode_pembayaran,
-          payment_method,
-          bank
-        },
-        success: function (res) {
-          if (res.payment_url) {
-            window.location.href = res.payment_url;
-          } else {
-            Swal.fire('Gagal', 'URL pembayaran tidak ditemukan.', 'error');
-          }
-        },
-        error: function (xhr) {
-          Swal.fire('Gagal', 'Gagal membuat pembayaran.', 'error');
-          console.error(xhr.responseText);
+        if (!token || !pemesanan_id || !penyewa_id) {
+          Swal.fire('Gagal', 'Data tidak lengkap.', 'error');
+          return;
         }
+  
+        $.ajax({
+          url: 'http://localhost:8000/api/pembayarans',
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + token
+          },
+          data: {
+            pemesanan_id,
+            penyewa_id,
+            total_tagihan,
+            metode_pembayaran: 'bank_transfer', // Ubah ke bank_transfer
+            payment_method: 'bank_transfer',
+            bank: 'bni' // Ganti ke 'bca', 'mandiri', atau 'permata' jika perlu
+          },
+          success: function (res) {
+            if (res.payment_url) {
+              window.location.href = res.payment_url;
+            } else {
+              Swal.fire('Berhasil', 'Silakan cek VA di dashboard atau email.', 'success');
+              // Bisa tampilkan info pembayaran juga di modal kalau mau
+            }
+          },
+          error: function (xhr) {
+            console.error(xhr.responseText);
+            Swal.fire('Gagal', 'Gagal membuat pembayaran.', 'error');
+          }
+        });
       });
     });
   </script>
+  
 
   <!-- <script src="halamanpembayaran.js"></script> -->
   
