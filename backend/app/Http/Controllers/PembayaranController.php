@@ -108,7 +108,7 @@ public function store(StorePembayaranRequest $request)
             'name'     => 'Pembayaran Kamar ' . $pembayaran->pemesanan->kamar->nama,
         ]],
         'callbacks' => [
-            'finish' => 'http://127.0.0.1:5500/frontend-user/html/transaksi.html',
+            'finish' => 'http://127.0.0.1:5500/frontend-user/html/konfirmasi.html',
         ],
     ];
 
