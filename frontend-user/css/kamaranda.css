@@ -36,20 +36,25 @@ body {
     color: #000000;
 }
 
-/* Panah kembali di pojok kiri atas */
-.back {
+.back-button {
     position: absolute;
     top: 20px;
     left: 20px;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: background-color 0.3s ease;
+    color: white;
+    text-decoration: none;
+    font-size: 32px;
+    font-weight: bold;
+    background-color: transparent;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
   }
   
-  .back:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+  .back-button:hover {
+    background-color: white;
+    color: #328300;
   }
+
   
 /* Box transaksi dengan border dan latar belakang putih */
 .box-transaksi {

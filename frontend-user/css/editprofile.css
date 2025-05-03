@@ -6,15 +6,27 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative; /* agar .back-button absolute-nya relatif ke body */
 }
 
 .container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  flex-direction: column; /* biar h1 dan .form-box ngatur vertikal */
   width: 100%;
   max-width: 600px;
+}
+
+h1 {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+h2 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #000;
 }
 
 .form-box {
@@ -26,58 +38,71 @@ body {
   max-width: 400px;
 }
 
-  
-  h1 {
-    color: #fff;
-    margin-bottom: 20px;
-  }
-  
-  h2 {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 20px;
-    color: #000000;
-  }
-  
-  label {
-    display: block;
-    text-align: left;
-    margin-top: 10px;
-    font-weight: bold;
-    color: #555;
-  }
-  input {
-    width: 90%; /* <--- dari 100% jadi 90% */
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    border: 1px solid #999;
-    border-radius: 5px;
-    box-sizing: border-box;
-  }
-  
-  
-  .edit-button {
-    display: block;
-    width: 50%;
-    margin: 20px auto 0 auto;
-    padding: 10px;
-    background-color: #328300;
-    color: white;
-    text-align: center;
-    text-decoration: none; /* inilah yang hapus underline */
-    border-radius: 60px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .edit-button:hover {
-    background-color: #010101;
-    text-decoration: none;
-  }
-  
-  .edit-button:visited {
-    color: white;
-    text-decoration: none;
-  }
-  
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #555;
+  text-align: left;
+}
+
+input {
+  width: 90%;
+  padding: 10px;
+  margin: 5px 0 10px;
+  border: 1px solid #999;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.edit-button {
+  display: block;
+  width: 50%;
+  margin: 20px auto 0;
+  padding: 10px;
+  background-color: #328300;
+  color: white;
+  text-align: center;
+  border-radius: 60px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.edit-button:hover {
+  background-color: #010101;
+}
+
+.edit-password-link {
+  display: block;
+  margin-top: 10px;
+  color: #328300;
+  text-align: left;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.edit-password-link:hover {
+  text-decoration: underline;
+  color: #010101;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  font-size: 32px;
+  font-weight: bold;
+  background-color: transparent;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.back-button:hover {
+  background-color: white;
+  color: #000000;
+}

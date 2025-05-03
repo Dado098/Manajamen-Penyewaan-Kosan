@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../css/profile.css" />
 </head>
 <body>
+  <a href="javascript:history.back()" class="back-button">&lt;</a>
   <div class="profil">
     <div class="profil-container">
       <!-- Gambar Profil -->
@@ -34,8 +35,7 @@
       <!-- Tombol -->
       <div class="button-group">
         <a href="editprofile.html"><button class="btn-edit">Edit Profil</button></a>
-        <a href="index.html"><button class="btn-edit">Keluar Akun</button></a>
-        <button class="btn-logout">Keluar</button>
+        <a href="index.html"><button class="btn-logout">Keluar Akun</button></a>
       </div>
     </div>
   </div>
@@ -45,6 +45,13 @@
   <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
 
   <script>
+    function goBack() {
+    if (document.referrer) {
+      window.history.back();
+    } else {
+      window.location.href = "profile.html"; // fallback jika tidak ada referrer
+    }
+  }
     $(document).ready(function () {
       const userToken = localStorage.getItem('token');
   
