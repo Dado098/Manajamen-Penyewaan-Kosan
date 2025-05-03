@@ -30,8 +30,9 @@ class StorePembayaranRequest extends FormRequest
             'metode_pembayaran' => 'required|string|max:255',
             'total_tagihan'     => 'required|numeric|min:1',
             'penyewa_id'        => 'required|exists:users,id',
-            'pemesanan_id'      => 'required|exists:pemesanans,id',
+            'pemesanan_id'      => 'nullable|exists:pemesanans,id',
         ];
+
     }
 
     /**
@@ -48,8 +49,8 @@ class StorePembayaranRequest extends FormRequest
             'total_tagihan.numeric'      => 'Total tagihan harus berupa angka.',
             'penyewa_id.required'        => 'ID penyewa harus diisi.',
             'penyewa_id.exists'          => 'ID penyewa tidak ditemukan.',
-            'pemesanan_id.required'      => 'ID pemesanan harus diisi.',
-            'pemesanan_id.exists'        => 'ID pemesanan tidak ditemukan.',
+            'pemesanan_id.exists'        => 'ID pemesanan tidak ditemukan.', // hanya validasi exists
         ];
     }
+
 }

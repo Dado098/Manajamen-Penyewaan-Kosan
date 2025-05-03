@@ -25,7 +25,7 @@ return new class extends Migration
 
             // Relasi antar table
             $table->foreignId('penyewa_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('pemesanan_id')->constrained('pemesanans')->onDelete('cascade');
+            $table->foreignId('pemesanan_id')->nullable()->constrained('pemesanans')->onDelete('cascade');
             $table->timestamps();
         });
 

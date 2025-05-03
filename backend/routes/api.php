@@ -11,6 +11,9 @@ use App\Http\Controllers\KosanExportController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\LocationController;
+
+
 
 
 // Route untuk Manajemen User (Admin)
@@ -91,15 +94,18 @@ Route::post('midtrans/notification', [PembayaranController::class, 'notification
 Route::post('midtrans/notification', [PembayaranController::class, 'notification'])->withoutMiddleware(['auth:sanctum']);
 
 
-// Route untuk Pembayaran
-Route::apiResource('pembayaranduas', PembayaranPerpanjanganController::class);
-
-// Route untuk Pembayaran berdasarkan ID Pemesanan (QRCode)
-Route::get('pembayaranduas/{id}/qrcode', [PembayaranPerpanjanganController::class, 'generateQRCode'])->name('pembayarans.qrcode');
-
-Route::post('midtrans/notification', [PembayaranPerpanjanganController::class, 'notification']);
+Route::get('locations', [LocationController::class, 'getLocations']);
 
 
-Route::post('midtrans/notification', [PembayaranPerpanjanganController::class, 'notification'])->withoutMiddleware(['auth:sanctum']);
+// // Route untuk Pembayaran
+// Route::apiResource('pembayaranduas', PembayaranPerpanjanganController::class);
+
+// // Route untuk Pembayaran berdasarkan ID Pemesanan (QRCode)
+// Route::get('pembayaranduas/{id}/qrcode', [PembayaranPerpanjanganController::class, 'generateQRCode'])->name('pembayarans.qrcode');
+
+// Route::post('midtrans/notification', [PembayaranPerpanjanganController::class, 'notification']);
+
+
+// Route::post('midtrans/notification', [PembayaranPerpanjanganController::class, 'notification'])->withoutMiddleware(['auth:sanctum']);
 
 

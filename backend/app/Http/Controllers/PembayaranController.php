@@ -70,16 +70,16 @@ public function store(StorePembayaranRequest $request)
     // 2. Validasi & data awal
     $data = $request->validated();
     $data['penyewa_id'] = $request->input('penyewa_id');
-    $data['qr_code']    = Str::uuid(); // Bisa diganti QR real jika pakai QRIS
+    $data['qr_code']    = Str::uuid();
 
     // 3. Simpan pembayaran awal
     $pembayaran = Pembayaran::create([
-        'pemesanan_id'      => $data['pemesanan_id'],
+        'pemesanan_id'      => $data['pemesanan_id'] ?? null,
         'penyewa_id'        => $data['penyewa_id'],
         'total_tagihan'     => $data['total_tagihan'],
         'status'            => 'menunggu pembayaran',
         'qr_code'           => $data['qr_code'],
-        'metode_pembayaran' => 'Bank Transfer', // akan diisi oleh notifikasi Midtrans
+        'metode_pembayaran' => 'Bank Transfer',
     ]);
 
     // 4. Generate order ID unik
@@ -87,8 +87,11 @@ public function store(StorePembayaranRequest $request)
     $pembayaran->order_id = $orderId;
     $pembayaran->save();
 
-    // 5. Load relasi
-    $pembayaran->load(['penyewa', 'pemesanan.kamar']);
+    // 5. Load relasi yang ada
+    $pembayaran->load('penyewa');
+    if ($pembayaran->pemesanan_id) {
+        $pembayaran->load('pemesanan.kamar');
+    }
 
     // 6. Setup parameter Snap
     $params = [
@@ -101,25 +104,36 @@ public function store(StorePembayaranRequest $request)
             'email'      => $pembayaran->penyewa->email,
             'phone'      => $pembayaran->penyewa->no_telp,
         ],
-        'item_details' => [[
-            'id'       => 'PEMESANAN-' . $pembayaran->pemesanan->id,
-            'price'    => (int) $pembayaran->total_tagihan,
-            'quantity' => 1,
-            'name'     => 'Pembayaran Kamar ' . $pembayaran->pemesanan->kamar->nama,
-        ]],
         'callbacks' => [
             'finish' => 'http://127.0.0.1:5500/frontend-user/html/konfirmasi.html',
         ],
     ];
 
-    // 7. Dapatkan Snap Token dari Midtrans
+    // Tambahkan item_details hanya jika ada pemesanan
+    if ($pembayaran->pemesanan_id && $pembayaran->pemesanan) {
+        $params['item_details'][] = [
+            'id'       => 'PEMESANAN-' . $pembayaran->pemesanan->id,
+            'price'    => (int) $pembayaran->total_tagihan,
+            'quantity' => 1,
+            'name'     => 'Pembayaran Kamar ' . $pembayaran->pemesanan->kamar->nama,
+        ];
+    } else {
+        $params['item_details'][] = [
+            'id'       => 'PEMBAYARAN-' . $pembayaran->id,
+            'price'    => (int) $pembayaran->total_tagihan,
+            'quantity' => 1,
+            'name'     => 'Pembayaran Umum',
+        ];
+    }
+
+    // 7. Snap Token
     $snapToken = Snap::getSnapToken($params);
 
     // 8. Simpan Snap Token
     $pembayaran->snap_token = $snapToken;
     $pembayaran->save();
 
-    // 9. Kirim response ke frontend
+    // 9. Response
     return response()->json([
         'message'     => 'Pembayaran berhasil dibuat',
         'order_id'    => $orderId,
@@ -128,6 +142,7 @@ public function store(StorePembayaranRequest $request)
         'data'        => new PembayaranResource($pembayaran),
     ], 201);
 }
+
 
 
 
