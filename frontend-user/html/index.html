@@ -13,11 +13,21 @@
     <div class="logo">
       <img src="../images/lg.svg" alt="Logo Senangkos" />
     </div>
+    
+    <nav class="navbar">
+      <a href="#about">About Us</a>
+      <a href="#kamar">Kamar</a>
+      <a href="#fasilitas">Fasilitas</a>
+      <a href="#lokasi">Lokasi</a>
+    </nav>
+  
     <div class="auth-buttons">
       <button id="loginBtn">Login</button>
       <button id="signupBtn">Sign Up</button>
     </div>
   </header>
+  
+  
 
   <!-- Hero Section -->
   <section class="hero" style="background: url('../images/hero-bg.png') no-repeat center center/cover;">
@@ -25,6 +35,26 @@
       <h1>Tinggal Nyaman Serasa di Rumah!</h1>
     </div>
   </section>
+
+
+  <!-- Intro Section dengan Gambar dan Deskripsi -->
+  <section class="intro-kost" id="about">
+  <div class="intro-container">
+    <div class="intro-image">
+      <img src="../images/kamar1.png" alt="Tampak Depan Kost" />
+    </div>
+    <div class="intro-text">
+      <h2>About Us</h2>
+      <p>
+        Senangkos menyediakan hunian kost yang nyaman, bersih, dan terjangkau bagi mahasiswa dan pekerja. Kami hadir untuk memberikan solusi bagi mereka yang kesulitan mencari kost dengan harga wajar dan kondisi yang layak. Senangkos adalah tempat tinggal yang aman dan nyaman, layaknya rumah sendiri.
+
+        Dengan lokasi strategis dekat kampus dan pusat kota, Senangkos mengutamakan kenyamanan dan kemudahan akses. Setiap kamar dirancang modern dan fungsional, lengkap dengan fasilitas seperti dapur bersama, area parkir, dan lingkungan yang tertata rapi. Senangkos beralamat di Jl. Babakan Fakultas, RT.04/RW.04, Tegallega, Kecamatan Bogor Tengah, Kota Bogor, Jawa Barat 16129.
+    </div>
+  </div>
+</section>
+
+
+
 
   <!-- Kamar Section -->
   <section class="section" id="kamar">
@@ -49,7 +79,7 @@
   </section>
 
   <!-- Fasilitas Section -->
-  <section class="section fasilitas">
+  <section class="section fasilitas" id="fasilitas">
     <h2>Fasilitas yang Tersedia</h2>
     <div class="fasilitas-list">
       <div class="card">
@@ -68,11 +98,11 @@
   </section>
 
   <!-- Lokasi Section -->
-  <section class="section lokasi" style="padding: 2rem 0;">
-    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-      <h2 style="font-size: 2rem; margin-bottom: 1rem;">Lokasi Kost</h2>
-      <div id="map" style="height: 450px; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
-    </div>
+  <section class="section lokasi">
+    <h2>Lokasi Kost</h2>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.387490227835!2d106.80554937480659!3d-6.598671593395129!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c5daedddf98d%3A0xce0c1712c240c876!2sJl.%20Babakan%20Fakultas%20No.4%2C%20RT.03%2FRW.05%2C%20Tegallega%2C%20Kecamatan%20Bogor%20Tengah%2C%20Kota%20Bogor%2C%20Jawa%20Barat%2016129!5e0!3m2!1sen!2sid!4v1744384832179!5m2!1sen!2sid"
+      width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
   </section>
 
   <!-- Leaflet CSS & JS -->
@@ -211,12 +241,7 @@
         <div class="footer-left">
           <img src="../images/lg.svg" alt="Logo Senangkos" class="footer-logo">
         </div>
-        <div class="footer-center footer-nav">
-          <a href="">Home</a>
-          <a href="#">Explore</a>
-          <a href="#">Kamar Anda</a>
-          <a href="#">Profile</a>
-        </div>
+
       </div>      
     </div>
     <div class="footer-bottom">
@@ -225,7 +250,22 @@
     </div>
   </footer>
 
+  
+
   <script>
+     $(document).ready(function () {
+    $('.navbar a').click(function (e) {
+      e.preventDefault(); // Mencegah aksi default link (langsung scroll)
+      
+      // Ambil target href dari elemen yang diklik
+      var target = $(this).attr('href');
+      
+      // Scroll ke target dengan sedikit offset
+      $('html, body').animate({
+        scrollTop: $(target).offset().top - 75 // Sesuaikan offset sesuai kebutuhan, misalnya -50px
+      }, 300); // Waktu scroll (300ms)
+    });
+  });
     $(document).ready(function () {
       $('#loginBtn').click(function () {
         window.location.href = 'login.html';

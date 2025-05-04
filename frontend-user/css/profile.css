@@ -76,27 +76,27 @@ body {
   }
   
   .btn-edit {
-    background-color: #2b1b12;
+    background-color: #d6d054;
   }
   
   .btn-edit:hover {
-    background-color: #3d2d21;
+    background-color: #e5e352;
   }
   
   .btn-backacount {
-    background-color: #121010;
+    background-color: #e84343;
   }
   
   .btn-backacount:hover {
-    background-color: #111010;
+    background-color: #b53b3b;
   }
   
   .btn-logout {
-    background-color: #5a6268;
+    background-color: #c93939;
   }
   
   .btn-logout:hover {
-    background-color: #4e555b;
+    background-color: #ec6f59;
   }
   /* RESPONSIVE */
 @media screen and (max-width: 480px) {
@@ -115,4 +115,22 @@ body {
   .sign-up {
     padding-top: 80px;
   }
+}
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  font-size: 32px;
+  font-weight: bold;
+  background-color: transparent;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.back-button:hover {
+  background-color: white;
+  color: #000000;
 }
