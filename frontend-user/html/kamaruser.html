@@ -29,9 +29,10 @@
     <h3 class="subtitle">History Pembayaran</h3>
     <div class="history-card" id="history-pembayaran">
       <!-- Data dari jQuery akan masuk di sini -->
-      <button class="btn-bayar"  id="btn-bayar">Bayar Lagi</button>
+      
     </div>
   </section>
+  <button class="btn-bayar"  id="btn-bayar">Bayar Lagi</button>
 
   <!-- jQuery & SweetAlert -->
   <script src="../js/jquery-3.7.1.min.js"></script>
@@ -42,10 +43,10 @@
     function goBack() {
       window.location.href = "homeuser.html"; // Ganti sesuai kebutuhan
     }
-
+  
     $(document).ready(function () {
       const token = localStorage.getItem("token");
-
+  
       if (!token) {
         Swal.fire({
           icon: 'warning',
@@ -56,7 +57,7 @@
         });
         return;
       }
-
+  
       $.ajax({
         url: 'http://localhost:8000/api/pembayarans',
         method: 'GET',
@@ -65,8 +66,8 @@
         },
         success: function (response) {
           let html = '';
-
-          if (response.length === 0) {
+  
+          if (!response || response.length === 0) {
             html = `<p>Tidak ada riwayat pembayaran.</p>`;
           } else {
             response.forEach(function (item) {
@@ -80,10 +81,11 @@
               `;
             });
           }
-
-          $("#history-pembayaran").prepend(html);
+  
+          $("#history-pembayaran").html(html);
         },
         error: function (xhr) {
+          console.error('Error response:', xhr);
           Swal.fire({
             icon: 'error',
             title: 'Gagal Mengambil Data',
@@ -91,7 +93,7 @@
           });
         }
       });
-
+  
       function formatTanggal(dateStr) {
         const date = new Date(dateStr);
         return date.toLocaleDateString('id-ID', {
@@ -100,12 +102,14 @@
           year: 'numeric'
         });
       }
-
+  
       function formatRupiah(angka) {
-        return parseInt(angka).toLocaleString('id-ID');
+        const num = parseInt(angka);
+        return isNaN(num) ? '0' : num.toLocaleString('id-ID');
       }
     });
   </script>
+  
   
   <script>
      $(document).ready(function () {
