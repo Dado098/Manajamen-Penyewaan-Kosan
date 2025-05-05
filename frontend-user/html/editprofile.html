@@ -38,96 +38,92 @@
 
   <script>
     $(document).ready(function () {
-  const userToken = localStorage.getItem('token');
-
-  if (!userToken) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Token Hilang',
-      text: 'Silakan login kembali.'
-    }).then(() => {
-      window.location.href = "login.html";
-    });
-    return;
-  }
-
-  let token = userToken;
-  try {
-    const parsed = JSON.parse(userToken);
-    if (parsed.token) {
-      token = parsed.token;
-    }
-  } catch (e) {}
-
-  // Ambil data user
-  $.ajax({
-    url: 'http://localhost:8000/api/user',
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + token
-    },
-    success: function(user) {
-      // Tampilkan data ke form
-      $("#profile-email").val(user.email || "");
-      $("#profile-nama").val(user.name || "");
-      $("#profile-hp").val(user.no_telp || "");
-
-      localStorage.setItem("userProfile", JSON.stringify(user));
-    },
-    error: function() {
-      Swal.fire({
-        icon: 'error',
-        title: 'Session Expired',
-        text: 'Silakan login kembali.'
-      }).then(() => {
-        localStorage.removeItem("token");
-        window.location.href = "login.html";
-      });
-    }
-  });
-
-  // Update profil
-  $("#edit-profile-form").on('submit', function (e) {
-    e.preventDefault();
-
-    const updatedData = {
-      name: $("#profile-nama").val(),
-      email: $("#profile-email").val(),
-      no_telp: $("#profile-hp").val()
-    };
-
-    $.ajax({
-      url: 'http://localhost:8000/api/user',
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      },
-      data: JSON.stringify(updatedData),
-      success: function () {
-        Swal.fire({
-          icon: 'success',
-          title: 'Berhasil',
-          text: 'Profil berhasil diperbarui.'
-        }).then(() => {
-          location.reload();
-        });
-      },
-      error: function (xhr) {
+      const userToken = localStorage.getItem('token');
+  
+      if (!userToken) {
         Swal.fire({
           icon: 'error',
-          title: 'Gagal Update',
-          text: xhr.responseJSON?.message || 'Terjadi kesalahan.'
+          title: 'Token Hilang',
+          text: 'Silakan login kembali.'
+        }).then(() => {
+          window.location.href = "login.html";
         });
+        return;
       }
+  
+      let token = userToken;
+      try {
+        const parsed = JSON.parse(userToken);
+        if (parsed.token) {
+          token = parsed.token;
+        }
+      } catch (e) {}
+  
+      // AMBIL DATA USER SAAT PERTAMA KALI MASUK
+      $.ajax({
+        url: 'http://localhost:8000/api/user',
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function (user) {
+          $("#profile-email").val(user.email || "");
+          $("#profile-nama").val(user.name || "");
+          $("#profile-hp").val(user.no_telp || "");
+  
+          localStorage.setItem("userProfile", JSON.stringify(user));
+          localStorage.setItem("userId", user.id); // <- SIMPAN ID DI LOCAL STORAGE
+        },
+        error: function () {
+          Swal.fire({
+            icon: 'error',
+            title: 'Session Expired',
+            text: 'Silakan login kembali.'
+          }).then(() => {
+            localStorage.removeItem("token");
+            window.location.href = "login.html";
+          });
+        }
+      });
+  
+      // KETIKA TOMBOL SIMPAN DIKLIK
+      $("#edit-profile-form").on('submit', function (e) {
+        e.preventDefault();
+  
+        const updatedData = {
+          name: $("#profile-nama").val(),
+          email: $("#profile-email").val(),
+          no_telp: $("#profile-hp").val()
+        };
+  
+        const userId = localStorage.getItem("userId"); // <- AMBIL ID
+  
+        $.ajax({
+          url: 'http://localhost:8000/api/users/' + userId, // <- GUNAKAN ROUTE SESUAI CONTROLLER
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          data: JSON.stringify(updatedData),
+          success: function () {
+            Swal.fire({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Profil berhasil diperbarui.'
+            }).then(() => {
+              location.reload();
+            });
+          },
+          error: function (xhr) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal Update',
+              text: xhr.responseJSON?.message || 'Terjadi kesalahan.'
+            });
+          }
+        });
+      });
     });
-  });
-
-  // Logout
-  $(".btn-logout").on('click', function () {
-    localStorage.removeItem("userProfile");
-    localStorage.removeItem("token");
-    window.location.href = "homepage.html";
-  });
-});
-</script>
+  </script>
+  

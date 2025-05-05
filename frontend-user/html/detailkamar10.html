@@ -49,39 +49,144 @@
       </div>
     </div>
 
-    <div class="buttons">
-      <a href="explorekmr.html" class="cancel-btn">Cancel</a>
-      <a href="halamanpembayaran.html" class="booking-btn">Booking</a>
+    <div class="booking-form">
+      <label for="tgl_masuk">Tanggal Masuk</label>
+      <input type="date" id="tgl_masuk" name="tgl_masuk" required />
+    
+      <label for="tgl_keluar">Tanggal Keluar</label>
+      <input type="date" id="tgl_keluar" name="tgl_keluar" required />
+    
+      <input type="hidden" id="kamar_id" value=""> <!-- Ganti dengan ID kamar yang sesuai -->
+
     </div>
-  </div>
-  <script src="../js/jquery-3.7.1.min.js"></script>
+
+    <div class="buttons">
+        <a href="explorekmr.html" class="cancel-btn">Cancel</a>
+        <button type="submit" id="btnBooking" class="booking-btn">Booking</button>
+      </div>
+    </div>
+
+    <script src="../js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
     <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
   
     <script>
-     $(document).ready(function () {
+    $(document).ready(function () {
+  // Ambil token dari localStorage
+  let tokenData = localStorage.getItem('token');
+
+  if (!tokenData) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Token Hilang',
+      text: 'Silakan login kembali.'
+    }).then(() => {
+      window.location.href = "login.html";
+    });
+    return;
+  }
+
+  let token = tokenData;
+
+  try {
+    const parsed = JSON.parse(tokenData);
+    if (parsed.token) token = parsed.token;
+  } catch (e) {
+    console.warn('Token bukan JSON, menggunakan string langsung.');
+  }
+
+  // Ambil data kamar
+  $.ajax({
+    url: 'http://localhost:8000/api/kamars',
+    method: 'GET',
+    dataType: 'json',
+    success: function (data) {
+      if (!data.length) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Tidak Ada Kamar',
+          text: 'Data kamar kosong.'
+        });
+        return;
+      }
+
+      const kamar = data[0]; // Ambil kamar pertama
+      const hargaFormatted = `Rp ${parseInt(kamar.harga).toLocaleString()}/bulan`;
+
+      $('.info-header .harga-kamar').text(hargaFormatted);
+      $('#kamar_id').val(kamar.id);
+    },
+    error: function (xhr, status, error) {
+      console.error('Gagal memuat kamar:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal Memuat Kamar',
+        text: 'Silakan coba lagi nanti.'
+      });
+    }
+  });
+
+  // Saat tombol booking ditekan
+  $('#btnBooking').on('click', function (e) {
+    e.preventDefault();
+
+    const tglMasuk = $('#tgl_masuk').val();
+    const tglKeluar = $('#tgl_keluar').val();
+    const kamarId = $('#kamar_id').val();
+
+    // Validasi input
+    if (!tglMasuk || !tglKeluar || !kamarId) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Form Tidak Lengkap',
+        text: 'Pastikan semua field terisi.'
+      });
+      return;
+    }
+
+    // Validasi tanggal keluar harus setelah masuk
+    if (new Date(tglKeluar) <= new Date(tglMasuk)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Tanggal Tidak Valid',
+        text: 'Tanggal keluar harus setelah tanggal masuk.'
+      });
+      return;
+    }
+
     $.ajax({
-      url: 'http://localhost:8000/api/kamars', // Gantilah dengan URL API yang sesuai
-      method: 'GET',
-      dataType: 'json',
-      success: function (data) {
-     
-        const kamar = data[9]; 
-  
-        if (kamar) {
-          const hargaFormatted = `Rp ${parseInt(kamar.harga).toLocaleString()}/bulan`;
-  
-          $('.info-header').each(function () {
-            $(this).find('.harga-kamar').text(hargaFormatted);
-          });
-        }
+      url: 'http://localhost:8000/api/pemesanans',
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + token
       },
-      error: function (xhr, status, error) {
-        console.error('Gagal memuat data kamar:', error);
+      data: {
+        tgl_masuk: tglMasuk,
+        tgl_keluar: tglKeluar,
+        kamar_id: kamarId
+        // penyewa_id tidak dikirim, di-handle di backend
+      },
+      success: function (response) {
+    localStorage.setItem('pemesanan_id', response.id);
+    localStorage.setItem('penyewa_id', response.penyewa_id);
+
+    Swal.fire('Berhasil!', 'Pemesanan berhasil dibuat.', 'success').then(() => {
+      window.location.href = 'halamanpembayaran.html';
+        });
+      },
+      error: function (xhr) {
+        console.error('Error response:', xhr.responseText);
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Booking',
+          text: 'Terjadi kesalahan. Coba lagi nanti.'
+        });
       }
     });
   });
+});
+
   
   
     </script>

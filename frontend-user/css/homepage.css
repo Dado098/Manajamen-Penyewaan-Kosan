@@ -150,13 +150,16 @@ body {
   
   /* ========== Card ========== */
   .card {
-    background: #fcfcfc;
+    background: #daeeda;
     padding: 30px 20px;
     width: 250px;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: 20px;
     border: 2px solid rgb(116, 114, 114);
+  }
+  .card button:hover {
+    background-color: #7eb93b; /* Efek hover pada tombol */
   }
   
   .card img {
@@ -234,7 +237,7 @@ body {
   }
   
   .footer-nav a {
-    color: white;
+    color:#328300;
     text-decoration: none;
     font-weight: bold;
     font-size: 16px;
