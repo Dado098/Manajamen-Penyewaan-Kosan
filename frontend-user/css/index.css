@@ -17,11 +17,11 @@ html {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 10px;
+  padding: 4px 10px;
   display: flex;
   justify-content: space-between;
   z-index: 1000;
-  background-color: #326810; /* pastikan warna tidak transparan */
+  background-color:#63AE00; /* pastikan warna tidak transparan */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* bayangan agar terlihat lebih baik */
 }
 
@@ -97,6 +97,8 @@ html {
   max-width: 1200px;
   margin: 0 auto;
   text-align: center; /* Tambahkan ini untuk memastikan teks di dalamnya juga terpusat */
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 .intro-image img {
@@ -131,6 +133,8 @@ html {
 .section {
   padding: 60px 40px;
   text-align: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 .kamar-list, .fasilitas-list {
@@ -138,10 +142,12 @@ html {
   justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 .card {
-  background: #fcfcfc;
+  background: #daeeda;
   padding: 30px 20px;
   width: 250px;
   border-radius: 12px;
@@ -170,6 +176,7 @@ html {
 /* Lokasi */
 .lokasi iframe {
   border-radius: 10px;
+
 }
 
 /* Footer */
