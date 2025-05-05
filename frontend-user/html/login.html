@@ -46,66 +46,67 @@
 
   <script>
     $(document).ready(function () {
-  $("#login-btn").click(function (e) {
-    e.preventDefault();
-
-    const username = $("#username").val();
-    const password = $("#password").val();
-
-    $("#error-message").addClass('hidden').text('');
-
-    if (!username || !password) {
-      $("#error-message").removeClass('hidden').text('Username dan Password wajib diisi.');
-      return;
-    }
-
-    $.ajax({
-      url: "http://localhost:8000/api/login",
-      method: "POST",
-      data: {
-        username: username,
-        password: password
-      },
-      success: function (response) {
-        // Simpan token
-        localStorage.setItem("token", response.token);
-
-        // Cek role dan verifikasi email
-        if (response.role === "pemilik") {
-          // Pemilik bisa langsung masuk
-          window.location.href = "../../frontend-admin/adminview/indexadmin.html";
-        } else if (response.role === "penyewa") {
-          // Penyewa harus verifikasi email dulu
-          if (!response.email_verified_at) {
-            $("#error-message").removeClass('hidden').text("Email harus diverifikasi terlebih dahulu. Silakan cek email Anda.");
-            return;
-          }
-          window.location.href = "homepage.html";
-        } else {
-          // Role tidak dikenali → tampilkan seolah belum verifikasi
-          $("#error-message").removeClass('hidden').text("Email harus diverifikasi terlebih dahulu. Silakan cek email Anda.");
+      $("#login-btn").click(function (e) {
+        e.preventDefault();
+  
+        const username = $("#username").val().trim();
+        const password = $("#password").val().trim();
+  
+        $("#error-message").addClass('hidden').text('');
+  
+        if (!username || !password) {
+          $("#error-message").removeClass('hidden').text('Username dan Password wajib diisi.');
+          return;
         }
-      },
-      error: function (xhr) {
-        let errorMsg = "Login gagal. Coba lagi.";
-        if (xhr.responseJSON) {
-          const res = xhr.responseJSON;
-          if (res.errors?.email) {
-            errorMsg = res.errors.email[0];
-          } else if (res.errors?.username) {
-            errorMsg = res.errors.username[0];
-          } else if (res.message) {
-            errorMsg = res.message;
+  
+        $.ajax({
+          url: "http://localhost:8000/api/login",
+          method: "POST",
+          data: {
+            username: username,
+            password: password
+          },
+          success: function (response) {
+            // Simpan token dan data user ke localStorage
+            localStorage.setItem("token", response.access_token);
+            localStorage.setItem("penyewa_id", response.penyewa_id || '');
+            localStorage.setItem("role", response.role || '');
+            localStorage.setItem("email_verified_at", response.email_verified_at || '');
+  
+            if (response.role === "pemilik") {
+              window.location.href = "../../frontend-admin/adminview/indexadmin.html";
+            } else if (response.role === "penyewa") {
+              if (!response.email_verified_at) {
+                $("#error-message").removeClass('hidden').text("Email harus diverifikasi terlebih dahulu. Silakan cek email Anda.");
+                return;
+              }
+              window.location.href = "homepage.html";
+            } else {
+              $("#error-message").removeClass('hidden').text("Role tidak dikenali.");
+            }
+          },
+          error: function (xhr) {
+            let errorMsg = "Login gagal. Coba lagi.";
+            if (xhr.responseJSON) {
+              const res = xhr.responseJSON;
+              if (res.errors?.username) {
+                errorMsg = res.errors.username[0];
+              } else if (res.errors?.password) {
+                errorMsg = res.errors.password[0];
+              } else if (res.errors?.email) {
+                errorMsg = res.errors.email[0];
+              } else if (res.message) {
+                errorMsg = res.message;
+              }
+            }
+  
+            $("#error-message").removeClass('hidden').text(errorMsg);
           }
-        }
-
-        $("#error-message").removeClass('hidden').text(errorMsg);
-      }
+        });
+      });
     });
-  });
-});
-
   </script>
+  
   
 
 </body>

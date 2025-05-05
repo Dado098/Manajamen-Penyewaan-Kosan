@@ -17,32 +17,36 @@
     </header>
 
     <div class="card">
-      <img src="../images/kamar.jpg" alt="Foto Kamar">
-      <div class="info">
-        <h3>Kamar Anda Sekarang </h3>
+      <img src="../images/Kamar.png" alt="Foto Kamar">
+      <div class="detail-kamar">
+        <h3> </h3>
         <p>Deskripsi Kamar<strong>Kamar Anda hadir dengan fasilitas modern dan telah dilengkapi tempat tidur nyaman berukuran 6 m², siap menunjang kenyamanan Anda.</strong></p>
         <p>Status <strong>Aktif (Disewa)</strong></p>
-        <p>Tanggal Masuk <strong>25 April 2025</strong></p>
+        <p>Tanggal Masuk <strong></strong></p>
       </div>
     </div>
 
     <h3 class="subtitle">History Pembayaran</h3>
     <div class="history-card" id="history-pembayaran">
       <!-- Data dari jQuery akan masuk di sini -->
-      <button class="btn-bayar">Bayar Lagi</button>
+      
     </div>
   </section>
+  <button class="btn-bayar"  id="btn-bayar">Bayar Lagi</button>
 
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- jQuery & SweetAlert -->
+  <script src="../js/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
   <script>
     function goBack() {
       window.location.href = "homeuser.html"; // Ganti sesuai kebutuhan
     }
-
+  
     $(document).ready(function () {
       const token = localStorage.getItem("token");
-
+  
       if (!token) {
         Swal.fire({
           icon: 'warning',
@@ -53,7 +57,7 @@
         });
         return;
       }
-
+  
       $.ajax({
         url: 'http://localhost:8000/api/pembayarans',
         method: 'GET',
@@ -62,8 +66,8 @@
         },
         success: function (response) {
           let html = '';
-
-          if (response.length === 0) {
+  
+          if (!response || response.length === 0) {
             html = `<p>Tidak ada riwayat pembayaran.</p>`;
           } else {
             response.forEach(function (item) {
@@ -77,10 +81,11 @@
               `;
             });
           }
-
-          $("#history-pembayaran").prepend(html);
+  
+          $("#history-pembayaran").html(html);
         },
         error: function (xhr) {
+          console.error('Error response:', xhr);
           Swal.fire({
             icon: 'error',
             title: 'Gagal Mengambil Data',
@@ -88,7 +93,7 @@
           });
         }
       });
-
+  
       function formatTanggal(dateStr) {
         const date = new Date(dateStr);
         return date.toLocaleDateString('id-ID', {
@@ -97,11 +102,122 @@
           year: 'numeric'
         });
       }
-
+  
       function formatRupiah(angka) {
-        return parseInt(angka).toLocaleString('id-ID');
+        const num = parseInt(angka);
+        return isNaN(num) ? '0' : num.toLocaleString('id-ID');
       }
     });
   </script>
+  
+  
+  <script>
+     $(document).ready(function () {
+      $('#btn-bayar').on('click', function (e) {
+        e.preventDefault();
+  
+        const token = localStorage.getItem('token');
+        const penyewa_id = localStorage.getItem('penyewa_id');
+        const total_tagihan = 600000;
+  
+        if (!token || !penyewa_id) {
+          Swal.fire('Gagal', 'Data tidak lengkap.', 'error');
+          return;
+        }
+  
+        $.ajax({
+          url: 'http://localhost:8000/api/pembayarans',
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + token
+          },
+          data: {
+            penyewa_id,
+            total_tagihan,
+            metode_pembayaran: 'bank_transfer', // Ubah ke bank_transfer
+            payment_method: 'bank_transfer',
+            bank: 'bni' // Ganti ke 'bca', 'mandiri', atau 'permata' jika perlu
+          },
+          success: function (res) {
+            if (res.payment_url) {
+              window.location.href = res.payment_url;
+            } else {
+              Swal.fire('Berhasil', 'Silakan cek VA di dashboard atau email.', 'success');
+              // Bisa tampilkan info pembayaran juga di modal kalau mau
+            }
+          },
+          error: function (xhr) {
+            console.error(xhr.responseText);
+            Swal.fire('Gagal', 'Gagal membuat pembayaran.', 'error');
+          }
+        });
+      });
+    });
+  </script>
+
+  <script>
+  $(document).ready(function () {
+    let token = localStorage.getItem('token');
+
+    try {
+      const parsedToken = JSON.parse(token);
+      if (parsedToken.token) token = parsedToken.token;
+    } catch (e) {}
+
+    if (!token) {
+      Swal.fire('Token Hilang', 'Silakan login ulang.', 'error');
+      return;
+    }
+
+    // Ambil user info dari token (pastikan API-nya ada dan valid)
+    $.ajax({
+      url: 'http://localhost:8000/api/user', // asumsi ini endpoint info user
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token
+      },
+      success: function (user) {
+        const penyewaId = user.id;
+
+        // Setelah dapat penyewa_id, ambil data pemesanan
+        $.ajax({
+          url: 'http://localhost:8000/api/pemesanans',
+          method: 'GET',
+          headers: {
+            Authorization: 'Bearer ' + token
+          },
+          success: function (res) {
+            if (Array.isArray(res)) {
+              const dataPenyewa = res.find(p => p.penyewa_id === penyewaId);
+
+              if (dataPenyewa) {
+                if (dataPenyewa.nama_kamar) {
+                  $('.detail-kamar h3').text(dataPenyewa.nama_kamar);
+                }
+
+                if (dataPenyewa.tgl_masuk) {
+                  const tanggal = new Date(dataPenyewa.tgl_masuk);
+                  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                  const formatted = tanggal.toLocaleDateString('id-ID', options);
+                  $('.detail-kamar p:contains("Tanggal Masuk") strong').text(formatted);
+                }
+              } else {
+                console.warn('Tidak ada pemesanan untuk penyewa ini');
+              }
+            }
+          },
+          error: function (xhr) {
+            console.error('Gagal ambil pemesanan:', xhr.responseText);
+          }
+        });
+      },
+      error: function (xhr) {
+        console.error('Gagal ambil user dari token:', xhr.responseText);
+        Swal.fire('Gagal Ambil Data', 'Silakan login ulang.', 'error');
+      }
+    });
+  });
+</script>
+
 </body>
 </html>

@@ -1,18 +1,18 @@
 $(document).ready(function () {
     const kamarData = {
       "1": [
-        { no: 1, img: "../images/kamar.jpg", harga: "Rp600.000/bulan" },
-        { no: 2, img: "../images/kamar.jpg", harga: "Rp600.000/bulan" },
-        { no: 3, img: "../images/kamar.jpg", harga: "Rp600.000/bulan" },
-        { no: 4, img: "../images/kamar.jpg", harga: "Rp600.000/bulan" },
-        { no: 5, img: "../images/kamar.jpg", harga: "Rp600.000/bulan" }
+        { no: 1, img: "../images/Kamar.png", harga: "Rp600.000/bulan" },
+        { no: 2, img: "../images/Kamar.png", harga: "Rp600.000/bulan" },
+        { no: 3, img: "../images/Kamar.png", harga: "Rp600.000/bulan" },
+        { no: 4, img: "../images/Kamar.png", harga: "Rp600.000/bulan" },
+        { no: 5, img: "../images/Kamar.png", harga: "Rp600.000/bulan" }
       ],
       "2": [
-        { no: 6, img: "../images/kamar.jpg", harga: "Rp600.000/bulan" },
-        { no: 7, img: "../images/kamar.jpg", harga: "Rp600.000/bulan" },
-        { no: 8, img: "../images/kamar.jpg", harga: "Rp600.000/bulan" },
-        { no: 9, img: "../images/kamar.jpg", harga: "Rp600.000/bulan" },
-        { no: 10, img: "../images/kamar.jpg", harga: "Rp600.000/bulan" },
+        { no: 6, img: "../images/Kamar.png", harga: "Rp600.000/bulan" },
+        { no: 7, img: "../images/Kamar.png", harga: "Rp600.000/bulan" },
+        { no: 8, img: "../images/Kamar.png", harga: "Rp600.000/bulan" },
+        { no: 9, img: "../images/Kamar.png", harga: "Rp600.000/bulan" },
+        { no: 10, img: "../images/Kamar.png", harga: "Rp600.000/bulan" },
       ]
     };
   

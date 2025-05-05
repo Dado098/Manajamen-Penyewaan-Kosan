@@ -45,12 +45,12 @@
   <section class="info-kamar">
     <h2>Informasi Kamar Anda</h2>
     <div class="kartu-kamar">
-        <img src="../images/kamar.jpg" alt="Foto Kamar" class="gambar-kamar">
+        <img src="../images/Kamar.png" alt="Foto Kamar" class="gambar-kamar">
       <div class="detail-kamar">
-        <h3>Kamar No 1</h3>
+        <h3></h3>
         <p>Luas kamar <strong>6 m²</strong></p>
         <p>Status <strong>Aktif (Disewa)</strong></p>
-        <p>Tanggal Masuk <strong>25 April 2025</strong></p>
+        <p>Tanggal Masuk <strong></strong></p>
       </div>
     </div>
   </section>
@@ -138,6 +138,75 @@
       });
     });
   </script>
+  
+
+<script>
+  $(document).ready(function () {
+    let token = localStorage.getItem('token');
+
+    try {
+      const parsedToken = JSON.parse(token);
+      if (parsedToken.token) token = parsedToken.token;
+    } catch (e) {}
+
+    if (!token) {
+      Swal.fire('Token Hilang', 'Silakan login ulang.', 'error');
+      return;
+    }
+
+    // Ambil user info dari token (pastikan API-nya ada dan valid)
+    $.ajax({
+      url: 'http://localhost:8000/api/user', // asumsi ini endpoint info user
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token
+      },
+      success: function (user) {
+        const penyewaId = user.id;
+
+        // Setelah dapat penyewa_id, ambil data pemesanan
+        $.ajax({
+          url: 'http://localhost:8000/api/pemesanans',
+          method: 'GET',
+          headers: {
+            Authorization: 'Bearer ' + token
+          },
+          success: function (res) {
+            if (Array.isArray(res)) {
+              const dataPenyewa = res.find(p => p.penyewa_id === penyewaId);
+
+              if (dataPenyewa) {
+                if (dataPenyewa.nama_kamar) {
+                  $('.detail-kamar h3').text(dataPenyewa.nama_kamar);
+                }
+
+                if (dataPenyewa.tgl_masuk) {
+                  const tanggal = new Date(dataPenyewa.tgl_masuk);
+                  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                  const formatted = tanggal.toLocaleDateString('id-ID', options);
+                  $('.detail-kamar p:contains("Tanggal Masuk") strong').text(formatted);
+                }
+              } else {
+                console.warn('Tidak ada pemesanan untuk penyewa ini');
+              }
+            }
+          },
+          error: function (xhr) {
+            console.error('Gagal ambil pemesanan:', xhr.responseText);
+          }
+        });
+      },
+      error: function (xhr) {
+        console.error('Gagal ambil user dari token:', xhr.responseText);
+        Swal.fire('Gagal Ambil Data', 'Silakan login ulang.', 'error');
+      }
+    });
+  });
+</script>
+
+
+  
+  
   
 
   <script src="../js/homepage.js"></script>
