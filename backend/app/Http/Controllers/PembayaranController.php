@@ -35,17 +35,21 @@ class PembayaranController extends Controller
     $user = $request->user(); // Dapatkan user dari token
 
     if ($user->role === 'pemilik') {
-        // Pemilik (admin) bisa melihat semua pembayaran
-        $pembayarans = Pembayaran::orderBy('updated_at', 'desc')->get();
+        // Admin bisa melihat semua pembayaran dan nama penyewa
+        $pembayarans = Pembayaran::with('penyewa')
+            ->orderBy('updated_at', 'desc')
+            ->get();
     } else {
         // Penyewa hanya melihat pembayarannya sendiri
-        $pembayarans = Pembayaran::where('penyewa_id', $user->id)
+        $pembayarans = Pembayaran::with('penyewa') // tetap bisa include nama sendiri
+            ->where('penyewa_id', $user->id)
             ->orderBy('updated_at', 'desc')
             ->get();
     }
 
     return response()->json($pembayarans);
 }
+
 
 
     /**
