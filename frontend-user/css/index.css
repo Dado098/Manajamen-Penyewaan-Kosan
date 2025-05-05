@@ -25,15 +25,24 @@ html {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* bayangan agar terlihat lebih baik */
 }
 
+.logo img {
+  height: 60px; /* Sesuaikan ukuran sesuai kebutuhan, misal 30px, 40px, dll */
+  width: auto; /* Agar proporsi gambar tetap terjaga */
+  margin-top: 5px; 
+  margin-bottom: 5px;
+  margin-left: 20px;
+}
+
 
 
 .auth-buttons {
-  position: absolute;
-  top: 10px;
-  right: 50px;
   display: flex;
   gap: 20px;
+  align-items: center;
+  margin-right: 30px; /* atur sesuai kebutuhan */
 }
+
+
 
 .auth-buttons button {
   font-family: 'Inter', sans-serif;
@@ -262,3 +271,19 @@ html {
   color: #86D52B;
 }
 
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 0;
+  }
+  .auth-buttons {
+    flex-direction: column;
+    gap: 10px;
+    margin-right: 10px;
+  }
+  .intro-container {
+    flex-direction: column;
+    padding: 2rem;
+  }
+}

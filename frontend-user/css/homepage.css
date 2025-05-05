@@ -19,10 +19,13 @@ body {
     justify-content: space-between;
     z-index: 10;
   }
-  
-  .logo {
-    height: 40px;
-    margin-left: 20px;
+
+  .logo img {
+    height: 80px; /* Sesuaikan ukuran sesuai kebutuhan, misal 30px, 40px, dll */
+    width: auto; /* Agar proporsi gambar tetap terjaga */
+    margin-top: 5px; 
+    margin-bottom: 5px;
+    margin-left: 40px;
   }
   
   /* ========== Navbar ========== */
@@ -98,9 +101,9 @@ body {
     z-index: 2;
     padding: 60px 20px;
     max-width: 700px;
-    margin-left: 20px;
+    margin-left: 30px;
     margin-top: 175px;
-    text-align: center;
+    text-align: left;
   }
   
   .hero h1 {
@@ -120,7 +123,7 @@ body {
     font-size: 22px;
     font-weight: 500;
     color: white;
-    text-align: center;
+    text-align: left;
     margin-top: 20px;
   }
   
@@ -237,7 +240,7 @@ body {
   }
   
   .footer-nav a {
-    color:#328300;
+    color:#ffffff;
     text-decoration: none;
     font-weight: bold;
     font-size: 16px;
@@ -245,7 +248,7 @@ body {
   }
   
   .footer-nav a:hover {
-    color: #f0f0f0;
+    color: #328300;
   }
   
   .footer-bottom {
