@@ -309,21 +309,33 @@
           console.error("Gagal memuat data pemesanan:", err);
         }
       });
-  
-      // Sidebar aktif
-      const currentPage = window.location.pathname.split("/").pop();
-      document.querySelectorAll(".sidebar-link").forEach(link => {
-        const linkHref = link.getAttribute("href");
-        if (linkHref === currentPage) {
-          link.classList.add("active");
-          const icon = link.querySelector(".icon");
-          const originalSrc = icon.getAttribute("src");
-          const greenSrc = originalSrc.replace(".svg", "-green.svg");
-          icon.setAttribute("src", greenSrc);
-        }
-      });
-    });
-  </script>  
 
+      if (!$(this).valid()) return; // validasi jQuery
+          const token = localStorage.getItem("token");
+          if (!token) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal!',
+              text: 'Anda harus login terlebih dahulu.',
+            });
+            return;
+          }
+    });
+
+    const currentPage = window.location.pathname.split("/").pop();
+    document.querySelectorAll(".sidebar-link").forEach(link => {
+      const linkHref = link.getAttribute("href");
+      if (linkHref === currentPage) {
+        link.classList.add("active");
+
+        const icon = link.querySelector(".icon");
+        const originalSrc = icon.getAttribute("src");
+
+        const greenSrc = originalSrc.replace(".svg", "-green.svg");
+        icon.setAttribute("src", greenSrc);
+      }
+    });
+
+  </script>
 </body>
 </html>
