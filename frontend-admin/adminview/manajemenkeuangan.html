@@ -99,7 +99,6 @@
 
   <script>
     $(document).ready(function () {
-      // Validasi token login
       const token = localStorage.getItem("token");
       if (!token) {
         Swal.fire({
@@ -110,115 +109,63 @@
         return;
       }
   
-      const penyewaMap = {};
-  
-      // Ambil data penyewa lebih dulu
       $.ajax({
-        url: 'http://localhost:8000/api/users?role=penyewa',
+        url: 'http://localhost:8000/api/pembayarans',
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         },
-        success: function (penyewaList) {
-          console.log('Data Penyewa:', penyewaList); // Debugging untuk memastikan data penyewa diterima
+        success: function (data) {
+          let rowsTransaksi = '', rowsPerpanjangan = '';
+          data.forEach(item => {
+            const badge = {
+              sukses: '<span class="badge badge-green">Sukses</span>',
+              gagal: '<span class="badge badge-red">Gagal</span>',
+              proses: '<span class="badge badge-yellow">Pending</span>',
+              'menunggu pembayaran': '<span class="badge badge-blue">Menunggu Pembayaran</span>'
+            }[item.status] || '-';
   
-          // Menyimpan nama penyewa ke dalam map dengan id sebagai key
-          penyewaList.forEach(p => {
-            penyewaMap[p.id] = p.name; // Menyimpan user.id dan user.name dalam map
+            const namaPenyewa = item.penyewa?.name || 'Tidak diketahui';
+  
+            const row = `
+              <tr>
+                <td>${item.id}</td>
+                <td>${item.order_id || '-'}</td>
+                <td>${item.metode_pembayaran || '-'}</td>
+                <td>Rp${Number(item.total_tagihan).toLocaleString('id-ID')}</td>
+                <td>${badge}</td>
+                <td>${namaPenyewa}</td>
+                <td>${new Date(item.created_at).toLocaleDateString('id-ID')}</td>
+                <td><a href="manajemenkeuangan-update.html?id=${item.id}" class="btn-action edit">Edit</a></td>
+              </tr>
+            `;
+  
+            if (item.pemesanan_id === null) {
+              rowsPerpanjangan += row;
+            } else {
+              rowsTransaksi += row;
+            }
           });
   
-          // Setelah itu ambil data pembayaran
-          $.ajax({
-            url: 'http://localhost:8000/api/pembayarans',
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            success: function (data) {
-              console.log('Data Pembayaran:', data); // Debugging untuk memastikan data pembayaran diterima
-              let rowsTransaksi = '', rowsPerpanjangan = '';
-              data.forEach(item => {
-                const badge = {
-                  sukses: '<span class="badge badge-green">Sukses</span>',
-                  gagal: '<span class="badge badge-red">Gagal</span>',
-                  proses: '<span class="badge badge-yellow">Pending</span>',
-                  'menunggu pembayaran': '<span class="badge badge-blue">Menunggu Pembayaran</span>'
-                }[item.status] || '-';
+          $("#tabel-transaksi").html(rowsTransaksi);
+          $("#tabel-perpanjangan").html(rowsPerpanjangan);
   
-                const namaPenyewa = penyewaMap[item.user_id] || 'Nama Penyewa Tidak Ditemukan'; // Ambil nama penyewa dari map
+          const now = new Date().toLocaleString('id-ID');
   
-                console.log(`Nama Penyewa untuk Transaksi ID ${item.id}:`, namaPenyewa); // Debugging nama penyewa per transaksi
+          dataTableTransaksi = $("#table-transaksi").DataTable({
+            dom: 'frtip',
+            buttons: [ /* ... */ ]
+          });
   
-                const row = `
-                  <tr>
-                    <td>${item.id}</td>
-                    <td>${item.order_id || '-'}</td>
-                    <td>${item.metode_pembayaran || '-'}</td>
-                    <td>Rp${Number(item.total_tagihan).toLocaleString('id-ID')}</td>
-                    <td>${badge}</td>
-                    <td>${namaPenyewa}</td>
-                    <td>${new Date(item.created_at).toLocaleDateString('id-ID')}</td>
-                    <td><a href="manajemenkeuangan-update.html?id=${item.id}" class="btn-action edit">Edit</a></td>
-                  </tr>
-                `;
-  
-                if (item.pemesanan_id === null) {
-                  rowsPerpanjangan += row;
-                } else {
-                  rowsTransaksi += row;
-                }
-              });
-  
-              $("#tabel-transaksi").html(rowsTransaksi);
-              $("#tabel-perpanjangan").html(rowsPerpanjangan);
-  
-              // Inisialisasi DataTables
-              const now = new Date().toLocaleString('id-ID');
-              dataTableTransaksi = $("#table-transaksi").DataTable({
-                dom: 'frtip',
-                buttons: [
-                  {
-                    extend: 'excelHtml5',
-                    title: `Data Transaksi Kos - ${now}`,
-                    exportOptions: { columns: ':not(:last-child)' },
-                    className: 'd-none'
-                  },
-                  {
-                    extend: 'pdfHtml5',
-                    title: `Data Transaksi Kos - ${now}`,
-                    exportOptions: { columns: ':not(:last-child)' },
-                    orientation: 'landscape',
-                    pageSize: 'A4',
-                    className: 'd-none'
-                  }
-                ]
-              });
-  
-              dataTablePerpanjangan = $("#table-perpanjangan").DataTable({
-                dom: 'frtip',
-                buttons: [
-                  {
-                    extend: 'excelHtml5',
-                    title: `Data Pembayaran Perpanjangan - ${now}`,
-                    exportOptions: { columns: ':not(:last-child)' },
-                    className: 'd-none'
-                  },
-                  {
-                    extend: 'pdfHtml5',
-                    title: `Data Pembayaran Perpanjangan - ${now}`,
-                    exportOptions: { columns: ':not(:last-child)' },
-                    orientation: 'landscape',
-                    pageSize: 'A4',
-                    className: 'd-none'
-                  }
-                ]
-              });
-            }
+          dataTablePerpanjangan = $("#table-perpanjangan").DataTable({
+            dom: 'frtip',
+            buttons: [ /* ... */ ]
           });
         }
       });
     });
   </script>
+  
   
 </body>
 </html>
