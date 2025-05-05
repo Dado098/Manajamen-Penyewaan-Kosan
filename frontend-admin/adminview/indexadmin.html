@@ -139,33 +139,58 @@
       });
     }
 
-      // Ambil data pembayaran untuk hitung pendapatan bulan ini
-    $.ajax({
-      url: 'http://localhost:8000/api/pembayarans',
-      method: 'GET',
-      success: function (res) {
-        const today = new Date();
-        const currentMonth = today.getMonth(); // bulan dimulai dari 0
-        const currentYear = today.getFullYear();
+    // Ambil data pembayaran untuk hitung pendapatan bulan ini
+    const token = localStorage.getItem("token");
 
-        const transaksiBulanIni = res.filter(item => {
-        const tanggal = new Date(item.created_at); // atau item.created_at jika 'tanggal' tidak ada
-        const bulan = tanggal.getMonth() + 1;
-        const tahun = tanggal.getFullYear();
-        return item.status === 'sukses' && bulan === currentMonth && tahun === currentYear;
+    if (!token) {
+      console.error("Token tidak ditemukan. Pengguna belum login.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: 'Anda harus login terlebih dahulu.',
       });
+    } else {
+      $.ajax({
+        url: 'http://localhost:8000/api/pembayarans',
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        success: function (res) {
+          const today = new Date();
+          const currentMonth = today.getMonth(); // bulan saat ini (0-11)
+          const currentYear = today.getFullYear();
 
-        // Hitung total tagihan
-        const totalPendapatan = transaksiBulanIni.reduce((sum, item) => {
-                return sum + (parseFloat(item.total_tagihan) || 0);
-              }, 0);
+          let totalPendapatan = 0;
 
-              $('#pendapatan').text('Rp' + totalPendapatan.toLocaleString());
-            },
-            error: function (err) {
-              console.error("Gagal memuat data pembayaran:", err);
+          res.forEach(item => {
+            const status = (item.status || '').trim().toLowerCase();
+            const tanggal = new Date(item.created_at);
+
+            if (
+              status === 'sukses' &&
+              tanggal.getMonth() === currentMonth &&
+              tanggal.getFullYear() === currentYear
+            ) {
+              const tagihan = parseFloat(item.total_tagihan);
+              if (!isNaN(tagihan)) {
+                totalPendapatan += tagihan;
+              }
             }
           });
+
+          $('#pendapatan').text('Rp' + totalPendapatan.toLocaleString('id-ID'));
+        },
+        error: function (err) {
+          console.error("Gagal memuat data pembayaran:", err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Gagal memuat data pembayaran dari server.',
+          });
+        }
+      });
+    }
       
       // Load data penyewa
       $.ajax({
