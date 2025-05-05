@@ -13,6 +13,7 @@ class Pemesanan extends Model
     [
         'tgl_masuk',
         'tgl_keluar',
+        'nama_kamar',
         'kamar_id',
         'penyewa_id'
     ];
