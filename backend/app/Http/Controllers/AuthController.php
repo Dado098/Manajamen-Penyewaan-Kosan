@@ -82,7 +82,8 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $user = $request->user;
+        // Ambil user dengan menggunakan fungsi user() (dengan tanda kurung)
+        $user = $request->user();
 
         // Cek apakah email sudah diverifikasi untuk penyewa
         if ($user->role === 'penyewa' && !$user->hasVerifiedEmail()) {
@@ -94,14 +95,18 @@ class AuthController extends Controller
         // Buat token
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        // Kirimkan response dengan token, role, dan email_verified_at
+        // Kirimkan response dengan token, id penyewa, role, dan status verifikasi
         return response()->json([
             'message' => 'Login berhasil',
-            'token' => $token,
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'penyewa_id' => $user->id,           // Penting untuk disimpan di localStorage
             'role' => $user->role,
-            'email_verified_at' => $user->email_verified_at, // <- ini penting untuk frontend
+            'email_verified_at' => $user->email_verified_at,
+            'name' => $user->name,               // Opsional, kalau mau pakai nama
         ]);
     }
+
 
 
 

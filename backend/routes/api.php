@@ -51,6 +51,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Route untuk Pembayaran
 Route::apiResource('pembayarans', PembayaranController::class);
+Route::middleware('auth:sanctum')->get('/pembayarans', [PembayaranController::class, 'index']);
+
 
 // Route untuk Pembayaran berdasarkan ID Pemesanan (QRCode)
 Route::get('pembayarans/{id}/qrcode', [PembayaranController::class, 'generateQRCode'])->name('pembayarans.qrcode');

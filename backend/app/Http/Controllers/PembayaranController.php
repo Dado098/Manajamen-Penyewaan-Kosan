@@ -30,11 +30,16 @@ class PembayaranController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
-    {
-        $pembayarans = Pembayaran::all();
-        return response()->json(PembayaranResource::collection($pembayarans), 200);
-    }
+    public function index(Request $request)
+{
+    $user = $request->user(); // Dapatkan user dari token
+
+    $pembayarans = Pembayaran::where('penyewa_id', $user->id)
+        ->orderBy('updated_at', 'desc')
+        ->get();
+
+    return response()->json($pembayarans);
+}
 
     /**
      * Menampilkan detail pembayaran.
