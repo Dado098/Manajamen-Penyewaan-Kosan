@@ -85,26 +85,60 @@
     </div>
     
   </footer>
+  
   <script src="../js/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
-    <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
   
-  
-  
-
-  <!-- Script -->
   <script>
     $(document).ready(function () {
-      $('#loginBtn').click(function () {
-        window.location.href = 'login.html';
-      });
-
-      $('#signupBtn, .signupRedirect').click(function () {
-        window.location.href = 'register.html';
+      const token = localStorage.getItem('token');
+  
+      // Ambil nama user
+      if (token) {
+        $.ajax({
+          url: 'http://localhost:8000/api/user',
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (user) {
+            $('.hero-content h1 span:first').text('Hallo, ' + user.name); // Ganti "Hallo, User" dengan nama asli
+          },
+          error: function () {
+            console.error('Gagal mengambil data pengguna');
+          }
+        });
+      }
+  
+      // Ambil data kamar
+      $.ajax({
+        url: 'http://localhost:8000/api/kamars',
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+          const kamarTerbatas = data.slice(0, 5);
+  
+          $('.kamar-list .card').each(function (index) {
+            if (index < kamarTerbatas.length) {
+              const kamar = kamarTerbatas[index];
+              const imageUrl = `http://localhost:8000/storage/${kamar.image}`;
+  
+              $(this).find('img').attr('src', imageUrl);
+              $(this).find('img').attr('alt', `Foto Kamar ${kamar.id}`);
+              $(this).find('p2').text('Rp ' + parseInt(kamar.harga).toLocaleString() + ' /bulan');
+              $(this).find('p1').text('Kamar ' + kamar.id);
+            }
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error('Gagal memuat data kamar:', error);
+        }
       });
     });
   </script>
+  
 
 <script>
   $(document).ready(function () {

@@ -1,13 +1,21 @@
 /* Warna latar belakang hijau terang dan posisi tengah */
-.login {
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
   background-color: #97D94D;
-  width: 100%;
-  height: 100vh;
+}
+
+.login {
+  position: relative; /* <--- WAJIB ada */
+  background-color: #97D94D;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: "Inter", sans-serif;
 }
+
 
 .login .container {
   position: relative;
@@ -16,17 +24,20 @@
   height: 100%;
 }
 
+
 /* Logo pojok kiri atas */
 .logo-wrapper {
-  position: absolute;
-  top: 30px;
+  position: fixed; /* agar nempel di jendela, bukan container */
+  top: 20px;
   left: 30px;
   width: 140px;
   height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10; /* supaya tidak ketimpa */
 }
+
 .logo-wrapper img {
   width: 100%;
   height: auto;
