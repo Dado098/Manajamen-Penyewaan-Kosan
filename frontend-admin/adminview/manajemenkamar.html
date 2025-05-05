@@ -309,6 +309,17 @@
           console.error("Gagal memuat data pemesanan:", err);
         }
       });
+
+      if (!$(this).valid()) return; // validasi jQuery
+          const token = localStorage.getItem("token");
+          if (!token) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal!',
+              text: 'Anda harus login terlebih dahulu.',
+            });
+            return;
+          }
   
       // Sidebar aktif
       const currentPage = window.location.pathname.split("/").pop();
