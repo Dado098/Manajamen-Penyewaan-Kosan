@@ -22,9 +22,12 @@ body {
 
 /* Logo di kiri */
 /* Logo di kiri */
-.logo {
-  height: 40px;
-  margin-left: 20px;
+.logo img {
+  height: 80px; /* Sesuaikan ukuran sesuai kebutuhan, misal 30px, 40px, dll */
+  width: auto; /* Agar proporsi gambar tetap terjaga */
+  margin-top: 5px; 
+  margin-bottom: 5px;
+  margin-left: 40px;
 }
 
 /* Navbar di tengah */
@@ -51,7 +54,8 @@ body {
 }
 
 .nav-menu ul li a.kmr {
-  color: #86D52B
+  color: #86D52B;
+  font-weight: bold;
 }
 
 /* Profil di kanan */
@@ -99,7 +103,8 @@ body {
   padding: 60px 20px;
   max-width: 700px;
   margin-left: 20px; /* Mengatur margin kiri untuk memberi jarak */
-  margin-top: 175px; /* Menggeser konten ke bawah */
+  margin-top: 175px;
+  text-align: left; /* Menggeser konten ke bawah */
 }
 
 .hero h1 {
@@ -108,7 +113,7 @@ body {
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  text-align: center;
+  text-align: left;
 }
 
 .hero h1 span {
@@ -265,7 +270,7 @@ body {
 }
 
 .footer-nav a {
-  color:#328300;
+  color:#ffffff;
   text-decoration: none;
   font-weight: bold;
   font-size: 16px;
@@ -273,7 +278,7 @@ body {
 }
 
 .footer-nav a:hover {
-  color: #ffffff;
+  color: #328300;
 }
 
 .footer-bottom {

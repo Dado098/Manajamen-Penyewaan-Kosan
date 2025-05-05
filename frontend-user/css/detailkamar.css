@@ -6,7 +6,7 @@ body {
   }
   
   .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 2rem auto;
     background-color: #ffffff;
     padding: 2rem;
@@ -88,10 +88,10 @@ body {
   
   .facility-box {
     flex: 1;
-    background-color: #c4c4c4;
+    background-color: #f8f8f8;
     padding: 1rem;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1.5px solid #e0e0e0;
   }
   
   .facility-box h3 {
@@ -136,7 +136,7 @@ body {
   
   .booking-btn {
     display: inline-block;
-    padding: 10px 16px;
+    padding: 10px 20px;
     background-color: #4CAF50;      /* Warna hijau */
     color: #fff;                    /* Teks putih */
     border: none;
@@ -144,3 +144,15 @@ body {
     text-decoration: none;
     font-weight: bold;
   }
+  .booking-btn:hover {
+    background-color: #8ec790;
+    color: #ffffff;
+  }
+  .booking-form {
+    padding-bottom: 20px; /* Menambah padding di bawah form untuk jarak */
+  }
+  
+  .booking-form input[type="date"] {
+    margin-bottom: 10px; /* Menambah jarak antara input dan tombol di bawahnya */
+  }
+  

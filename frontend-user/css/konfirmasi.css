@@ -59,3 +59,22 @@ body {
     background-color: #97D94D;
   }
   
+  .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-size: 32px;
+    font-weight: bold;
+    background-color: transparent;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .back-button:hover {
+    background-color: white;
+    color: #000000;
+  }
+  

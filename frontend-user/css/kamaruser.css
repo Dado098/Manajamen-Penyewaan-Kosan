@@ -104,3 +104,12 @@ body {
     background-color: #6fa734;
   }
   
+  p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+strong {
+    color: #000000; /* Anda bisa memilih warna lain sesuai dengan desain */
+}

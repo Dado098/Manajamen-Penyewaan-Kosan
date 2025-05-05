@@ -19,8 +19,13 @@ body {
 
 h1 {
   color: #fff;
+  position: absolute;
+  top: 20px;  /* Atur posisi dari atas */
+  left: 50%;
+  transform: translateX(-50%); /* Untuk memusatkan h1 */
   margin-bottom: 20px;
 }
+
 
 h2 {
   width: 100%;
