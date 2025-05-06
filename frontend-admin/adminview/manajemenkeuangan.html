@@ -39,7 +39,7 @@
       <section class="summary">
         <!-- Transaksi Kos -->
         <div class="summary-header">
-          <h3>Daftar Transaksi</h3>
+          <h3>Daftar Pembayaran</h3>
           <button class="btn-green" id="exportTransaksi">Ekspor</button>
         </div>
         <div class="room-table-wrapper">
@@ -53,7 +53,6 @@
                 <th>Status</th>
                 <th>Nama Penyewa</th>
                 <th>Tanggal Pembayaran</th>
-                <th>Aksi</th>
               </tr>
             </thead>
             <tbody id="tabel-transaksi"></tbody>
@@ -76,7 +75,6 @@
                 <th>Status</th>
                 <th>Nama Penyewa</th>
                 <th>Tanggal Pembayaran</th>
-                <th>Aksi</th>
               </tr>
             </thead>
             <tbody id="tabel-perpanjangan"></tbody>
@@ -162,7 +160,6 @@
                 <td>${badge}</td>
                 <td>${namaPenyewa}</td>
                 <td>${new Date(item.created_at).toLocaleDateString('id-ID')}</td>
-                <td><a href="manajemenkeuangan-update.html?id=${item.id}" class="btn-action edit">Edit</a></td>
               </tr>
             `;
   
@@ -180,12 +177,41 @@
   
           dataTableTransaksi = $("#table-transaksi").DataTable({
             dom: 'frtip',
-            buttons: [ /* ... */ ]
-          });
+            buttons: [           {
+              extend: 'pdfHtml5',
+              title: 'Data Transaksi',
+              text: 'Ekspor ke PDF',
+              className: 'btn-export'
+            },
+            {
+              extend: 'print',
+              title: 'Data Transaksi',
+              text: 'Cetak',
+              className: 'btn-export'
+            } 
+          ]
+        });
   
           dataTablePerpanjangan = $("#table-perpanjangan").DataTable({
             dom: 'frtip',
-            buttons: [ /* ... */ ]
+            buttons: [    {
+              extend: 'excelHtml5',
+              title: 'Data Pembayaran',
+              text: 'Ekspor ke Excel',
+              className: 'btn-export'
+            },
+            {
+              extend: 'pdfHtml5',
+              title: 'Data Pembayaran Perpanjangan',
+              text: 'Ekspor ke PDF',
+              className: 'btn-export'
+            },
+            {
+              extend: 'print',
+              title: 'Data Transaksi',
+              text: 'Cetak',
+              className: 'btn-export'
+            } ]
           });
         }
       });
@@ -203,6 +229,41 @@
         const greenSrc = originalSrc.replace(".svg", "-green.svg");
         icon.setAttribute("src", greenSrc);
       }
+
+      $("#exportTransaksi").on("click", function () {
+      Swal.fire({
+        title: 'Pilih Format Ekspor Transaksi',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Excel',
+        denyButtonText: 'PDF',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dataTableTransaksi.button('.buttons-excel').trigger();
+        } else if (result.isDenied) {
+          dataTableTransaksi.button('.buttons-pdf').trigger();
+        }
+      });
+    });
+
+    $("#exportPerpanjangan").on("click", function () {
+      Swal.fire({
+        title: 'Pilih Format Ekspor Perpanjangan',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Excel',
+        denyButtonText: 'PDF',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dataTablePerpanjangan.button('.buttons-excel').trigger();
+        } else if (result.isDenied) {
+          dataTablePerpanjangan.button('.buttons-pdf').trigger();
+        }
+      });
+    });
+
     });
   </script>
   
