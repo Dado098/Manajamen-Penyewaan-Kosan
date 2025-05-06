@@ -21,7 +21,7 @@
       <div class="detail-kamar">
           <h3 class="title">Kamar Anda</h3> <!-- Judul kamar, bisa disesuaikan -->
           <p class="description">
-              <strong>Kamar Anda hadir dengan fasilitas modern dan telah dilengkapi tempat tidur nyaman berukuran 6 m², siap menunjang kenyamanan Anda.</strong>
+              Kamar Anda hadir dengan fasilitas modern dan telah dilengkapi tempat tidur nyaman berukuran 6 m², siap menunjang kenyamanan Anda.
           </p>
           <p class="status">Status: <strong>Aktif (Disewa)</strong></p>
           <p class="tanggal-masuk">Tanggal Masuk: <strong>01 Januari 2025</strong></p> <!-- Tambahkan tanggal masuk -->
@@ -115,7 +115,7 @@
   
   
   <script>
-     $(document).ready(function () {
+    $(document).ready(function () {
       $('#btn-bayar').on('click', function (e) {
         e.preventDefault();
   
@@ -128,36 +128,48 @@
           return;
         }
   
-        $.ajax({
-          url: 'http://localhost:8000/api/pembayarans',
-          method: 'POST',
-          headers: {
-            Authorization: 'Bearer ' + token
-          },
-          data: {
-            penyewa_id,
-            total_tagihan,
-            metode_pembayaran: 'bank_transfer', // Ubah ke bank_transfer
-            payment_method: 'bank_transfer',
-            bank: 'bni' // Ganti ke 'bca', 'mandiri', atau 'permata' jika perlu
-          },
-          success: function (res) {
-            if (res.payment_url) {
-              window.location.href = res.payment_url;
-            } else {
-              Swal.fire('Berhasil', 'Silakan cek VA di dashboard atau email.', 'success');
-              // Bisa tampilkan info pembayaran juga di modal kalau mau
-            }
-          },
-          error: function (xhr) {
-            console.error(xhr.responseText);
-            Swal.fire('Gagal', 'Gagal membuat pembayaran.', 'error');
+        // Tambahkan Swal konfirmasi
+        Swal.fire({
+          title: 'Apakah Anda yakin?',
+          text: 'Anda akan membayar perpanjangan kamar kost sekarang.',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, bayar sekarang!',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Lanjutkan proses pembayaran
+            $.ajax({
+              url: 'http://localhost:8000/api/pembayarans',
+              method: 'POST',
+              headers: {
+                Authorization: 'Bearer ' + token
+              },
+              data: {
+                penyewa_id,
+                total_tagihan,
+                metode_pembayaran: 'bank_transfer',
+                payment_method: 'bank_transfer',
+                bank: 'bni'
+              },
+              success: function (res) {
+                if (res.payment_url) {
+                  window.location.href = res.payment_url;
+                } else {
+                  Swal.fire('Berhasil', 'Silakan cek VA di dashboard atau email.', 'success');
+                }
+              },
+              error: function (xhr) {
+                console.error(xhr.responseText);
+                Swal.fire('Gagal', 'Gagal membuat pembayaran.', 'error');
+              }
+            });
           }
         });
       });
     });
   </script>
-
+  
   <script>
   $(document).ready(function () {
     let token = localStorage.getItem('token');
