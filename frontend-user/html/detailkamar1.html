@@ -31,7 +31,7 @@
     </div>
 
     <div class="description">
-      Kamar No 1 hadir dengan fasilitas modern dan telah dilengkapi tempat tidur nyaman berukuran 6 m², siap menunjang kenyamanan Anda.
+      Kamar ini dilengkapi dengan fasilitas lengkap, tersedia tempat tidur yang nyaman serta kamar berukuran 6 m² yang dirancang untuk menunjang kenyamanan dan kebutuhan harian Anda. Setiap kamar memiliki pencahayaan yang baik, sirkulasi udara lancar, serta interior yang bersih dan rapi. Cocok untuk mahasiswa atau pekerja yang menginginkan hunian praktis, tenang, dan nyaman. Beberapa kamar juga tersedia dengan fasilitas tambahan seperti meja belajar, lemari pakaian, dan colokan listrik yang memadai untuk perangkat elektronik Anda.
     </div>
 
     <div class="facilities">
@@ -130,34 +130,46 @@
     });
   
     // Saat tombol booking ditekan
-    $('#btnBooking').on('click', function (e) {
-      e.preventDefault();
-  
-      const tglMasuk = $('#tgl_masuk').val();
-      const tglKeluar = $('#tgl_keluar').val();
-      const kamarId = $('#kamar_id').val();
-      const namaKamar = $('.nama-kamar').text();
-  
-      // Validasi input
-      if (!tglMasuk || !tglKeluar || !kamarId) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Form Tidak Lengkap',
-          text: 'Pastikan semua field terisi.'
-        });
-        return;
-      }
-  
-      // Validasi tanggal keluar harus setelah masuk
-      if (new Date(tglKeluar) <= new Date(tglMasuk)) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Tanggal Tidak Valid',
-          text: 'Tanggal keluar harus setelah tanggal masuk.'
-        });
-        return;
-      }
-  
+   // Saat tombol booking ditekan
+$('#btnBooking').on('click', function (e) {
+  e.preventDefault();
+
+  const tglMasuk = $('#tgl_masuk').val();
+  const tglKeluar = $('#tgl_keluar').val();
+  const kamarId = $('#kamar_id').val();
+  const namaKamar = $('.nama-kamar').text();
+
+  // Validasi input
+  if (!tglMasuk || !tglKeluar || !kamarId) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Form Tidak Lengkap',
+      text: 'Pastikan semua field terisi.'
+    });
+    return;
+  }
+
+  // Validasi tanggal keluar harus setelah masuk
+  if (new Date(tglKeluar) <= new Date(tglMasuk)) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Tanggal Tidak Valid',
+      text: 'Tanggal keluar harus setelah tanggal masuk.'
+    });
+    return;
+  }
+
+  // Tambahkan Swal konfirmasi di sini
+  Swal.fire({
+    title: 'Apakah Anda yakin?',
+    text: "Anda akan memesan kamar sekarang.",
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Ya, pesan sekarang!',
+    cancelButtonText: 'Batal'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Lanjutkan proses booking jika dikonfirmasi
       $.ajax({
         url: 'http://localhost:8000/api/pemesanans',
         method: 'POST',
@@ -169,14 +181,13 @@
           tgl_keluar: tglKeluar,
           kamar_id: kamarId,
           nama_kamar: namaKamar
-          // penyewa_id tidak dikirim, di-handle di backend
         },
         success: function (response) {
-      localStorage.setItem('pemesanan_id', response.id);
-      localStorage.setItem('penyewa_id', response.penyewa_id);
-  
-      Swal.fire('Berhasil!', 'Pemesanan berhasil dibuat.', 'success').then(() => {
-        window.location.href = 'halamanpembayaran.html';
+          localStorage.setItem('pemesanan_id', response.id);
+          localStorage.setItem('penyewa_id', response.penyewa_id);
+
+          Swal.fire('Berhasil!', 'Pemesanan berhasil dibuat.', 'success').then(() => {
+            window.location.href = 'halamanpembayaran.html';
           });
         },
         error: function (xhr) {
@@ -188,8 +199,10 @@
           });
         }
       });
-    });
+    }
   });
+});
+});
   
     
     
