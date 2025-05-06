@@ -43,6 +43,26 @@ html, body {
   height: auto;
   object-fit: contain;
 }
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 20; /* Tambahkan ini */
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  font-size: 32px;
+  font-weight: bold;
+  background-color: transparent;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+
+.back-button:hover {
+  background-color: white;
+  color: #000000;
+}
 
 /* Box putih form login */
 .popup-login {
