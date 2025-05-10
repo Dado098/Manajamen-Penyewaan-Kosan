@@ -24,12 +24,13 @@ body, html {
 }
 
 .back-button {
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   text-decoration: none;
   font-size: 32px;
   font-weight: bold;
-  background-color: transparent;
-  padding: 8px 12px;
+  background-color: #328300
+  ;
+  padding: 4px 12px;
   border-radius: 8px;
   margin-top: -5px; /* Menambahkan margin-top negatif untuk menaikkan back button */
   transition: background-color 0.3s, color 0.3s;

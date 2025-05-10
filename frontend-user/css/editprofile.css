@@ -82,16 +82,18 @@ input {
 .edit-password-link {
   display: block;
   margin-top: 10px;
-  color: #328300;
-  text-align: left;
-  text-decoration: none;
+  color: #000000;
+  text-align: right;
+  text-decoration: none; /* hilangkan underline */
   font-weight: bold;
 }
 
 .edit-password-link:hover {
-  text-decoration: underline;
-  color: #010101;
+  text-decoration: none; /* pastikan tetap tanpa underline saat hover */
+  color: #1a5c88;
 }
+
+
 
 .back-button {
   position: absolute;
