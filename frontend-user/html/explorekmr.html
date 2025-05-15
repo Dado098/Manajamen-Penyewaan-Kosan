@@ -37,14 +37,15 @@
       
   </section>
 
-  <section class="kamar-list">
-    <h2>Kamar Kost yang Tersedia</h2>
-    <div class="tab">
-      <button class="tablinks active" data-lantai="1">Lantai 1</button>
-      <button class="tablinks" data-lantai="2">Lantai 2</button>
-    </div>
-    <div id="card-container" class="card-container"></div>
-  </section>
+ <section class="kamar-list">
+  <h2>Kamar Kost yang Tersedia</h2>
+  <div class="tab">
+    <button class="tablinks active" data-lantai="1">Lantai 1</button>
+    <button class="tablinks" data-lantai="2">Lantai 2</button>
+  </div>
+  <div id="card-container" class="card-container"></div>
+</section>
+
 
   <section class="kenapa">
     <p>Temukan kamar yang paling cocok untukmu dan nikmati tinggal nyaman serasa di rumah sendiri.</p>
@@ -90,31 +91,66 @@
 
 <script>
   $(document).ready(function () {
+    let kamarKosong = [];
+
+    // Ambil data kamar dari API
     $.ajax({
       url: 'http://localhost:8000/api/kamars',
       method: 'GET',
       dataType: 'json',
       success: function (data) {
-        const kamarTerbatas = data.slice(0, 5);
+        // Ambil hanya kamar yang status-nya "Kosong"
+        kamarKosong = data.filter(kamar => kamar.status === 'Kosong');
 
-        $('.kamar-list .card').each(function (index) {
-          if (index < kamarTerbatas.length) {
-            const kamar = kamarTerbatas[index];
-            const imageUrl = `http://localhost:8000/storage/${kamar.image}`;
+        // Tampilkan default lantai 1 (ID 1–5)
+        renderKamar(1);
 
-            $(this).find('img').attr('src', imageUrl);
-            $(this).find('img').attr('alt', `Foto Kamar ${kamar.id}`);
-            $(this).find('p2').text('Rp ' + parseInt(kamar.harga + '/bulan').toLocaleString());
-            $(this).find('p1').text('Kamar ' + parseInt(kamar.id).toLocaleString());
+        // Event tab tombol
+        $('.tablinks').click(function () {
+          $('.tablinks').removeClass('active');
+          $(this).addClass('active');
 
-          }
+          const lantai = parseInt($(this).data('lantai'));
+          renderKamar(lantai);
         });
       },
       error: function (xhr, status, error) {
         console.error('Gagal memuat data kamar:', error);
       }
     });
+
+    function renderKamar(lantai) {
+      const container = $('#card-container');
+      container.empty();
+
+      // Tentukan range ID kamar berdasarkan lantai
+      const minID = lantai === 1 ? 1 : 6;
+      const maxID = lantai === 1 ? 5 : 10;
+
+      const filteredKamar = kamarKosong.filter(kamar => kamar.id >= minID && kamar.id <= maxID);
+
+      if (filteredKamar.length === 0) return container.append('<p>Tidak ada kamar kosong untuk lantai ini.</p>');
+
+
+      filteredKamar.forEach(kamar => {
+        const imageUrl = `http://localhost:8000/storage/${kamar.image}`;
+        const card = `
+          <div class="card">
+            <img src="${imageUrl}" alt="Foto Kamar ${kamar.id}" />
+            <div class="card-body">
+              <p1>Kamar No ${kamar.id}</p1><br>
+              <p2>Rp ${parseInt(kamar.harga).toLocaleString()} /bulan</p2>
+            </div>
+            <a href="detailkamar${kamar.id}.html">
+              <button class="cekdtlkamarRedirect">Cek Detail Kamar</button>
+            </a>
+          </div>
+        `;
+        container.append(card);
+      });
+    }
   });
 </script>
+
 </body>
 </html>

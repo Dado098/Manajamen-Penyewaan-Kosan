@@ -142,6 +142,13 @@ body {
   padding: 40px 30px;
 }
 
+.kamar-list p {
+  white-space: nowrap; /* supaya kalimat tidak pecah jadi baris baru */
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+
 .tab {
   margin-bottom: 20px;
 }

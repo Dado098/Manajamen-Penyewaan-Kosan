@@ -43,48 +43,13 @@
   </section>
 
   <!-- Kamar Section -->
-  <section class="section" id="kamar">
-    <h2>Cari Kost Nyaman & Terjangkau?<br />Tinggal di Sini Saja, Serasa di Rumah Sendiri!</h2>
-    <div class="kamar-list">
-      <div class="card">
-        <img src="../images/Kamar.png" alt="Kamar No 1" />
-        <div class="card-body">
-          <p1></p1>
-          <p2></p2>
-        </div>
-        <a href="detailkamar1.html">
-          <button class="cekdtlkamarRedirect">Cek Detail Kamar</button>
-        </a>
-        
+ <section class="section" id="kamar">
+  <h2>Cari Kost Nyaman & Terjangkau?<br />Tinggal di Sini Saja, Serasa di Rumah Sendiri!</h2>
+  <div class="kamar-list">
+    <!-- Kamar akan dimuat secara dinamis di sini -->
+  </div>
+</section>
 
-      </div>
-
-      <div class="card">
-        <img src="../images/Kamar.png" alt="Kamar No 2" />
-        <div class="card-body">
-          <p1></p1>
-          <p2></p2>
-        </div>
-        <a href="detailkamar2.html">
-          <button class="cekdtlkamarRedirect">Cek Detail Kamar</button>
-        </a>
-        
-
-      </div>
-
-      <div class="card">
-        <img src="../images/Kamar.png" alt="Kamar No 3" />
-        <div class="card-body">
-          <p1></p1>
-          <p2></p2>
-        </div>
-        <a href="detailkamar3.html">
-          <button class="cekdtlkamarRedirect">Cek Detail Kamar</button>
-        </a>
-        
-      </div>
-    </div>
-  </section>
 
   <!-- Fasilitas Section -->
   <section class="section fasilitas">
@@ -296,7 +261,7 @@
           'Authorization': 'Bearer ' + token
         },
         success: function (user) {
-          $('.hero-content h1 span:first').text('Hallo, ' + user.name); // Ganti "Hallo, User" dengan nama asli
+          $('.hero-content h1 span:first').text('Hallo, ' + user.name);
         },
         error: function () {
           console.error('Gagal mengambil data pengguna');
@@ -304,24 +269,36 @@
       });
     }
 
-    // Ambil data kamar
+    // Ambil data kamar yang kosong saja
     $.ajax({
       url: 'http://localhost:8000/api/kamars',
       method: 'GET',
       dataType: 'json',
       success: function (data) {
-        const kamarTerbatas = data.slice(0, 5);
+        // Filter kamar dengan status kosong
+        const kamarKosong = data.filter(kamar => kamar.status === 'Kosong').slice(0, 3);
 
-        $('.kamar-list .card').each(function (index) {
-          if (index < kamarTerbatas.length) {
-            const kamar = kamarTerbatas[index];
-            const imageUrl = `http://localhost:8000/storage/${kamar.image}`;
+        const kamarList = $('.kamar-list');
+        kamarList.empty(); // Kosongkan dulu isinya
 
-            $(this).find('img').attr('src', imageUrl);
-            $(this).find('img').attr('alt', `Foto Kamar ${kamar.id}`);
-            $(this).find('p2').text('Rp ' + parseInt(kamar.harga).toLocaleString() + ' /bulan');
-            $(this).find('p1').text('Kamar ' + kamar.id);
-          }
+        kamarKosong.forEach(kamar => {
+          const imageUrl = `http://localhost:8000/storage/${kamar.image}`;
+          const detailUrl = `detailkamar${kamar.id}.html`;
+
+          const cardHtml = `
+            <div class="card">
+              <img src="${imageUrl}" alt="Foto Kamar ${kamar.id}" />
+              <div class="card-body">
+                <p1>Kamar No ${kamar.id}</p1><br>
+                <p2>Rp ${parseInt(kamar.harga).toLocaleString()} /bulan</p2>
+              </div>
+              <a href="${detailUrl}">
+                <button class="cekdtlkamarRedirect">Cek Detail Kamar</button>
+              </a>
+            </div>
+          `;
+
+          kamarList.append(cardHtml);
         });
       },
       error: function (xhr, status, error) {
