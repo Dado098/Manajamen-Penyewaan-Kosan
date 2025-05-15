@@ -99,15 +99,5 @@ Route::post('midtrans/notification', [PembayaranController::class, 'notification
 Route::get('locations', [LocationController::class, 'getLocations']);
 
 
-// // Route untuk Pembayaran
-// Route::apiResource('pembayaranduas', PembayaranPerpanjanganController::class);
-
-// // Route untuk Pembayaran berdasarkan ID Pemesanan (QRCode)
-// Route::get('pembayaranduas/{id}/qrcode', [PembayaranPerpanjanganController::class, 'generateQRCode'])->name('pembayarans.qrcode');
-
-// Route::post('midtrans/notification', [PembayaranPerpanjanganController::class, 'notification']);
-
-
-// Route::post('midtrans/notification', [PembayaranPerpanjanganController::class, 'notification'])->withoutMiddleware(['auth:sanctum']);
 
 
