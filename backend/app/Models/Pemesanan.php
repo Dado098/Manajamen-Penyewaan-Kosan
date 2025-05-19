@@ -13,7 +13,9 @@ class Pemesanan extends Model
     [
         'tgl_masuk',
         'tgl_keluar',
+        'nama_kamar',
         'kamar_id',
+        'penyewa_id'
     ];
 
     // Relasi ke Kamar
@@ -26,4 +28,10 @@ class Pemesanan extends Model
     {
         return $this->belongsTo(Pemesanan::class);  // Relasi Pembayaran ke Pemesanan
     }
+
+    // Relasi ke Penyewa (User)
+public function penyewa()
+{
+    return $this->belongsTo(User::class, 'penyewa_id');
+}
 }

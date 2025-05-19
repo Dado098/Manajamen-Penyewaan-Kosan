@@ -22,6 +22,9 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    /**
+     * Setelah validasi berhasil, cek kredensial login.
+     */
     protected function passedValidation()
     {
         $user = User::where('username', $this->username)->first();
@@ -32,15 +35,7 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        // Jika role adalah penyewa, periksa verifikasi email
-        if ($user->role === 'penyewa' && !$user->hasVerifiedEmail()) {
-            throw ValidationException::withMessages([
-                'email' => ['Email belum diverifikasi.'],
-            ]);
-        }
-
-        // Menyimpan data user untuk digunakan di controller
-        $this->merge(['user' => $user]);
+        // Simpan instance user agar controller bisa pakai $request->user
+        $this->setUserResolver(fn () => $user);
     }
 }
-

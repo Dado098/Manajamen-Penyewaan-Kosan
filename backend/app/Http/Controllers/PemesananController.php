@@ -6,6 +6,7 @@ use App\Http\Requests\StorePemesananRequest;
 use App\Http\Resources\PemesananResource;
 use App\Models\Pemesanan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @group Pemesanan
@@ -51,7 +52,15 @@ class PemesananController extends Controller
      */
     public function store(StorePemesananRequest $request)
     {
+        $user = Auth::user(); // atau auth()->user()
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
         $validated = $request->validated();
+        $validated['penyewa_id'] = $user->id;
+
         $pemesanan = Pemesanan::create($validated);
 
         return response()->json(new PemesananResource($pemesanan), 201);

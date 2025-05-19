@@ -11,11 +11,12 @@ class Pembayaran extends Model
     use HasFactory;
 
     protected $fillable = [
+        'order_id',
+        'pemesanan_id',
+        'penyewa_id',
         'metode_pembayaran',
         'total_tagihan',
         'status',
-        'penyewa_id',
-        'pemesanan_id',
         'qr_code',
         'snap_token',
     ];

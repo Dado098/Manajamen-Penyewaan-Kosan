@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->timestamp('tgl_masuk')->nullable();
             $table->timestamp('tgl_keluar')->nullable();
+            $table->string('nama_kamar')->nullable();
 
             // Relasi antar table
             $table->foreignId('kamar_id')->constrained('kamars')->onDelete('cascade');
+            $table->foreignId('penyewa_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

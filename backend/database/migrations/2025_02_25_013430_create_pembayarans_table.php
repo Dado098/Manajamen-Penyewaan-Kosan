@@ -13,17 +13,19 @@ return new class extends Migration
     {
         Schema::create('pembayarans', function (Blueprint $table) {
             $table->id();
-            $table->string('order_id')->unique()->nullable();
-            $table->string('metode_pembayaran');
+            $table->string('order_id')->unique()->nullable(); // Order ID yang dikirim ke Midtrans
+            $table->string('metode_pembayaran')->nullable(); // Contoh: bank_transfer, gopay, qris
+            $table->string('qr_code')->nullable(); // Jika pakai QRIS
+            $table->string('snap_token')->nullable(); // Snap token yang dikirim ke front-end
+
             $table->decimal('total_tagihan', 15, 2);
+
             $table->enum('status', ['menunggu pembayaran', 'proses', 'sukses', 'gagal'])->default('menunggu pembayaran');
-            $table->string('qr_code')->nullable();
-            $table->string('snap_token')->nullable(); // ✅ Tambahan kolom snap_token
 
 
             // Relasi antar table
             $table->foreignId('penyewa_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('pemesanan_id')->constrained('pemesanans')->onDelete('cascade');
+            $table->foreignId('pemesanan_id')->nullable()->constrained('pemesanans')->onDelete('cascade');
             $table->timestamps();
         });
 
