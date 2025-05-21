@@ -22,8 +22,7 @@ class PemesananController extends Controller
      */
     public function index()
     {
-        $pemesanans = Pemesanan::with('kamar:id,image')->get();
-
+       $pemesanans = Pemesanan::with(['kamar:id,image,status'])->get();
         return response()->json(PemesananResource::collection($pemesanans), 200);
     }
 

@@ -81,31 +81,45 @@ class AuthController extends Controller
     }
 
     public function login(LoginRequest $request)
-    {
-        // Ambil user dengan menggunakan fungsi user() (dengan tanda kurung)
-        $user = $request->user();
+{
+    $user = $request->user();
 
-        // Cek apakah email sudah diverifikasi untuk penyewa
-        if ($user->role === 'penyewa' && !$user->hasVerifiedEmail()) {
-            return response()->json([
-                'message' => 'Email belum diverifikasi.'
-            ], 400);
-        }
-
-        // Buat token
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        // Kirimkan response dengan token, id penyewa, role, dan status verifikasi
+    // Verifikasi email dulu
+    if ($user->role === 'penyewa' && !$user->hasVerifiedEmail()) {
         return response()->json([
-            'message' => 'Login berhasil',
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'penyewa_id' => $user->id,           // Penting untuk disimpan di localStorage
-            'role' => $user->role,
-            'email_verified_at' => $user->email_verified_at,
-            'name' => $user->name,               // Opsional, kalau mau pakai nama
-        ]);
+            'message' => 'Email belum diverifikasi.'
+        ], 400);
     }
+
+    // Buat token login
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    // Cek apakah penyewa sudah punya kamar berdasarkan pembayaran sukses
+    $memilikiKamar = false;
+
+    if ($user->role === 'penyewa') {
+        $penyewaId = $user->id; // asumsikan id user = penyewa_id di tabel pembayaran
+
+        $memilikiKamar = \App\Models\Pembayaran::where('penyewa_id', $penyewaId)
+            ->where('status', 'sukses')
+            ->whereNotNull('pemesanan_id') // pastikan ada pemesanan terkait kamar
+            ->exists();
+    }
+
+    // Kirim respons
+    return response()->json([
+        'message'           => 'Login berhasil',
+        'access_token'      => $token,
+        'token_type'        => 'Bearer',
+        'penyewa_id'        => $user->id,
+        'role'              => $user->role,
+        'email_verified_at' => $user->email_verified_at,
+        'name'              => $user->name,
+        'memiliki_kamar'    => $memilikiKamar
+    ]);
+}
+
+
 
 
 

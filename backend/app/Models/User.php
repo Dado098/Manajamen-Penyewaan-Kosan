@@ -43,4 +43,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new VerifyEmail);
     }
+
+       public function penyewa()
+    {
+        return $this->belongsTo(User::class, 'penyewa_id');
+    }
+
 }

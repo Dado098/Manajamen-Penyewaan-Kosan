@@ -213,24 +213,39 @@ public function store(StorePembayaranRequest $request)
         return response()->json(['message' => 'Pembayaran tidak ditemukan'], 404);
     }
 
-    // Update status pembayaran
+    // Update status pembayaran dan kamar
     switch ($notif['transaction_status']) {
         case 'settlement':
             $pembayaran->status = 'sukses';
+            $pembayaran->save();
+
+            // ✅ Update status kamar jika ada pemesanan
+            if ($pembayaran->pemesanan_id && $pembayaran->pemesanan) {
+                $kamar = \App\Models\Kamar::find($pembayaran->pemesanan->kamar_id);
+                if ($kamar) {
+                    $kamar->status = 'terisi';
+                    $kamar->save();
+                }
+            }
+
             break;
+
         case 'pending':
             $pembayaran->status = 'proses';
+            $pembayaran->save();
             break;
+
         case 'deny':
         case 'cancel':
         case 'expire':
             $pembayaran->status = 'gagal';
+            $pembayaran->save();
             break;
+
         default:
             $pembayaran->status = 'proses';
+            $pembayaran->save();
     }
-
-    $pembayaran->save();
 
     return response()->json(['message' => 'Notification received'], 200);
 }

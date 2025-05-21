@@ -21,6 +21,7 @@ class PemesananResource extends JsonResource
             'tgl_masuk' => Carbon::parse($this->tgl_masuk)->format('Y-m-d H:i:s'),
             'tgl_keluar' => Carbon::parse($this->tgl_keluar)->format('Y-m-d H:i:s'),
             'kamar_id' => $this->kamar_id,
+            'kamar'       => new KamarResource($this->whenLoaded('kamar')),
             'penyewa_id' => $this->penyewa_id, // <--- Tambahan ini
             'nama_kamar' => $this->nama_kamar,
             'image' => $this->kamar ? asset('storage/' . $this->kamar->image) : null,
