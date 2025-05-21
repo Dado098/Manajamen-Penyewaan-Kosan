@@ -78,41 +78,41 @@
             password: password
           },
           success: function (response) {
-            // Simpan token dan data user ke localStorage
-            localStorage.setItem("token", response.access_token);
-            localStorage.setItem("penyewa_id", response.penyewa_id || '');
-            localStorage.setItem("role", response.role || '');
-            localStorage.setItem("email_verified_at", response.email_verified_at || '');
-  
-            if (response.role === "pemilik") {
-              window.location.href = "../../frontend-admin/adminview/indexadmin.html";
-            } else if (response.role === "penyewa") {
-              if (!response.email_verified_at) {
-                $("#error-message").removeClass('hidden').text("Email harus diverifikasi terlebih dahulu. Silakan cek email Anda.");
-                return;
-              }
-              window.location.href = "homepage.html";
-            } else {
-              $("#error-message").removeClass('hidden').text("Role tidak dikenali.");
-            }
-          },
-          error: function (xhr) {
-            let errorMsg = "Login gagal. Coba lagi.";
-            if (xhr.responseJSON) {
-              const res = xhr.responseJSON;
-              if (res.errors?.username) {
-                errorMsg = res.errors.username[0];
-              } else if (res.errors?.password) {
-                errorMsg = res.errors.password[0];
-              } else if (res.errors?.email) {
-                errorMsg = res.errors.email[0];
-              } else if (res.message) {
-                errorMsg = res.message;
-              }
-            }
-  
-            $("#error-message").removeClass('hidden').text(errorMsg);
-          }
+  // Simpan token dan data user ke localStorage
+  localStorage.setItem("token", response.access_token);
+  localStorage.setItem("penyewa_id", response.penyewa_id || '');
+  localStorage.setItem("role", response.role || '');
+  localStorage.setItem("email_verified_at", response.email_verified_at || '');
+  localStorage.setItem("name", response.name || '');
+  localStorage.setItem("memiliki_kamar", response.memiliki_kamar || false);
+
+  // Cek role user
+  if (response.role === "pemilik") {
+    window.location.href = "../../frontend-admin/adminview/indexadmin.html";
+
+  } else if (response.role === "penyewa") {
+    // Cek verifikasi email
+    if (!response.email_verified_at) {
+      $("#error-message")
+        .removeClass('hidden')
+        .text("Email harus diverifikasi terlebih dahulu. Silakan cek email Anda.");
+      return;
+    }
+
+    // Cek apakah sudah memiliki kamar
+    if (response.memiliki_kamar) {
+      window.location.href = "homeuser.html"; // Sudah punya kamar
+    } else {
+      window.location.href = "homepage.html"; // Belum punya kamar
+    }
+
+  } else {
+    $("#error-message")
+      .removeClass('hidden')
+      .text("Role tidak dikenali.");
+  }
+}
+
         });
       });
     });
