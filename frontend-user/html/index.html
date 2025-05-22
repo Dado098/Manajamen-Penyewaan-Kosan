@@ -13,18 +13,19 @@
     <div class="logo">
       <img src="../images/lg.svg" alt="Logo Senangkos" />
     </div>
+
     
     <nav class="navbar">
-      <a href="#about">About Us</a>
+      <a href="#about">Tentang Kami</a>
       <a href="#kamar">Kamar</a>
       <a href="#fasilitas">Fasilitas</a>
       <a href="#lokasi">Lokasi</a>
     </nav>
   
     <div class="auth-buttons">
-      <button id="loginBtn">Login</button>
-      <button id="signupBtn">Sign Up</button>
-    </div>
+      <button id="loginBtn">Masuk</button>
+      <button id="signupBtn">Daftar</button>
+
   </header>
   
   
@@ -44,7 +45,7 @@
       <img src="../images/kamarr.jpg" alt="Tampak Depan Kost" />
     </div>
     <div class="intro-text">
-      <h2>About Us</h2>
+      <h2>Tentang Kami</h2>
       <p>
         Senangkos menyediakan hunian kost yang nyaman, bersih, dan terjangkau bagi mahasiswa dan pekerja. Kami hadir untuk memberikan solusi bagi mereka yang kesulitan mencari kost dengan harga wajar dan kondisi yang layak. Senangkos adalah tempat tinggal yang aman dan nyaman, layaknya rumah sendiri.
 
@@ -98,7 +99,7 @@
   </section>
 
   <!-- Lokasi Section -->
-  <section class="section lokasi" style="padding: 2rem 0;">
+  <section class="section lokasi" id="lokasi" style="padding: 2rem 0;">
     <div style="max-width: 1500px; margin: 0 auto; text-align: center;">
       <h2 style="font-size: 2rem; margin-bottom: 1rem;">Lokasi Kost</h2>
       <div id="map" style="height: 450px; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
@@ -115,6 +116,7 @@
   <input type="hidden" id="lngInput" name="longitude">
   
   <script>
+
     // Inisialisasi peta dengan view awal global
     var map = L.map('map').setView([0, 0], 2);
   
@@ -246,7 +248,7 @@
     </div>
     <div class="footer-bottom">
       <div class="footer-left">© 2025 Senangkos. All rights reserved.</div>
-      <div class="footer-right">Website by Gondrong</div>
+      <!-- <div class="footer-right">Website by Gondrong</div> -->
     </div>
   </footer>
 
@@ -285,6 +287,10 @@
   <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
 
   <script>
+    $('html, body').animate({
+  scrollTop: $(target).offset().top - 75
+}, 300);
+
     $(document).ready(function () {
       $.ajax({
         url: 'http://localhost:8000/api/kamars',

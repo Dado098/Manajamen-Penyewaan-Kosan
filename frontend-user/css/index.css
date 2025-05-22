@@ -271,19 +271,56 @@ html {
   color: #86D52B;
 }
 
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 25px;
+  height: 20px;
+  cursor: pointer;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.hamburger span {
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* Saat active (misal klik), bisa tambahkan efek jika ingin */
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Navbar saat mobile (disembunyikan dan muncul saat hamburger diklik) */
 @media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
   .navbar {
+    display: none;
     flex-direction: column;
-    gap: 10px;
-    margin-left: 0;
+    background-color: #63AE00;
+    position: absolute;
+    top: 70px;
+    right: 10px;
+    width: 200px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    z-index: 999;
   }
-  .auth-buttons {
-    flex-direction: column;
-    gap: 10px;
-    margin-right: 10px;
-  }
-  .intro-container {
-    flex-direction: column;
-    padding: 2rem;
+
+  .navbar.show {
+    display: flex;
   }
 }

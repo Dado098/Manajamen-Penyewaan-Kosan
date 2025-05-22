@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil Senangkos</title>
+  <link rel="stylesheet" href="../css/profiluser.css" />
+</head>
+<body>
+ <a href="homeuser.html" class="back-button">&lt;</a>
+
+
+  <div class="profil">
+    <div class="profil-container">
+      <!-- Gambar Profil -->
+      <img src="../images/ph.jpg" alt="Profil" />
+
+      <!-- Nama -->
+      <h1 id="profile-name"></h1>
+
+      <!-- Data Diri -->
+      <div class="data-diri">
+        <div class="data-row">
+          <div class="data-label">Nama</div>
+          <div class="data-value" id="profile-nama"></div>
+        </div>
+        <div class="data-row">
+          <div class="data-label">Email</div>
+          <div class="data-value" id="profile-email"></div>
+        </div>
+        <div class="data-row">
+          <div class="data-label">Nomor HP</div>
+          <div class="data-value" id="profile-hp"></div>
+        </div>
+      </div>
+      
+      <!-- Tombol -->
+      <div class="button-group">
+        <a href="editprofile.html"><button class="btn-edit">Edit Profil</button></a>
+        <a href="index.html"><button class="btn-logout">Keluar Akun</button></a>
+      </div>
+    </div>
+  </div>
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
+  <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+
+  <script>
+    function goBack() {
+    if (document.referrer) {
+      window.history.back();
+    } else {
+      window.location.href = "profile.html"; // fallback jika tidak ada referrer
+    }
+  }
+    $(document).ready(function () {
+      const userToken = localStorage.getItem('token');
+  
+      if (!userToken) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Token Hilang',
+          text: 'Silakan login kembali.'
+        }).then(() => {
+          window.location.href = "login.html";
+        });
+        return;
+      }
+  
+      // Cek apakah token dalam bentuk string biasa atau JSON
+      let token = userToken;
+      try {
+        const parsed = JSON.parse(userToken);
+        if (parsed.token) {
+          token = parsed.token;
+        }
+      } catch (e) {
+        // Plain string, langsung pakai
+      }
+  
+      // URL API endpoint user yang benar
+      $.ajax({
+        url: 'http://localhost:8000/api/user', // <<--- ganti ke /api/user
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        dataType: 'json',
+        success: function(response) {
+          console.log(response); // debug dulu lihat isinya apa
+          const user = response; // biasanya API user langsung kirim object
+  
+          $("#profile-name").text(user.name || "Nama tidak ditemukan");
+          $("#profile-nama").text(user.name || "Nama tidak ditemukan");
+          $("#profile-email").text(user.email || "Email tidak ditemukan");
+          $("#profile-hp").text(user.no_telp || "No HP tidak ditemukan");
+  
+          localStorage.setItem("userProfile", JSON.stringify(user));
+        },
+        error: function(xhr, status, error) {
+          console.error("Gagal ambil data user:", xhr.responseText);
+          Swal.fire({
+            icon: 'error',
+            title: 'Session Expired',
+            text: 'Sesi anda habis, silahkan login ulang.'
+          }).then(() => {
+            localStorage.removeItem("token");
+            window.location.href = "login.html";
+          });
+        }
+      });
+  
+      // Logout
+      $(".btn-logout").on('click', function () {
+        localStorage.removeItem("userProfile");
+        localStorage.removeItem("token");
+        window.location.href = "homeuser.html";
+      });
+    });
+  </script>
+  
