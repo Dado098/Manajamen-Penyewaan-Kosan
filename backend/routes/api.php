@@ -20,6 +20,8 @@ use App\Http\Controllers\LocationController;
 Route::apiResource('users', UserController::class);
 Route::get('users/role/{role}', [UserController::class, 'getUsersByRole']);
 
+Route::middleware('auth:sanctum')->post('/users/update-password', [UserController::class, 'updatePassword']);
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -97,6 +99,7 @@ Route::post('midtrans/notification', [PembayaranController::class, 'notification
 
 
 Route::get('locations', [LocationController::class, 'getLocations']);
+
 
 
 

@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -19,26 +20,26 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function verifyEmail(Request $request, $id, $hash)
-    {
-        if (! URL::hasValidSignature($request)) {
-            return response()->json(['message' => 'Link verifikasi tidak valid atau sudah kadaluarsa.'], 403);
-        }
-
-        $user = User::findOrFail($id);
-
-        if ($user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email sudah diverifikasi.']);
-        }
-
-        if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
-            return response()->json(['message' => 'Verifikasi gagal.'], 400);
-        }
-
-        $user->markEmailAsVerified();
-        event(new Verified($user));
-
-        return response()->json(['message' => 'Email berhasil diverifikasi.']);
+{
+    if (! URL::hasValidSignature($request)) {
+        return response()->json(['message' => 'Link verifikasi tidak valid atau sudah kadaluarsa.'], 403);
     }
+
+    $user = User::findOrFail($id);
+
+    if ($user->hasVerifiedEmail()) {
+        return Redirect::route('email.verified.success');
+    }
+
+    if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
+        return response()->json(['message' => 'Verifikasi gagal.'], 400);
+    }
+
+    $user->markEmailAsVerified();
+    event(new Verified($user));
+
+    return Redirect::route('email.verified.success');
+}
 
 
     /**

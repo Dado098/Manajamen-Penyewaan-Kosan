@@ -121,7 +121,7 @@ public function store(StorePembayaranRequest $request)
             'phone'      => $pembayaran->penyewa->no_telp,
         ],
         'callbacks' => [
-            'finish' => 'http://127.0.0.1:5500/frontend-user/html/konfirmasi.html',
+            'finish' => 'http://localhost:5500/frontend-user/html/konfirmasi.html',
         ],
     ];
 
