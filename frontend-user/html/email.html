@@ -50,5 +50,54 @@
   });
 </script>
 
+ <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('username').value.trim();
+      const errorMsg = document.getElementById('error-message');
+
+      if (email === "") {
+        errorMsg.textContent = "Email wajib diisi!";
+        errorMsg.classList.remove('hidden');
+        return;
+      }
+
+      errorMsg.classList.add('hidden');
+
+      fetch('http://localhost:8000/api/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Gagal mengirim link reset. Pastikan email sudah terdaftar.");
+        }
+        return response.json();
+      })
+      .then(data => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil',
+          text: 'Link reset password telah dikirim ke email Anda.',
+        });
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal',
+          text: error.message,
+        });
+      });
+    });
+  </script>
+
   
   
