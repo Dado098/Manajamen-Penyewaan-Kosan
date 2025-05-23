@@ -598,17 +598,72 @@ transition: background-color 0.3s;
 background-color: #145c03;
 }
 
+
+.sidebar-toggle {
+  display: none;
+  font-size: 28px;
+  margin: 14px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* Tombol close sidebar (default desktop: hidden) */
+.close-sidebar-btn {
+  display: none;
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.sidebar-toggle {
+  display: none;
+  font-size: 28px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
-  body {
-    flex-direction: column;
+  .sidebar {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 240px;
+    background-color: #fff;
+    overflow-y: auto;
+    border-right: 1px solid #eee;
+    padding-top: 20px;
   }
 
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-    border-right: none;
-    border-bottom: 1px solid #eee;
+  .sidebar.show {
+    display: block;
+  }
+
+  /* Tampilkan tombol sidebar toggle */
+  .sidebar-toggle {
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 16px;
+    z-index: 1001;
+  }
+
+  /* Tampilkan tombol close di dalam sidebar */
+  .close-sidebar-btn {
+    display: block;
+  }
+
+  /* Content reset margin kalau sidebar collapsible */
+  .content-wrapper {
+    margin-left: 0;
   }
 
   .main-content {
@@ -625,39 +680,40 @@ background-color: #145c03;
   .summary-cards {
     grid-template-columns: 1fr 1fr;
   }
+}
 
-  @media (max-width: 480px) {
-    .summary-cards {
-      grid-template-columns: 1fr;
-    }
+/* RESPONSIVE MOBILE: max-width 480px */
+@media (max-width: 480px) {
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
 
-    table, thead, tbody, th, td, tr {
-      display: block;
-    }
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
 
-    thead {
-      display: none;
-    }
+  thead {
+    display: none;
+  }
 
-    tr {
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 10px;
-    }
+  tr {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+  }
 
-    td {
-      padding: 8px;
-      text-align: right;
-      position: relative;
-    }
+  td {
+    padding: 8px;
+    text-align: right;
+    position: relative;
+  }
 
-    td::before {
-      content: attr(data-label);
-      position: absolute;
-      left: 10px;
-      font-weight: bold;
-      text-align: left;
-    }
+  td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    font-weight: bold;
+    text-align: left;
   }
 }
