@@ -16,12 +16,27 @@
 
     <button class="hamburger" id="hamburger">&#9776;</button>
     
+<<<<<<< HEAD
   <nav class="navbar" id="navbarMenu">
     <a href="#about">Tentang Kami</a>
     <a href="#kamar">Kamar</a>
     <a href="#fasilitas">Fasilitas</a>
     <a href="#lokasi">Lokasi</a>
   </nav>
+=======
+    <nav class="navbar">
+      <a href="#about">Tentang Kami</a>
+      <a href="#kamar">Kamar</a>
+      <a href="#fasilitas">Fasilitas</a>
+      <a href="#lokasi">Lokasi</a>
+    </nav>
+  
+    <div class="auth-buttons">
+      <button id="loginBtn">Masuk</button>
+      <button id="signupBtn">Daftar</button>
+
+  </header>
+>>>>>>> 4a8c94e2999a6284b9e1143ba2357de95f80112d
   
   <div class="auth-buttons">
     <button id="loginBtn">Masuk</button>
@@ -113,6 +128,7 @@
       </div>
     </div>
   </section>
+<<<<<<< HEAD
 
   <style>
     .btn {
@@ -186,6 +202,66 @@
   <script>
 
 
+=======
+
+  <style>
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+  
+  
+
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Leaflet Measure Plugin -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-measure/dist/leaflet-measure.css" />
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-measure/dist/leaflet-measure.min.js"></script>
+  <!-- Leaflet Geocoder (Search Control) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <!-- Leaflet Routing Machine -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+
+
+  <input type="hidden" id="latInput" name="latitude">
+  <input type="hidden" id="lngInput" name="longitude">
+  
+ <script src="../js/map-script.js"></script>
+ 
+ 
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-container">
+        <div class="footer-left">
+          <img src="../images/lg.svg" alt="Logo Senangkos" class="footer-logo">
+        </div>
+
+      </div>      
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-left">© 2025 Senangkos. All rights reserved.</div>
+      <!-- <div class="footer-right">Website by Gondrong</div> -->
+    </div>
+  </footer>
+
+  
+
+  <script>
+>>>>>>> 4a8c94e2999a6284b9e1143ba2357de95f80112d
      $(document).ready(function () {
     $('.navbar a').click(function (e) {
       e.preventDefault(); // Mencegah aksi default link (langsung scroll)
@@ -233,10 +309,17 @@
           $('.kamar-list .card').each(function (index) {
             if (index < kamarTerbatas.length) {
               const kamar = kamarTerbatas[index];
+<<<<<<< HEAD
               const imageUrl = http://localhost:8000/storage/${kamar.image};
   
               $(this).find('img').attr('src', imageUrl);
               $(this).find('img').attr('alt', Foto Kamar ${kamar.id});
+=======
+              const imageUrl = `http://localhost:8000/storage/${kamar.image}`;
+  
+              $(this).find('img').attr('src', imageUrl);
+              $(this).find('img').attr('alt', `Foto Kamar ${kamar.id}`);
+>>>>>>> 4a8c94e2999a6284b9e1143ba2357de95f80112d
               $(this).find('p').text('Kamar ' + parseInt(kamar.id).toLocaleString());
               // $(this).find('p').text('Rp ' + parseInt(kamar.harga).toLocaleString());
             }
