@@ -22,7 +22,7 @@ class UserController extends Controller
         if ($request->has('role')) {
             $role = $request->role;
 
-            if (!in_array($role, ['penyewa', 'admin'])) {
+            if (!in_array($role, ['penyewa', 'pemilik'])) {
                 return response()->json(['message' => 'Role tidak valid'], 400);
             }
 
@@ -117,23 +117,24 @@ class UserController extends Controller
         return response()->json(['message' => 'User berhasil dihapus'], 200);
     }
 
-    public function updatePassword(Request $request)
-    {
-        $user = $request->user();
+public function updatePassword(Request $request)
+{
+    $user = $request->user();
 
-        if ($user->role !== 'penyewa') {
-            return response()->json(['message' => 'Akses ditolak.'], 403);
-        }
-
-        $request->validate([
-            'password' => 'required|string|confirmed|min:8',
-        ]);
-
-        $user->update([
-            'password' => bcrypt($request->password),
-        ]);
-
-        return response()->json(['message' => 'Password berhasil diperbarui.']);
+    if (!in_array($user->role, ['penyewa', 'pemilik'])) {
+        return response()->json(['message' => 'Akses ditolak.'], 403);
     }
 
+    $request->validate([
+        'password' => 'required|string|confirmed|min:8',
+    ]);
+
+    $user->update([
+        'password' => bcrypt($request->password),
+    ]);
+
+    return response()->json(['message' => 'Password berhasil diperbarui.']);
+}
+
+    
 }
