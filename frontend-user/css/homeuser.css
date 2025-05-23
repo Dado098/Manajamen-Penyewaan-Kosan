@@ -340,4 +340,48 @@ body {
       text-align: center;
     }
   }
-  
+/* Hamburger Style */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  border-radius: 2px;
+}
+
+/* Mobile Menu Style */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  background-color: #f8f8f8;
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.mobile-menu a {
+  padding: 10px 0;
+  text-decoration: none;
+  color: #333;
+}
+
+/* Responsive: Tampilkan hamburger saat layar kecil */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-menu {
+    display: none; /* Sembunyikan menu desktop */
+  }
+}

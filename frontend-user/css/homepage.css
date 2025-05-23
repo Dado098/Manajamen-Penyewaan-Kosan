@@ -1,332 +1,448 @@
 /* ========== Global Styles ========== */
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #ffffff;
-    color: #111;
-  }
-  
-  /* ========== Header ========== */
-  .header {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 10;
-  }
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #111;
+}
 
-  .logo img {
-    height: 80px; /* Sesuaikan ukuran sesuai kebutuhan, misal 30px, 40px, dll */
-    width: auto; /* Agar proporsi gambar tetap terjaga */
-    margin-top: 5px; 
-    margin-bottom: 5px;
-    margin-left: 40px;
-  }
-  
-  /* ========== Navbar ========== */
-  .nav-menu {
-    margin-left: 40px;
-  }
-  
+/* ========== Header ========== */
+.header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.logo img {
+  height: 80px; /* Sesuaikan ukuran sesuai kebutuhan */
+  width: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 40px;
+}
+
+/* ========== Navbar ========== */
+.nav-menu {
+  margin-left: 40px;
+  position: fixed;
+  top: 0;
+  right: -300px; /* sembunyikan di luar layar kanan */
+  width: 250px;
+  height: 100%;
+  background-color: #328300;
+  color: white;
+  padding: 60px 20px 20px;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+  transition: right 0.3s ease;
+  z-index: 100;
+  display: block; /* agar tetap tampil tapi tersembunyi di kanan */
+}
+
+.nav-menu.active {
+  right: 0;
+}
+
+.nav-menu ul {
+  list-style: none;
+  display: flex;
+  gap: 120px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu ul li {
+  margin: 0 40px;
+}
+
+.nav-menu ul li a {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.nav-menu ul li a.home {
+  color: #86D52B;
+}
+
+/* ========== Profile Icon ========== */
+.profile-icon {
+  margin-right: 20px;
+  cursor: pointer;
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: none;
+}
+
+/* ========== Hero Section ========== */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: 
+    url('../images/bgitem.svg') no-repeat top center,
+    url('../images/hero-bg.png') no-repeat center center;
+  background-size: cover, cover;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  color: white;
+  overflow: hidden;
+}
+
+.overlay-rrt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 60px 20px;
+  max-width: 700px;
+  margin-left: 30px;
+  margin-top: 175px;
+  text-align: left;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero h1 span {
+  display: block;
+  font-size: 4rem;
+}
+
+.layanan-teks {
+  font-size: 22px;
+  font-weight: 500;
+  color: white;
+  text-align: left;
+  margin-top: 20px;
+}
+
+.layanan-teks span {
+  display: inline-block;
+  line-height: 1.5;
+}
+
+.layanan-teks span:first-child {
+  margin-bottom: 15px;
+}
+
+/* ========== Section ========== */
+.section {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+/* ========== Kamar & Fasilitas List ========== */
+.kamar-list,
+.fasilitas-list {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* ========== Card ========== */
+.card {
+  background: #daeeda;
+  padding: 30px 20px;
+  width: 250px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 20px;
+  border: 2px solid rgb(116, 114, 114);
+}
+
+.card button:hover {
+  background-color: #7eb93b; /* Efek hover pada tombol */
+}
+
+.card img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.card button,
+.cekdtlkamarRedirect {
+  margin-top: 10px;
+  padding: 5px 15px;
+  background: #328300;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.cekdtlkamarRedirect {
+  align-self: center;
+}
+
+/* ========== Lokasi ========== */
+.lokasi iframe {
+  border-radius: 10px;
+  width: 100%;
+  height: 450px;
+}
+
+/* ========== Footer ========== */
+.footer {
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.footer-top {
+  background-color: #86D52B;
+  padding: 20px 0;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+
+.footer-logo {
+  width: 150px;
+  height: auto;
+  position: relative;
+  left: -100px;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+  transform: translateX(-400px);
+}
+
+.footer-nav a {
+  color:#ffffff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.footer-nav a:hover {
+  color: #328300;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #97D94D;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+}
+
+.footer-left {
+  margin-left: 50px;
+}
+
+.footer-right {
+  margin-right: 50px;
+}
+
+/* ========== Media Queries ========== */
+@media (max-width: 768px) {
   .nav-menu ul {
-    list-style: none;
-    display: flex;
-    gap: 120px;
-    margin: 0;
-    padding: 0;
+    flex-direction: column;
+    gap: 20px;
+    margin-left: 0;
+    text-align: center;
   }
-  
-  .nav-menu ul li {
-    margin: 0 40px;
-  }
-  
-  .nav-menu ul li a {
-    text-decoration: none;
-    color: rgb(255, 255, 255);
-    font-weight: bold;
-    font-size: 1rem;
-  }
-  
-  .nav-menu ul li a.home {
-    color: #86D52B;
-}
 
-  
-  /* ========== Profile Icon ========== */
-  .profile-icon {
-    margin-right: 20px;
-    cursor: pointer;
-    height: 35px;
-    width: 35px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: none;
+  .hero h1 {
+    font-size: 2rem;
   }
-  
-  /* ========== Hero Section ========== */
-  .hero {
-    position: relative;
+
+  .hero-buttons a {
+    padding: 8px 16px;
+  }
+
+  .kamar-list {
+    flex-direction: column;
+  }
+
+  .card {
     width: 100%;
-    height: 100vh;
-    background: 
-      url('../images/bgitem.svg') no-repeat top center,
-      url('../images/hero-bg.png') no-repeat center center;
-    background-size: cover, cover; /* Ubah jadi sama-sama 'cover' */
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    color: white;
-    overflow: hidden;
+    margin: 10px 0;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .column {
+    width: 100%;
+  }
 }
 
-  .overlay-rrt {
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero-buttons a {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  .card {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .profile-icon {
+    margin-right: 10px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* ========== Hamburger Button ========== */
+.hamburger {
+  display: none;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  margin-right: 20px;
+
+  /* Tambahan supaya hamburger ke kanan */
+  position: relative;
+  right: -200px;
+}
+
+/* Responsif di layar kecil */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-menu {
     position: absolute;
-    top: 0;
+    top: 80px;
     left: 0;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0.7;
-  }
-  
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 60px 20px;
-    max-width: 700px;
-    margin-left: 30px;
-    margin-top: 175px;
-    text-align: left;
-  }
-  
-  .hero h1 {
-    font-size: 4rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    display: flex;
+    background-color: rgba(50, 131, 0, 0.95);
+    display: none;
     flex-direction: column;
-  }
-  
-  .hero h1 span {
-    display: block;
-    font-size: 4rem;
-  }
-  
-  .layanan-teks {
-    font-size: 22px;
-    font-weight: 500;
-    color: white;
-    text-align: left;
-    margin-top: 20px;
-  }
-  
-  .layanan-teks span {
-    display: inline-block;
-    line-height: 1.5;
-  }
-  
-  .layanan-teks span:first-child {
-    margin-bottom: 15px;
-  }
-  
-  /* ========== Section ========== */
-  .section {
-    padding: 60px 20px;
-    text-align: center;
-  }
-  
-  /* ========== Kamar & Fasilitas List ========== */
-  .kamar-list,
-  .fasilitas-list {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  
-  /* ========== Card ========== */
-  .card {
-    background: #daeeda;
-    padding: 30px 20px;
-    width: 250px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin: 20px;
-    border: 2px solid rgb(116, 114, 114);
-  }
-  .card button:hover {
-    background-color: #7eb93b; /* Efek hover pada tombol */
-  }
-  
-  .card img {
-    width: 100%;
-    max-height: 180px;
-    object-fit: contain;
-    border-radius: 10px;
-  }
-  
-  .card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     align-items: center;
-    text-align: center;
-    margin-top: 10px;
-  }
-  
-  .card button,
-  .cekdtlkamarRedirect {
-    margin-top: 10px;
-    padding: 5px 15px;
-    background: #328300;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
-  }
-  
-  .cekdtlkamarRedirect {
-    align-self: center;
-  }
-  
-  /* ========== Lokasi ========== */
-  .lokasi iframe {
-    border-radius: 10px;
-    width: 100%;
-    height: 450px;
-  }
-  
-  /* ========== Footer ========== */
-  .footer {
-    width: 100%;
-    font-family: Arial, sans-serif;
-  }
-  
-  .footer-top {
-    background-color: #86D52B;
     padding: 20px 0;
+    z-index: 9;
   }
-  
-  .footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
+
+  .nav-menu.show {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 50px;
-    flex-wrap: wrap;
   }
-  
-  .footer-logo {
-    width: 150px;
-    height: auto;
-    position: relative;
-    left: -100px;
+
+  .nav-menu ul {
+    flex-direction: column;
+    gap: 20px;
   }
-  
-  .footer-nav {
+
+  .nav-menu ul li {
+    margin: 10px 0;
+  }
+
+  .profile-icon {
+    margin-left: auto;
+  }
+}
+
+.close-btn {
+  font-size: 30px;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .close-btn {
+    display: block;
+  }
+}
+/* Navbar default untuk desktop */
+.nav-menu {
+  position: static;
+  display: flex;
+  background: none;
+  width: auto;
+  height: auto;
+  padding: 0;
+  box-shadow: none;
+  right: auto;
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    position: fixed;       
+    top: 80px;            
+    right: 10;             
+    width: 250px;         
+    height: 180px;        /* tinggi tetap, tidak terlalu tinggi */
+    background-color: rgba(50, 131, 0, 0.95);
+    display: none;        
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    z-index: 9999;        /* z-index harus angka, bukan px */
+    border-radius: 0 0 0 12px; 
+    overflow-y: auto;     /* jika isinya lebih tinggi, bisa scroll */
+  }
+
+  .nav-menu.show {
     display: flex;
-    gap: 30px;
-    justify-content: center;
-    flex-wrap: wrap;
-    transform: translateX(-400px);
   }
-  
-  .footer-nav a {
-    color:#ffffff;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    transition: color 0.3s ease;
-  }
-  
-  .footer-nav a:hover {
-    color: #328300;
-  }
-  
-  .footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #97D94D;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-  }
-  
-  .footer-left {
-    margin-left: 50px;
-  }
-  
-  .footer-right {
-    margin-right: 50px;
-  }
-  
-  /* ========== Media Queries ========== */
-  @media (max-width: 768px) {
-    .nav-menu ul {
-      flex-direction: column;
-      gap: 20px;
-      margin-left: 0;
-      text-align: center;
-    }
-  
-    .hero h1 {
-      font-size: 2rem;
-    }
-  
-    .hero-buttons a {
-      padding: 8px 16px;
-    }
-  
-    .kamar-list {
-      flex-direction: column;
-    }
-  
-    .card {
-      width: 100%;
-      margin: 10px 0;
-    }
-  
-    .footer-content {
-      flex-direction: column;
-      text-align: center;
-    }
-  
-    .column {
-      width: 100%;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .hero h1 {
-      font-size: 1.5rem;
-    }
-  
-    .hero-buttons a {
-      padding: 6px 12px;
-      font-size: 0.9rem;
-    }
-  
-    .card {
-      width: 100%;
-      margin: 10px 0;
-    }
-  
-    .profile-icon {
-      margin-right: 10px;
-    }
-  
-    .footer-content {
-      flex-direction: column;
-      text-align: center;
-    }
-  }
-  
+}
+
+
