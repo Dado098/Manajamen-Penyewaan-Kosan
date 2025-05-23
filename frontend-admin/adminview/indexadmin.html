@@ -14,6 +14,7 @@
     <div class="logo-container">
       <img src="../images/logosenangkos.svg" alt="Logo" class="logo">
     </div>
+    <button class="close-sidebar-btn" id="closeSidebarBtn">&times;</button>
     <ul class="sidebar-menu">
       <li>
         <a href="indexadmin.html" class="sidebar-link">
@@ -39,8 +40,9 @@
   <div class="content-wrapper">
     <header>
       <div class="header-buttons-row">
+        <span class="sidebar-toggle" id="sidebarToggle">&#9776;</span>
         <div class="header-buttons">
-          <button class="btn-yellow" onclick="window.location.href='editpasswordadmin.html'">Edit Password</button>
+          <button class="btn-yellow" onclick="window.location.href='editpasswordadmin.html'">Edit Sandi</button>
           <button class="btn-green" onclick="window.location.href='../../frontend-user/html/homepage.html'">Lihat Web</button>
           <button class="btn-red" id="logoutBtn">Logout</button>
         </div>
@@ -253,6 +255,18 @@
         icon.setAttribute("src", greenSrc);
       }
     });
+    $('#sidebarToggle').click(function() {
+      $('.sidebar').toggleClass('show');
+    $('#closeSidebarBtn').click(function() {
+      $('.sidebar').removeClass('show');
+    });
+
+    $('.sidebar-link').click(function() {
+    if (window.innerWidth <= 768) {
+      $('.sidebar').removeClass('show');
+      }
+    });
+});
     
   </script>
 </body>
