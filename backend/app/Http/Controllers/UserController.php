@@ -136,5 +136,5 @@ public function updatePassword(Request $request)
     return response()->json(['message' => 'Password berhasil diperbarui.']);
 }
 
-    
+
 }
