@@ -8,14 +8,14 @@ html, body {
 }
 
 /* Container utama login */
-.login {
+/* .login {
   position: relative;
   background-color: #97D94D;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 .login .container {
   position: relative;
@@ -133,38 +133,28 @@ html, body {
 .signup-link a:hover {
   text-decoration: underline;
 }
-.form-box {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-box label {
-  margin-bottom: 5px;
-  font-weight: 500;
-}
-
-.hidden {
-  display: none;
-}
 
 /* Tombol login */
 .login-btn {
-  width: 100%;
-  margin-top: 20px;
   background-color: #328300;
   color: #fff;
-  padding: 12px;
-  border-radius: 6px;
+  padding: 10px 20px;
   border: none;
-  text-align: center;
-  font-size: 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* efek cover belakang */
+  display: block;
+  margin: 20px auto 0;
 }
 
 .login-btn:hover {
-  background-color: #328300;
+  background-color: #97D94D;
+  transform: translateY(-2px);
 }
+
 
 /* Error message */
 .error-message {
