@@ -13,7 +13,8 @@
     <div class="logo">
       <img src="../images/lg.svg" alt="Logo Senangkos" />
     </div>
-    <nav class="nav-menu">
+    <button class="hamburger" id="hamburger">&#9776;</button>
+   <nav class="nav-menu" id="navMenu">
       <ul>
         <li><a href="homepage.html" class="home">Beranda</a></li>
         <li><a href="explorekmr.html"class="kmr">Jelajahi Kamar</a></li>
@@ -88,7 +89,19 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../js/jquery-validation-1.19.5/jquery.validate.min.js"></script>
 <script src="../js/jquery-validation-1.19.5/additional-methods.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#hamburger').on('click', function () {
+      $('#navMenu').toggleClass('show'); // Sesuaikan dengan id navMenu
+    });
 
+    $('#navMenu a').on('click', function () {
+      if ($(window).width() <= 768) {
+        $('#navMenu').removeClass('show');
+      }
+    });
+  });
+</script>
 <script>
   $(document).ready(function () {
     let kamarKosong = [];

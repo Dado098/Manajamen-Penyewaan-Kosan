@@ -13,10 +13,9 @@
     <img src="../images/lg.svg" alt="Logo Senangkos" />
   </div>
 
-
+    <button class="hamburger" id="hamburger">&#9776;</button>
 
   <nav class="nav-menu" id="navMenu">
-    <div class="close-btn">&times;</div>
     <ul>
       <li><a href="#" class="home">Beranda</a></li>
       <li><a href="explorekmr.html">Jelajahi Kamar</a></li>
@@ -90,6 +89,22 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet-measure/dist/leaflet-measure.min.js"></script>
   <input type="hidden" id="latInput" name="latitude">
   <input type="hidden" id="lngInput" name="longitude">
+
+<script>
+  $(document).ready(function () {
+    $('#hamburger').on('click', function () {
+      $('#navMenu').toggleClass('show'); // Sesuaikan dengan id navMenu
+    });
+
+    $('#navMenu a').on('click', function () {
+      if ($(window).width() <= 768) {
+        $('#navMenu').removeClass('show');
+      }
+    });
+  });
+</script>
+
+
   
   <script>
 

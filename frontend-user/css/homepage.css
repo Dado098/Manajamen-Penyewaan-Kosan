@@ -9,45 +9,37 @@ body {
 
 /* ========== Header ========== */
 .header {
-  position: absolute;
+  position: fixed;
   top: 0;
-  right: 0;
+  left: 0;
   width: 100%;
-  padding: 20px;
+  padding: 4px 10px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  z-index: 10;
+  z-index: 1000;
+  background-color:#63AE00; /* pastikan warna tidak transparan */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* bayangan agar terlihat lebih baik */
 }
 
 .logo img {
-  height: 80px; /* Sesuaikan ukuran sesuai kebutuhan */
+  height: 80px;
   width: auto;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  margin-left: 40px;
+  margin: 5px 0 5px 40px;
 }
 
 /* ========== Navbar ========== */
 .nav-menu {
+  display: flex;
+  background: none;
+  width: auto;
+  height: auto;
+  padding: 0;
+  box-shadow: none;
   margin-left: 40px;
-  position: fixed;
-  top: 0;
-  right: -300px; /* sembunyikan di luar layar kanan */
-  width: 250px;
-  height: 100%;
-  background-color: #328300;
-  color: white;
-  padding: 60px 20px 20px;
-  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
-  transition: right 0.3s ease;
-  z-index: 100;
-  display: block; /* agar tetap tampil tapi tersembunyi di kanan */
+  position: static;
+  margin-top: 40px; /* geser ke bawah 10px */
 }
 
-.nav-menu.active {
-  right: 0;
-}
 
 .nav-menu ul {
   list-style: none;
@@ -63,24 +55,32 @@ body {
 
 .nav-menu ul li a {
   text-decoration: none;
-  color: rgb(255, 255, 255);
+  color: #fff;
   font-weight: bold;
   font-size: 1rem;
 }
 
 .nav-menu ul li a.home {
-  color: #86D52B;
+  color: #000000;
 }
 
-/* ========== Profile Icon ========== */
 .profile-icon {
   margin-right: 20px;
   cursor: pointer;
   height: 35px;
   width: 35px;
   border-radius: 50%;
+  overflow: hidden;
+  margin-top: 32px;
+  margin-right: 90px; /* ini geser ke kiri */
+}
+
+
+.profile-icon img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border: none;
+  border-radius: 50%;
 }
 
 /* ========== Hero Section ========== */
@@ -97,18 +97,6 @@ body {
   justify-content: flex-start;
   color: white;
   overflow: hidden;
-}
-
-.overlay-rrt {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.7;
 }
 
 .hero-content {
@@ -142,22 +130,12 @@ body {
   margin-top: 20px;
 }
 
-.layanan-teks span {
-  display: inline-block;
-  line-height: 1.5;
-}
-
-.layanan-teks span:first-child {
-  margin-bottom: 15px;
-}
-
 /* ========== Section ========== */
 .section {
   padding: 60px 20px;
   text-align: center;
 }
 
-/* ========== Kamar & Fasilitas List ========== */
 .kamar-list,
 .fasilitas-list {
   display: flex;
@@ -166,7 +144,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* ========== Card ========== */
 .card {
   background: #daeeda;
   padding: 30px 20px;
@@ -174,11 +151,7 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin: 20px;
-  border: 2px solid rgb(116, 114, 114);
-}
-
-.card button:hover {
-  background-color: #7eb93b; /* Efek hover pada tombol */
+  border: 2px solid #747272;
 }
 
 .card img {
@@ -191,7 +164,6 @@ body {
 .card-body {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   text-align: center;
   margin-top: 10px;
@@ -208,18 +180,12 @@ body {
   border-radius: 8px;
 }
 
-.cekdtlkamarRedirect {
-  align-self: center;
-}
-
-/* ========== Lokasi ========== */
 .lokasi iframe {
   border-radius: 10px;
   width: 100%;
   height: 450px;
 }
 
-/* ========== Footer ========== */
 .footer {
   width: 100%;
   font-family: Arial, sans-serif;
@@ -235,7 +201,7 @@ body {
   margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* logo kiri, nav kanan */
   gap: 50px;
   flex-wrap: wrap;
 }
@@ -243,20 +209,20 @@ body {
 .footer-logo {
   width: 150px;
   height: auto;
-  position: relative;
-  left: -100px;
+  margin-left: 0;
+  flex-shrink: 0; /* Jangan dikecilkan */
 }
-
 .footer-nav {
   display: flex;
   gap: 30px;
-  justify-content: center;
+  justify-content: center; /* Ini membuat link nav di tengah */
+  flex-grow: 1;             /* Footer-nav mengambil ruang yang tersedia */
   flex-wrap: wrap;
-  transform: translateX(-400px);
+  transform: none;
 }
 
 .footer-nav a {
-  color:#ffffff;
+  color: #fff;
   text-decoration: none;
   font-weight: bold;
   font-size: 16px;
@@ -275,18 +241,98 @@ body {
   padding: 10px 20px;
   font-size: 16px;
   color: white;
+  flex-wrap: wrap;
 }
 
 .footer-left {
-  margin-left: 50px;
+  margin-left: 0;
+  flex-shrink: 0;
+}
+.footer-right {
+  margin-right: 0; /* agar rata kanan saat mobile */
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  order: 2; /* supaya footer-right ada di bawah footer-left di mobile */
 }
 
-.footer-right {
-  margin-right: 50px;
+/* Media Query untuk layar <= 768px (tablet dan ponsel) */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .footer-logo {
+    margin-left: 0;
+    width: 120px;
+  }
+  
+  .footer-nav {
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .footer-nav a {
+    font-size: 14px;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .footer-left, .footer-right {
+    margin: 0;
+    width: 100%;
+    order: unset;
+  }
 }
+
+/* ========== Hamburger ========== */
+.hamburger {
+  display: none;
+  font-size: 30px;
+  color: #000; /* warna ikon hamburger hitam */
+  cursor: pointer;
+  margin-left: 250px;  /* dorong ke paling kanan */
+  margin-right: 20px; /* kasih jarak dari kanan */
+  background: none;   /* hilangkan background */
+  border: none;       /* hilangkan border */
+  outline: none;      /* hilangkan outline saat klik */
+}
+
+
+
 
 /* ========== Media Queries ========== */
 @media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 62px;
+    right: 0;
+    width: 180px;
+    height: 180px;
+    background-color: #63AE00;
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.3); 
+    z-index: 9999;
+    border-radius: 0 0 0 12px;
+    overflow-y: auto;
+  }
+
+  .nav-menu.show {
+    display: flex;
+  }
+
   .nav-menu ul {
     flex-direction: column;
     gap: 20px;
@@ -294,16 +340,12 @@ body {
     text-align: center;
   }
 
+  .nav-menu ul li {
+    margin: 10px 0;
+  }
+
   .hero h1 {
     font-size: 2rem;
-  }
-
-  .hero-buttons a {
-    padding: 8px 16px;
-  }
-
-  .kamar-list {
-    flex-direction: column;
   }
 
   .card {
@@ -311,24 +353,24 @@ body {
     margin: 10px 0;
   }
 
+  .footer-container,
   .footer-content {
     flex-direction: column;
     text-align: center;
   }
 
-  .column {
-    width: 100%;
+  .profile-icon {
+    margin-left: auto;
+  }
+
+  .close-btn {
+    display: block;
   }
 }
 
 @media (max-width: 480px) {
   .hero h1 {
     font-size: 1.5rem;
-  }
-
-  .hero-buttons a {
-    padding: 6px 12px;
-    font-size: 0.9rem;
   }
 
   .card {
@@ -340,109 +382,9 @@ body {
     margin-right: 10px;
   }
 
+  .footer-container,
   .footer-content {
     flex-direction: column;
     text-align: center;
   }
 }
-
-/* ========== Hamburger Button ========== */
-.hamburger {
-  display: none;
-  font-size: 30px;
-  color: white;
-  cursor: pointer;
-  margin-right: 20px;
-
-  /* Tambahan supaya hamburger ke kanan */
-  position: relative;
-  right: -200px;
-}
-
-/* Responsif di layar kecil */
-@media (max-width: 768px) {
-  .hamburger {
-    display: block;
-  }
-
-  .nav-menu {
-    position: absolute;
-    top: 80px;
-    left: 0;
-    width: 100%;
-    background-color: rgba(50, 131, 0, 0.95);
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 0;
-    z-index: 9;
-  }
-
-  .nav-menu.show {
-    display: flex;
-  }
-
-  .nav-menu ul {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .nav-menu ul li {
-    margin: 10px 0;
-  }
-
-  .profile-icon {
-    margin-left: auto;
-  }
-}
-
-.close-btn {
-  font-size: 30px;
-  cursor: pointer;
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  color: white;
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .close-btn {
-    display: block;
-  }
-}
-/* Navbar default untuk desktop */
-.nav-menu {
-  position: static;
-  display: flex;
-  background: none;
-  width: auto;
-  height: auto;
-  padding: 0;
-  box-shadow: none;
-  right: auto;
-}
-
-@media (max-width: 768px) {
-  .nav-menu {
-    position: fixed;       
-    top: 80px;            
-    right: 10;             
-    width: 250px;         
-    height: 180px;        /* tinggi tetap, tidak terlalu tinggi */
-    background-color: rgba(50, 131, 0, 0.95);
-    display: none;        
-    flex-direction: column;
-    padding: 20px;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.3);
-    z-index: 9999;        /* z-index harus angka, bukan px */
-    border-radius: 0 0 0 12px; 
-    overflow-y: auto;     /* jika isinya lebih tinggi, bisa scroll */
-  }
-
-  .nav-menu.show {
-    display: flex;
-  }
-}
-
-
