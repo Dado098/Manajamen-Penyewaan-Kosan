@@ -14,6 +14,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ResetPasswordController;
 
 
 
@@ -22,7 +23,8 @@ use App\Http\Controllers\ForgotPasswordController;
 Route::apiResource('users', UserController::class);
 Route::get('users/role/{role}', [UserController::class, 'getUsersByRole']);
 
-Route::middleware('auth:sanctum')->post('/users/update-password', [UserController::class, 'updatePassword']);
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) {
     return $request->user();
