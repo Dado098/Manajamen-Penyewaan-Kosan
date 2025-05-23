@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="../css/login.css" />
+</head>
+<body>
+
+  <div class="logo-wrapper">
+    <img src="../images/lg.svg" alt="Logo Senangkos" />
+  </div> 
+  <div class="login">
+    <div class="container">
+      
+      
+  
+      <!-- Form Login -->
+<!-- Form Login -->
+<div class="popup-login">
+  <a href="login.html" class="back-button">&lt;</a>
+  <div class="login-sekarang-juga">Masukan Email Anda</div>
+
+  <form id="login-form">
+    <div class="form-group">
+      <input type="text" id="username" class="input-field" placeholder="Email" required />
+    </div>
+
+    <button type="submit" class="login-btn" id="login-btn">Simpan Email</button>
+  </form>
+
+  <p id="error-message" class="hidden error-message"></p>
+</div>
+<script>
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault(); // agar tidak reload halaman
+
+    const email = document.getElementById('username').value.trim();
+    const errorMsg = document.getElementById('error-message');
+
+    if (email === "") {
+      errorMsg.textContent = "Email wajib diisi!";
+      errorMsg.classList.remove('hidden');
+    } else {
+      errorMsg.classList.add('hidden');
+      alert("Email berhasil disimpan: " + email);
+      // lakukan aksi simpan atau kirim ke server di sini
+    }
+  });
+</script>
+
+  
+  
