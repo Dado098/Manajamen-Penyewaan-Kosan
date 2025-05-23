@@ -22,7 +22,7 @@ class UserController extends Controller
         if ($request->has('role')) {
             $role = $request->role;
 
-            if (!in_array($role, ['penyewa', 'admin'])) {
+            if (!in_array($role, ['penyewa', 'pemilik'])) {
                 return response()->json(['message' => 'Role tidak valid'], 400);
             }
 

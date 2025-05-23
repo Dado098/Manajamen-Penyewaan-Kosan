@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgotPasswordController as AuthForgotPasswordController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\ForgotPasswordController;
 
 
 
@@ -29,6 +31,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// routes/api.php
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+
 
 
 
