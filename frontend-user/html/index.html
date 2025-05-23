@@ -103,6 +103,10 @@
     <div style="max-width: 1500px; margin: 0 auto; text-align: center;">
       <h2 style="font-size: 2rem; margin-bottom: 1rem;">Lokasi Kost</h2>
       <div id="map" style="height: 450px; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
+      <button id="btnRute" style="margin-top: 1rem; padding: 0.5rem 1rem; border: none; background-color: #007bff; color: white; border-radius: 5px; cursor: pointer;">
+        Tampilkan Rute ke Kost
+      </button>
+      
     </div>
   </section>
 
@@ -112,9 +116,20 @@
   <!-- Leaflet Measure Plugin -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-measure/dist/leaflet-measure.css" />
   <script src="https://cdn.jsdelivr.net/npm/leaflet-measure/dist/leaflet-measure.min.js"></script>
+  <!-- Leaflet Geocoder (Search Control) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <!-- Leaflet Routing Machine -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+
+
   <input type="hidden" id="latInput" name="latitude">
   <input type="hidden" id="lngInput" name="longitude">
   
+<<<<<<< HEAD
+ <script src="../js/map-script.js"></script>
+=======
   <script>
 
     // Inisialisasi peta dengan view awal global
@@ -231,6 +246,7 @@
       })
       .catch(error => console.error('Error fetching locations:', error));
   </script>
+>>>>>>> 81972a3d49b4b44d6d3c1165c87b82f37a7724fe
   
  
  
