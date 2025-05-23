@@ -13,7 +13,23 @@ body {
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
 }
+.logo-wrapper {
+  position: fixed;
+  top: 20px;
+  left: 30px;
+  width: 140px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
 
+.logo-wrapper img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
 h2 {
   text-align: center;
   margin-bottom: 30px;
