@@ -8,6 +8,23 @@ body {
   align-items: center;
   position: relative; /* agar .back-button absolute-nya relatif ke body */
 }
+.logo-wrapper {
+  position: fixed;
+  top: 20px;
+  left: 30px;
+  width: 140px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.logo-wrapper img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
 
 .container {
   display: flex;
@@ -96,20 +113,20 @@ input {
 
 
 .back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+  display: inline-block;
+  margin-bottom: 10px;
   color: rgb(0, 0, 0);
   text-decoration: none;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: bold;
   background-color: transparent;
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
   transition: background-color 0.3s, color 0.3s;
+  align-self: flex-start; /* jika pakai flexbox */
 }
 
 .back-button:hover {
-  background-color: white;
+  background-color: #eee;
   color: #000000;
 }

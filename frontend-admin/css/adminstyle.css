@@ -161,7 +161,7 @@ header {
 
 .header-buttons-row {
   background-color: #86D52B; /* slightly darker green */
-  padding: 0px 0px;
+  padding: 0px 30px;
   display: flex;
   width: 100%;
   justify-content: flex-end;
@@ -179,8 +179,7 @@ header {
 /* Bottom row: greeting section */
 .greeting {
   text-align: center;
-  width: 100%;
-  padding: 20px 00px;
+  padding: 20px 30px;
   color: white;
 }
 
@@ -439,16 +438,6 @@ font-size: small;
 text-decoration: none;
 }
 
-.btn-yellow {
-background-color: #ffa91f;
-color: white;
-padding: 10px 20px;
-border: none;
-border-radius: 6px;
-cursor: pointer;
-font-size: small;
-text-decoration: none;
-}
 
 .form-kamar {
 background: #fff;
@@ -608,7 +597,6 @@ transition: background-color 0.3s;
 .register-card button:hover {
 background-color: #145c03;
 }
-
 
 @media (max-width: 768px) {
   body {
